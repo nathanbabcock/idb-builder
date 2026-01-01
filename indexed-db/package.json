@@ -1,0 +1,15 @@
+{
+  "name": "@typedex/indexed-db",
+  "scripts": {
+    "typecheck": "tsgo --build --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "idb": "^8.0.3",
+    "zod": "^4.3.4"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^6.2.5",
+    "vitest": "^4.0.16"
+  }
+}

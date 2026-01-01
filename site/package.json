@@ -1,0 +1,6 @@
+{
+  "name": "@typedex/site",
+  "scripts": {
+    "typecheck": "pnpm run --parallel typecheck"
+  }
+}

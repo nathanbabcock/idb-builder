@@ -1,0 +1,26 @@
+{
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "react",
+    "react-perf",
+    "oxc",
+    "import",
+    "jsdoc",
+    "node",
+    "promise",
+    "vitest"
+  ],
+  "rules": {
+    "oxc/no-barrel-file": "error",
+    "import/no-cycle": "error",
+    "unicorn/no-thenable": "off",
+    "eslint/no-debugger": "off",
+    "eslint/no-unused-expressions": "warn",
+    "typescript/unbound-method": "off",
+    "typescript/no-meaningless-void-operator": "off",
+    "vitest/require-to-throw-message": "off"
+  },
+  "ignorePatterns": ["**/supabase-types.gen.ts"]
+}

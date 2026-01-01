@@ -1,0 +1,16 @@
+{
+  "name": "@typedex/monorepo",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "pnpm run --parallel test",
+    "typecheck": "pnpm run --parallel typecheck",
+    "format": "oxfmt"
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260101.1",
+    "oxfmt": "^0.21.0",
+    "oxlint": "^1.36.0",
+    "oxlint-tsgolint": "^0.10.1"
+  },
+  "packageManager": "pnpm@10.12.4"
+}
