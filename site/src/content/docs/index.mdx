@@ -1,14 +1,14 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Home
+description: Extreme typesafety for Indexed DB
 template: splash # Remove or comment out this line to display the site sidebar on this page.
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Extreme typesafety for Indexed DB
   image:
     file: ../../assets/houston.webp
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Getting started
+      link: /guides/getting-started/
       icon: right-arrow
     - text: Read the Starlight docs
       link: https://starlight.astro.build
@@ -16,25 +16,31 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components'
 
-## Next steps
+## Features
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+  <Card title="Typesafety" icon="document">
+    Indexed DB's idiosyncracies are enforced through the type system, catching a
+    wide range of potential errors at compile-time before they happen.
+  </Card>
+  <Card title="Declarative migrations" icon="pencil">
+    Use a fluent builder interface to set up your database, capturing granular
+    information about the schema and database architecture while you do so.
+  </Card>
+  <Card title="Schema validation*" icon="document">
+    Define and validate the shape of your data with best-in-class schema
+    libraries like [`zod`](http://zod.dev/).
+    <small>
+      *only Zod for now, with full [Standard
+      Schema](https://standardschema.dev/) support coming soon ;)
+    </small>
+  </Card>
+  <Card title="Thin wrapper" icon="document">
+    Since most of the functionality is compile-time, there is little to no
+    runtime overhead and minimal impact on bundle size. Under the hood, the
+    excellent [`idb`](https://github.com/jakearchibald/idb) library is used as a
+    minimal, ergonomic, and modern interface for Indexed DB.
+  </Card>
 </CardGrid>
