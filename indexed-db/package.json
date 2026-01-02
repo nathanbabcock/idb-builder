@@ -1,5 +1,12 @@
 {
   "name": "@typedex/indexed-db",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/lib/migration-builder.ts",
+      "default": "./src/lib/migration-builder.ts"
+    }
+  },
   "scripts": {
     "typecheck": "tsgo --build --noEmit",
     "test": "vitest run"

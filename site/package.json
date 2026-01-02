@@ -11,11 +11,16 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.37.1",
+    "@shikijs/twoslash": "^3.20.0",
+    "@typedex/indexed-db": "workspace:^",
     "astro": "^5.6.1",
+    "expressive-code-twoslash": "^0.5.3",
     "sharp": "^0.34.2",
-    "starlight-package-managers": "^0.11.1"
+    "starlight-package-managers": "^0.11.1",
+    "zod": "^4.3.4"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.6"
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3"
   }
 }

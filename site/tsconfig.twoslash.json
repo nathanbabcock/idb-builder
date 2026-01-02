@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.app.json",
+  "compilerOptions": {
+    "baseUrl": "..",
+    "paths": {
+      "@typedex/indexed-db": ["indexed-db/src/lib/migration-builder.ts"],
+      "zod": ["indexed-db/node_modules/zod/index.d.ts"],
+      "zod/v4": ["indexed-db/node_modules/zod/v4/index.d.ts"]
+    }
+  },
+  "include": ["../indexed-db/src/**/*"]
+}

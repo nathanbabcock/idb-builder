@@ -52,7 +52,9 @@ class VersionBuilder<S extends Schema> {
           PrimaryKey,
           AutoIncrement
         > extends never
-      ? InvalidAutoIncrementKey<`autoIncrement requires keyPath to resolve to number, but '${Stringify<PrimaryKey>}' resolves to ${TypeName<ResolveKeyPath<z.infer<ZodSchema>, PrimaryKey>>}`>
+      ? InvalidAutoIncrementKey<`autoIncrement requires keyPath to resolve to number, but '${Stringify<PrimaryKey>}' resolves to ${TypeName<
+          ResolveKeyPath<z.infer<ZodSchema>, PrimaryKey>
+        >}`>
       : VersionBuilder<
           UpdateStore<
             S,
@@ -96,13 +98,19 @@ class VersionBuilder<S extends Schema> {
     name: Name,
     transform: (row: S[Name]['value']) => NewValue
   ): ValidateKeyPath<NewValue, Info['primaryKeyPath']> extends never
-    ? InvalidKeyPath<`Transform invalidates primaryKey '${Stringify<Info['primaryKeyPath']>}': keyPath no longer valid for new value type`>
+    ? InvalidKeyPath<`Transform invalidates primaryKey '${Stringify<
+        Info['primaryKeyPath']
+      >}': keyPath no longer valid for new value type`>
     : ValidateAutoIncrementKey<
           NewValue,
           Info['primaryKeyPath'],
           Info['autoIncrement']
         > extends never
-      ? InvalidAutoIncrementKey<`autoIncrement requires keyPath to resolve to number after transform, but '${Stringify<Info['primaryKeyPath']>}' resolves to ${TypeName<ResolveKeyPath<NewValue, Info['primaryKeyPath']>>}`>
+      ? InvalidAutoIncrementKey<`autoIncrement requires keyPath to resolve to number after transform, but '${Stringify<
+          Info['primaryKeyPath']
+        >}' resolves to ${TypeName<
+          ResolveKeyPath<NewValue, Info['primaryKeyPath']>
+        >}`>
       : [InvalidIndex] extends [never]
         ? VersionBuilder<
             UpdateStore<
@@ -276,7 +284,7 @@ export interface Migration {
 
 class MigrationBuilder<
   S extends Schema = {},
-  PrevVersion extends number | undefined = undefined,
+  const PrevVersion extends number | undefined = undefined,
 > {
   readonly migrations: Migration[] = []
 
@@ -285,12 +293,13 @@ class MigrationBuilder<
     return (last?.version ?? 0) as PrevVersion
   }
 
-  version<NewS extends Schema, V extends number>(
+  version<NewS extends Schema, const V extends number>(
     version: PrevVersion extends undefined
       ? V // First version - any number allowed
       : GreaterThan<V, PrevVersion & number> extends true
         ? V
-        : InvalidVersionOrder<`Version ${V} must be greater than previous version ${PrevVersion & number}`>,
+        : InvalidVersionOrder<`Version ${V} must be greater than previous version ${PrevVersion &
+            number}`>,
     fn: (v: VersionBuilder<S>) => VersionBuilder<NewS>
   ): MigrationBuilder<NewS, V> {
     const builder = fn(new VersionBuilder<S>())

@@ -4,6 +4,12 @@ import starlight from '@astrojs/starlight'
 
 // https://astro.build/config
 export default defineConfig({
+  vite: {
+    ssr: {
+      // https://github.com/withastro/astro/issues/14117#issuecomment-3117797751
+      noExternal: ['zod'],
+    },
+  },
   integrations: [
     starlight({
       title: 'Typedex',
@@ -15,13 +21,6 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        // {
-        //   label: 'Guides',
-        //   items: [
-        //     // Each item here is one entry in the navigation menu.
-        //     { label: 'Example Guide', slug: 'guides/example' },
-        //   ],
-        // },
         {
           label: 'Guides',
           autogenerate: { directory: 'guides' },
