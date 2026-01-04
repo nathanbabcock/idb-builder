@@ -1,6 +1,8 @@
 import { visit } from 'unist-util-visit'
 import fs from 'node:fs'
 import path from 'node:path'
+import type { Root, Link, Code } from 'mdast'
+import type { VFile } from 'vfile'
 
 /**
  * Remark plugin that transforms links to .sample.ts files into twoslash code blocks.
@@ -13,8 +15,8 @@ import path from 'node:path'
  * This will be replaced with a ```ts twoslash code block containing the file contents.
  */
 export function remarkCodeImport() {
-  return (tree, file) => {
-    visit(tree, 'link', (node, index, parent) => {
+  return (tree: Root, file: VFile) => {
+    visit(tree, 'link', (node: Link, index, parent) => {
       if (!node.url.endsWith('.sample.ts')) return
       if (index === undefined || !parent) return
 
@@ -31,22 +33,21 @@ export function remarkCodeImport() {
       code = addCutAfterImports(code)
 
       // Replace the link node with a code block
-      parent.children[index] = {
+      const codeBlock: Code = {
         type: 'code',
         lang: 'ts',
         meta: 'twoslash',
         value: code,
       }
+      parent.children[index] = codeBlock
     })
   }
 }
 
 /**
  * Adds a // ---cut--- directive after the last import statement.
- * @param {string} code
- * @returns {string}
  */
-function addCutAfterImports(code) {
+function addCutAfterImports(code: string): string {
   const lines = code.split('\n')
   let lastImportIndex = -1
 

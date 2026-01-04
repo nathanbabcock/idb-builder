@@ -4,6 +4,7 @@
     "dev": "pnpm run --parallel dev",
     "test": "pnpm run --parallel test",
     "typecheck": "pnpm run --parallel typecheck",
+    "clean": "pnpm run --parallel clean",
     "format": "oxfmt",
     "lint": "oxlint --type-aware"
   },

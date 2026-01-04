@@ -1,4 +1,3 @@
-// @ts-check
 import { defineEcConfig } from '@astrojs/starlight/expressive-code'
 import ecTwoSlash from 'expressive-code-twoslash'
 import { fileURLToPath } from 'node:url'
@@ -7,7 +6,7 @@ import ts from 'typescript'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-export default defineEcConfig({
+export const expressiveCodeConfig = defineEcConfig({
   plugins: [
     ecTwoSlash({
       includeJsDoc: true,
