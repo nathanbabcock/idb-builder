@@ -2,11 +2,12 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import { remarkCodeImport } from './remark-code-import.mjs'
+import { remarkExternalLinks } from './remark-external-links.mjs'
 
 // https://astro.build/config
 export default defineConfig({
   markdown: {
-    remarkPlugins: [remarkCodeImport],
+    remarkPlugins: [remarkCodeImport, remarkExternalLinks],
   },
   vite: {
     ssr: {
