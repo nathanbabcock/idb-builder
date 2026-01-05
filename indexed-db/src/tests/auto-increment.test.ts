@@ -12,7 +12,9 @@ beforeEach(() => {
 
 test('out-of-line auto-increment generates sequential keys', async () => {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('events', z.object({ name: z.string() }), {
+    v.createObjectStore({
+      name: 'events',
+      schema: z.object({ name: z.string() }),
       autoIncrement: true,
     })
   )

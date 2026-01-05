@@ -5,15 +5,15 @@ import { createMigrations } from '../lib/migration-builder'
 void async function testMultiEntryIndexQueriesByElementType() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           title: z.string(),
           tags: z.array(z.string()),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byTag', {
@@ -35,14 +35,14 @@ void async function testMultiEntryIndexQueriesByElementType() {
 void function testMultiEntryRejectsObjectArrayElements() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           authors: z.array(z.object({ id: z.string(), name: z.string() })),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       // @ts-expect-error multiEntry requires array elements to be valid IDB keys
@@ -57,15 +57,15 @@ void function testMultiEntryRejectsObjectArrayElements() {
 void function testMultiEntryRejectsCompositeKeyPath() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           category: z.string(),
           subcategory: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       // @ts-expect-error multiEntry cannot be used with composite keyPath
@@ -80,14 +80,14 @@ void function testMultiEntryRejectsCompositeKeyPath() {
 void function testMultiEntryRejectsNonArrayKeyPath() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           title: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       // @ts-expect-error multiEntry requires keyPath to point to an array
@@ -102,14 +102,14 @@ void function testMultiEntryRejectsNonArrayKeyPath() {
 void function testMultiEntryInvalidatedByTransformRemovingKeyPath() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           tags: z.array(z.string()),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byTag', {
@@ -130,14 +130,14 @@ void function testMultiEntryInvalidatedByTransformRemovingKeyPath() {
 void async function testMultiEntryWidenedArrayTypeAllowsBothTypes() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           codes: z.array(z.number()),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byCode', {

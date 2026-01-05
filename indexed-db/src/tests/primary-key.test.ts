@@ -18,7 +18,11 @@ test('creates object store with keyPath and verifies lookup', async () => {
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('users', userSchema, { primaryKey: 'id' })
+    v.createObjectStore({
+      name: 'users',
+      schema: userSchema,
+      primaryKey: 'id',
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -47,7 +51,10 @@ test('creates object store without keyPath (out-of-line keys)', async () => {
   const userSchema = z.object({ name: z.string() })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('users', userSchema)
+    v.createObjectStore({
+      name: 'users',
+      schema: userSchema,
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -75,7 +82,9 @@ test('creates object store with nested keyPath', async () => {
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('documents', documentSchema, {
+    v.createObjectStore({
+      name: 'documents',
+      schema: documentSchema,
       primaryKey: 'metadata.id',
     })
   )

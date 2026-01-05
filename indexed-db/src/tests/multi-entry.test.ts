@@ -13,15 +13,15 @@ beforeEach(() => {
 test('multi-entry index retrieves records by array element', async () => {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           title: z.string(),
           tags: z.array(z.string()),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byTag', {

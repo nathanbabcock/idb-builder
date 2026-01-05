@@ -11,15 +11,15 @@ import { createMigrations } from '../lib/migration-builder'
 void async function testSingleVersionIndexQuery() {
   const migrations = createMigrations().version(1, v =>
     v
-      .createObjectStore(
-        'users',
-        z.object({
+      .createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           email: z.string(),
           age: z.number(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
       .createIndex('byEmail', { storeName: 'users', keyPath: 'email' })
       .createIndex('byAge', { storeName: 'users', keyPath: 'age' })
   )
@@ -35,15 +35,15 @@ void async function testSingleVersionIndexQuery() {
 void async function testTwoVersionIndexQuery() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           email: z.string(),
           age: z.number(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v
@@ -62,15 +62,15 @@ void async function testTwoVersionIndexQuery() {
 void async function testThreeVersionIndexQuery() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           email: z.string(),
           age: z.number(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byEmail', { storeName: 'users', keyPath: 'email' })
@@ -90,14 +90,14 @@ void async function testThreeVersionIndexQuery() {
 void async function testGetAllFromIndex() {
   const migrations = createMigrations().version(1, v =>
     v
-      .createObjectStore(
-        'users',
-        z.object({
+      .createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           role: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
       .createIndex('byRole', { storeName: 'users', keyPath: 'role' })
   )
 
@@ -111,14 +111,14 @@ void async function testGetAllFromIndex() {
 void async function testMultiEntryIndexQuery() {
   const migrations = createMigrations().version(1, v =>
     v
-      .createObjectStore(
-        'posts',
-        z.object({
+      .createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           tags: z.array(z.string()),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
       .createIndex('byTag', {
         storeName: 'posts',
         keyPath: 'tags',

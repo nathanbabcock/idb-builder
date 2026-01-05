@@ -19,7 +19,9 @@ test('creates object store with composite primary key (flat) and verifies lookup
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('orders', orderSchema, {
+    v.createObjectStore({
+      name: 'orders',
+      schema: orderSchema,
       primaryKey: ['customerId', 'orderId'],
     })
   )
@@ -85,7 +87,9 @@ test('creates object store with composite primary key (nested) and verifies look
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('events', eventSchema, {
+    v.createObjectStore({
+      name: 'events',
+      schema: eventSchema,
       primaryKey: ['user.id', 'event.id'],
     })
   )
@@ -143,7 +147,9 @@ test('creates object store with composite primary key (mixed flat and nested) an
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('transactions', transactionSchema, {
+    v.createObjectStore({
+      name: 'transactions',
+      schema: transactionSchema,
       primaryKey: ['accountId', 'transaction.id'],
     })
   )
@@ -211,7 +217,9 @@ test('creates object store with composite primary key (deeply nested) and verifi
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('logs', logSchema, {
+    v.createObjectStore({
+      name: 'logs',
+      schema: logSchema,
       primaryKey: ['system.server.id', 'system.timestamp'],
     })
   )
@@ -277,7 +285,9 @@ test('composite primary key enforces uniqueness', async () => {
   })
 
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('orders', orderSchema, {
+    v.createObjectStore({
+      name: 'orders',
+      schema: orderSchema,
       primaryKey: ['customerId', 'orderId'],
     })
   )

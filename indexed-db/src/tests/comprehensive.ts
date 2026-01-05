@@ -23,42 +23,42 @@ test('complete migration lifecycle with all features', async () => {
   const v1Migrations = createMigrations().version(1, v =>
     v
       // Store with simple string primaryKey
-      .createObjectStore(
-        'users',
-        z.object({
+      .createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           name: z.string(),
           email: z.string(),
           role: z.string(),
           createdAt: z.number(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
       // Store with composite primaryKey
-      .createObjectStore(
-        'orders',
-        z.object({
+      .createObjectStore({
+        name: 'orders',
+        schema: z.object({
           customerId: z.string(),
           orderId: z.string(),
           amount: z.number(),
           status: z.string(),
         }),
-        { primaryKey: ['customerId', 'orderId'] }
-      )
+        primaryKey: ['customerId', 'orderId'],
+      })
       // Store with out-of-line autoIncrement keys
-      .createObjectStore(
-        'logs',
-        z.object({
+      .createObjectStore({
+        name: 'logs',
+        schema: z.object({
           level: z.string(),
           message: z.string(),
           timestamp: z.number(),
         }),
-        { autoIncrement: true }
-      )
+        autoIncrement: true,
+      })
       // Store with nested primaryKey
-      .createObjectStore(
-        'documents',
-        z.object({
+      .createObjectStore({
+        name: 'documents',
+        schema: z.object({
           metadata: z.object({
             id: z.string(),
             version: z.number(),
@@ -66,8 +66,8 @@ test('complete migration lifecycle with all features', async () => {
           title: z.string(),
           content: z.string(),
         }),
-        { primaryKey: 'metadata.id' }
-      )
+        primaryKey: 'metadata.id',
+      })
   )
 
   // Open database and insert initial data
@@ -246,16 +246,16 @@ test('complete migration lifecycle with all features', async () => {
   const v3Migrations = v2Migrations.version(3, v =>
     v
       // New store with array field for multiEntry
-      .createObjectStore(
-        'posts',
-        z.object({
+      .createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           title: z.string(),
           tags: z.array(z.string()),
           authorId: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
       // multiEntry index on tags
       .createIndex('byTag', {
         storeName: 'posts',
@@ -382,16 +382,16 @@ test('complete migration lifecycle with all features', async () => {
   const v6Migrations = v5Migrations.version(6, v =>
     v
       // Add a store with numeric IDs for KeyRange testing
-      .createObjectStore(
-        'scores',
-        z.object({
+      .createObjectStore({
+        name: 'scores',
+        schema: z.object({
           id: z.number(),
           playerId: z.string(),
           score: z.number(),
           level: z.number(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
       .createIndex('byScore', { storeName: 'scores', keyPath: 'score' })
       .createIndex('byLevel', { storeName: 'scores', keyPath: 'level' })
   )

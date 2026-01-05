@@ -3,40 +3,38 @@ import { createMigrations } from '../lib/migration-builder'
 
 void function testCreateObjectStoreSupportsCompositePrimaryKeysFlat() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'orders',
-      z.object({
+    v.createObjectStore({
+      name: 'orders',
+      schema: z.object({
         customerId: z.string(),
         orderId: z.string(),
         amount: z.number(),
       }),
-      { primaryKey: ['customerId', 'orderId'] }
-    )
+      primaryKey: ['customerId', 'orderId'],
+    })
   )
 }
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeFlat() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'nonexistent' is not a key of the value type
-    v.createObjectStore(
-      'orders',
-      z.object({
+    v.createObjectStore({
+      name: 'orders',
+      schema: z.object({
         customerId: z.string(),
         orderId: z.string(),
         amount: z.number(),
       }),
-      {
-        primaryKey: ['customerId', 'nonexistent'],
-      }
-    )
+      primaryKey: ['customerId', 'nonexistent'],
+    })
   )
 }
 
 void function testCreateObjectStoreSupportsCompositePrimaryKeysNested() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'events',
-      z.object({
+    v.createObjectStore({
+      name: 'events',
+      schema: z.object({
         user: z.object({
           id: z.string(),
           name: z.string(),
@@ -47,17 +45,17 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysNested() {
         }),
         timestamp: z.number(),
       }),
-      { primaryKey: ['user.id', 'event.id'] }
-    )
+      primaryKey: ['user.id', 'event.id'],
+    })
   )
 }
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeNested() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'user.nonexistent' is not a valid nested key path
-    v.createObjectStore(
-      'events',
-      z.object({
+    v.createObjectStore({
+      name: 'events',
+      schema: z.object({
         user: z.object({
           id: z.string(),
           name: z.string(),
@@ -68,18 +66,16 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeNested() {
         }),
         timestamp: z.number(),
       }),
-      {
-        primaryKey: ['user.id', 'user.nonexistent'],
-      }
-    )
+      primaryKey: ['user.id', 'user.nonexistent'],
+    })
   )
 }
 
 void function testCreateObjectStoreSupportsCompositePrimaryKeysMixed() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'transactions',
-      z.object({
+    v.createObjectStore({
+      name: 'transactions',
+      schema: z.object({
         accountId: z.string(),
         transaction: z.object({
           id: z.string(),
@@ -87,17 +83,17 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysMixed() {
         }),
         amount: z.number(),
       }),
-      { primaryKey: ['accountId', 'transaction.id'] }
-    )
+      primaryKey: ['accountId', 'transaction.id'],
+    })
   )
 }
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeMixed() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'transaction.nonexistent' is not a valid nested key path
-    v.createObjectStore(
-      'transactions',
-      z.object({
+    v.createObjectStore({
+      name: 'transactions',
+      schema: z.object({
         accountId: z.string(),
         transaction: z.object({
           id: z.string(),
@@ -105,18 +101,16 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeMixed() {
         }),
         amount: z.number(),
       }),
-      {
-        primaryKey: ['accountId', 'transaction.nonexistent'],
-      }
-    )
+      primaryKey: ['accountId', 'transaction.nonexistent'],
+    })
   )
 }
 
 void function testCreateObjectStoreSupportsCompositePrimaryKeysDeeplyNested() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'logs',
-      z.object({
+    v.createObjectStore({
+      name: 'logs',
+      schema: z.object({
         system: z.object({
           server: z.object({
             id: z.string(),
@@ -129,17 +123,17 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysDeeplyNested() {
           message: z.string(),
         }),
       }),
-      { primaryKey: ['system.server.id', 'system.timestamp'] }
-    )
+      primaryKey: ['system.server.id', 'system.timestamp'],
+    })
   )
 }
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeDeeplyNested() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'system.server.nonexistent' is not a valid nested key path
-    v.createObjectStore(
-      'logs',
-      z.object({
+    v.createObjectStore({
+      name: 'logs',
+      schema: z.object({
         system: z.object({
           server: z.object({
             id: z.string(),
@@ -152,9 +146,7 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeDeeplyNested()
           message: z.string(),
         }),
       }),
-      {
-        primaryKey: ['system.server.id', 'system.server.nonexistent'],
-      }
-    )
+      primaryKey: ['system.server.id', 'system.server.nonexistent'],
+    })
   )
 }

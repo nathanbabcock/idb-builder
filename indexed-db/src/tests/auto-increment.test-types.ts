@@ -14,61 +14,65 @@ import { createMigrations } from '../lib/migration-builder'
 
 void function testAutoIncrementWithNumericKeyPathIsValid() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'counters',
-      z.object({
+    v.createObjectStore({
+      name: 'counters',
+      schema: z.object({
         id: z.number(),
         value: z.string(),
       }),
-      { primaryKey: 'id', autoIncrement: true }
-    )
+      primaryKey: 'id',
+      autoIncrement: true,
+    })
   )
 }
 
 void function testAutoIncrementWithStringKeyPathIsInvalid() {
   createMigrations().version(1, v =>
     // @ts-expect-error autoIncrement requires keyPath to point at a number type, not string
-    v.createObjectStore(
-      'users',
-      z.object({
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
-      { primaryKey: 'id', autoIncrement: true }
-    )
+      primaryKey: 'id',
+      autoIncrement: true,
+    })
   )
 }
 
 void function testAutoIncrementWithNestedNumericKeyPathIsValid() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'documents',
-      z.object({
+    v.createObjectStore({
+      name: 'documents',
+      schema: z.object({
         metadata: z.object({
           id: z.number(),
           version: z.number(),
         }),
         title: z.string(),
       }),
-      { primaryKey: 'metadata.id', autoIncrement: true }
-    )
+      primaryKey: 'metadata.id',
+      autoIncrement: true,
+    })
   )
 }
 
 void function testAutoIncrementWithNestedStringKeyPathIsInvalid() {
   createMigrations().version(1, v =>
     // @ts-expect-error autoIncrement requires keyPath to point at a number type, not string
-    v.createObjectStore(
-      'documents',
-      z.object({
+    v.createObjectStore({
+      name: 'documents',
+      schema: z.object({
         metadata: z.object({
           id: z.string(),
           version: z.number(),
         }),
         title: z.string(),
       }),
-      { primaryKey: 'metadata.id', autoIncrement: true }
-    )
+      primaryKey: 'metadata.id',
+      autoIncrement: true,
+    })
   )
 }
 
@@ -79,15 +83,16 @@ void function testAutoIncrementWithNestedStringKeyPathIsInvalid() {
 void function testCompositeKeysWithAutoIncrementIsInvalid() {
   createMigrations().version(1, v =>
     // @ts-expect-error composite keys (array keyPath) cannot be used with autoIncrement
-    v.createObjectStore(
-      'orders',
-      z.object({
+    v.createObjectStore({
+      name: 'orders',
+      schema: z.object({
         customerId: z.number(),
         orderId: z.number(),
         amount: z.number(),
       }),
-      { primaryKey: ['customerId', 'orderId'], autoIncrement: true }
-    )
+      primaryKey: ['customerId', 'orderId'],
+      autoIncrement: true,
+    })
   )
 }
 
@@ -97,14 +102,14 @@ void function testCompositeKeysWithAutoIncrementIsInvalid() {
 
 void async function testOutOfLineAutoIncrementKeyIsNumber() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'events',
-      z.object({
+    v.createObjectStore({
+      name: 'events',
+      schema: z.object({
         name: z.string(),
         timestamp: z.date(),
       }),
-      { autoIncrement: true }
-    )
+      autoIncrement: true,
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -122,13 +127,13 @@ void async function testOutOfLineAutoIncrementKeyIsNumber() {
 
 void async function testOutOfLineNoAutoIncrementKeyIsIDBValidKey() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'items',
-      z.object({
+    v.createObjectStore({
+      name: 'items',
+      schema: z.object({
         name: z.string(),
       }),
-      { autoIncrement: false }
-    )
+      autoIncrement: false,
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -145,14 +150,14 @@ void async function testOutOfLineNoAutoIncrementKeyIsIDBValidKey() {
 
 void async function testOutOfLineAutoIncrementPutAllowsOptionalKey() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'events',
-      z.object({
+    v.createObjectStore({
+      name: 'events',
+      schema: z.object({
         name: z.string(),
         timestamp: z.date(),
       }),
-      { autoIncrement: true }
-    )
+      autoIncrement: true,
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -205,13 +210,13 @@ void async function testOutOfLineAutoIncrementPutAllowsOptionalKey() {
 void async function testTransformRecordsPreservesAutoIncrementKeyType() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'events',
-        z.object({
+      v.createObjectStore({
+        name: 'events',
+        schema: z.object({
           name: z.string(),
         }),
-        { autoIncrement: true }
-      )
+        autoIncrement: true,
+      })
     )
     .version(2, v =>
       v.transformRecords('events', row => ({
@@ -232,14 +237,15 @@ void async function testTransformRecordsPreservesAutoIncrementKeyType() {
 void function testTransformRecordsChangingInlineKeyTypeIsInvalid() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'counters',
-        z.object({
+      v.createObjectStore({
+        name: 'counters',
+        schema: z.object({
           id: z.number(),
           value: z.string(),
         }),
-        { primaryKey: 'id', autoIncrement: true }
-      )
+        primaryKey: 'id',
+        autoIncrement: true,
+      })
     )
     .version(2, v =>
       // @ts-expect-error transforming id from number to string breaks autoIncrement constraint

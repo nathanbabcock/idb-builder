@@ -4,7 +4,7 @@ import type { InferSchema } from '../lib/migration-builder.types'
 
 void function testAlterTableAddsOptionalProperties() {
   const migrations = createMigrations()
-    .version(1, v => v.createObjectStore('users', z.object({ id: z.string() })))
+    .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
       v.alterObjectStore('users', oldSchema =>
         oldSchema.extend({
@@ -27,7 +27,7 @@ void function testAlterTableAddsOptionalProperties() {
 
 void function testAlterTableCanExtendNestedObjects() {
   const migrations = createMigrations()
-    .version(1, v => v.createObjectStore('users', z.object({ id: z.string() })))
+    .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
       v.alterObjectStore('users', oldSchema =>
         oldSchema.extend({
@@ -58,7 +58,7 @@ void function testAlterTableCanExtendNestedObjects() {
 
 void function testAlterObjectStoreRejectsAddingRequiredField() {
   createMigrations()
-    .version(1, v => v.createObjectStore('users', z.object({ id: z.string() })))
+    .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
       // @ts-expect-error adding required field is not backwards-compatible
       v.alterObjectStore('users', oldSchema =>
@@ -70,10 +70,10 @@ void function testAlterObjectStoreRejectsAddingRequiredField() {
 void function testAlterObjectStoreAllowsWideningType() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'items',
-        z.object({ id: z.string(), status: z.literal('active') })
-      )
+      v.createObjectStore({
+        name: 'items',
+        schema: z.object({ id: z.string(), status: z.literal('active') }),
+      })
     )
     .version(2, v =>
       v.alterObjectStore('items', oldSchema =>
@@ -85,10 +85,10 @@ void function testAlterObjectStoreAllowsWideningType() {
 void function testAlterObjectStoreRejectsNarrowingType() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'items',
-        z.object({ id: z.string(), status: z.string() })
-      )
+      v.createObjectStore({
+        name: 'items',
+        schema: z.object({ id: z.string(), status: z.string() }),
+      })
     )
     .version(2, v =>
       // @ts-expect-error narrowing type is not backwards-compatible
@@ -101,10 +101,10 @@ void function testAlterObjectStoreRejectsNarrowingType() {
 void function testAlterObjectStoreRejectsChangingFieldType() {
   createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'counters',
-        z.object({ id: z.string(), count: z.number() })
-      )
+      v.createObjectStore({
+        name: 'counters',
+        schema: z.object({ id: z.string(), count: z.number() }),
+      })
     )
     .version(2, v =>
       // @ts-expect-error changing field type is not backwards-compatible

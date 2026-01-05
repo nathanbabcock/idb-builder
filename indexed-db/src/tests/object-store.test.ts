@@ -12,7 +12,10 @@ beforeEach(() => {
 
 test('creates object store', async () => {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore('users', z.object({}))
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({}),
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -24,7 +27,12 @@ test('creates object store', async () => {
 
 test('deletes object store', async () => {
   const migrations = createMigrations()
-    .version(1, v => v.createObjectStore('users', z.object({})))
+    .version(1, v =>
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({}),
+      })
+    )
     .version(2, v => v.deleteObjectStore('users'))
 
   const db = await openDB('test-db', migrations)
@@ -37,9 +45,18 @@ test('deletes object store', async () => {
 test('creates multiple object stores', async () => {
   const migrations = createMigrations().version(1, v =>
     v
-      .createObjectStore('users', z.object({}))
-      .createObjectStore('posts', z.object({}))
-      .createObjectStore('comments', z.object({}))
+      .createObjectStore({
+        name: 'users',
+        schema: z.object({}),
+      })
+      .createObjectStore({
+        name: 'posts',
+        schema: z.object({}),
+      })
+      .createObjectStore({
+        name: 'comments',
+        schema: z.object({}),
+      })
   )
 
   const db = await openDB('test-db', migrations)
@@ -55,9 +72,18 @@ test('deletes multiple object stores', async () => {
   const migrations = createMigrations()
     .version(1, v =>
       v
-        .createObjectStore('users', z.object({}))
-        .createObjectStore('posts', z.object({}))
-        .createObjectStore('comments', z.object({}))
+        .createObjectStore({
+          name: 'users',
+          schema: z.object({}),
+        })
+        .createObjectStore({
+          name: 'posts',
+          schema: z.object({}),
+        })
+        .createObjectStore({
+          name: 'comments',
+          schema: z.object({}),
+        })
     )
     .version(2, v => v.deleteObjectStore('users').deleteObjectStore('comments'))
 

@@ -5,9 +5,9 @@ import type { InferSchema } from '../lib/migration-builder.types'
 void function testInferSchemaPreservesDiscriminatedUnions() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'files',
-        z.discriminatedUnion('type', [
+      v.createObjectStore({
+        name: 'files',
+        schema: z.discriminatedUnion('type', [
           z.object({
             id: z.string(),
             type: z.literal('local'),
@@ -20,8 +20,8 @@ void function testInferSchemaPreservesDiscriminatedUnions() {
             name: z.string(),
             url: z.string(),
           }),
-        ])
-      )
+        ]),
+      })
     )
     .version(2, v =>
       // todo: we want to use oldSchema to transform into the one without

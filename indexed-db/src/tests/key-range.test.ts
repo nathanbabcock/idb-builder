@@ -13,11 +13,11 @@ beforeEach(() => {
 
 test('KeyRange.gte().lt() retrieves records in range', async () => {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'scores',
-      z.object({ id: z.number(), value: z.number() }),
-      { primaryKey: 'id' }
-    )
+    v.createObjectStore({
+      name: 'scores',
+      schema: z.object({ id: z.number(), value: z.number() }),
+      primaryKey: 'id',
+    })
   )
 
   const db = await openDB('test-db', migrations)

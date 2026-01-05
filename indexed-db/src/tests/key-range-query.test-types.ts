@@ -10,14 +10,14 @@ import { createMigrations } from '../lib/migration-builder'
 
 void async function testGetAllWithKeyRangeOnStringPrimaryKey() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'users',
-      z.object({
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
-      { primaryKey: 'id' }
-    )
+      primaryKey: 'id',
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -38,14 +38,14 @@ void async function testGetAllWithKeyRangeOnStringPrimaryKey() {
 
 void async function testGetAllWithKeyRangeOnNumberPrimaryKey() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'products',
-      z.object({
+    v.createObjectStore({
+      name: 'products',
+      schema: z.object({
         sku: z.number(),
         name: z.string(),
       }),
-      { primaryKey: 'sku' }
-    )
+      primaryKey: 'sku',
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -63,15 +63,15 @@ void async function testGetAllWithKeyRangeOnNumberPrimaryKey() {
 void async function testGetAllFromIndexWithKeyRange() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'orders',
-        z.object({
+      v.createObjectStore({
+        name: 'orders',
+        schema: z.object({
           id: z.string(),
           customerId: z.string(),
           total: z.number(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v

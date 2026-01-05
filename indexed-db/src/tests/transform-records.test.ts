@@ -12,11 +12,11 @@ beforeEach(() => {
 
 test('records are transformed from firstName/lastName to single name field', async () => {
   const v1Migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'users',
-      z.object({ id: z.string(), firstName: z.string(), lastName: z.string() }),
-      { primaryKey: 'id' }
-    )
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({ id: z.string(), firstName: z.string(), lastName: z.string() }),
+      primaryKey: 'id',
+    })
   )
 
   // Insert record using v1 schema
@@ -28,15 +28,15 @@ test('records are transformed from firstName/lastName to single name field', asy
   // Reopen with v2 schema that transforms firstName/lastName into name
   const v2Migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           firstName: z.string(),
           lastName: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.transformRecords('users', user => ({

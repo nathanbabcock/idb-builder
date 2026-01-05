@@ -13,11 +13,11 @@ beforeEach(() => {
 test('retrieves record by index', async () => {
   const migrations = createMigrations().version(1, v =>
     v
-      .createObjectStore(
-        'users',
-        z.object({ id: z.string(), email: z.string() }),
-        { primaryKey: 'id' }
-      )
+      .createObjectStore({
+        name: 'users',
+        schema: z.object({ id: z.string(), email: z.string() }),
+        primaryKey: 'id',
+      })
       .createIndex('byEmail', { storeName: 'users', keyPath: 'email' })
   )
 

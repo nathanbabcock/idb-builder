@@ -382,9 +382,9 @@ export type DeepPrettify<T> = T extends object
  *
  * @example
  * const migrations = createMigrations()
- *   .version(1, v => v.createObjectStore('users', {
- *     id: z.string(),
- *     name: z.string(),
+ *   .version(1, v => v.createObjectStore({
+ *     name: 'users',
+ *     schema: z.object({ id: z.string(), name: z.string() }),
  *   }))
  *
  * type Schema = InferSchema<typeof migrations>

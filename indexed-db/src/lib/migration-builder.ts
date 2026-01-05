@@ -36,15 +36,16 @@ class VersionBuilder<S extends Schema> {
   }
 
   createObjectStore<
-    Name extends string,
-    ZodSchema extends z.ZodTypeAny,
+    const Name extends string,
+    const ZodSchema extends z.ZodTypeAny,
     const PrimaryKey extends string | readonly string[] | undefined = undefined,
     const AutoIncrement extends boolean = false,
-  >(
-    name: Name & Exclude<Name, keyof S>,
-    _schema: ZodSchema, // Used for type inference only
-    options: { primaryKey?: PrimaryKey; autoIncrement?: AutoIncrement } = {}
-  ): ValidateKeyPath<z.infer<ZodSchema>, PrimaryKey> extends never
+  >(options: {
+    name: Name & Exclude<Name, keyof S>
+    schema: ZodSchema
+    primaryKey?: PrimaryKey
+    autoIncrement?: AutoIncrement
+  }): ValidateKeyPath<z.infer<ZodSchema>, PrimaryKey> extends never
     ? InvalidKeyPath<`Primary key '${Stringify<PrimaryKey>}' is not a valid path in the schema`>
     : ValidateAutoIncrementKey<
           z.infer<ZodSchema>,
@@ -69,9 +70,9 @@ class VersionBuilder<S extends Schema> {
         > {
     return this.chain<any>({
       action: 'create-object-store',
-      storeName: name,
-      keyPath: options?.primaryKey,
-      autoIncrement: options?.autoIncrement,
+      storeName: options.name,
+      keyPath: options.primaryKey,
+      autoIncrement: options.autoIncrement,
     }) as any
   }
 
@@ -318,10 +319,10 @@ class MigrationBuilder<
    * }
    *
    * const migrations = createMigrations()
-   *   .version(1, v1 => v1.createObjectStore('users', z.object({
-   *     id: z.string(),
-   *     name: z.string(),
-   *   })))
+   *   .version(1, v1 => v1.createObjectStore({
+   *     name: 'users',
+   *     schema: z.object({ id: z.string(), name: z.string() }),
+   *   }))
    *   .expectType<MyDBSchema>()
    */
   expectType<_Expected extends SchemaToIDBSchema<S>>(): MigrationBuilder<

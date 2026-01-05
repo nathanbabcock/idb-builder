@@ -5,11 +5,11 @@ import { z } from 'zod/v4'
 
 // ---cut---
 const migrations = createMigrations().version(1, v =>
-  v.createObjectStore(
-    'events',
-    z.object({ name: z.string(), timestamp: z.date() }),
-    { autoIncrement: true }
-  )
+  v.createObjectStore({
+    name: 'events',
+    schema: z.object({ name: z.string(), timestamp: z.date() }),
+    autoIncrement: true,
+  })
 )
 
 const db = await openDB('test-db', migrations)

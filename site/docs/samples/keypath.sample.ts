@@ -5,15 +5,13 @@ import { z } from 'zod/v4'
 
 // ---cut---
 createMigrations().version(1, v =>
-  v.createObjectStore(
-    'users',
-    z.object({
+  v.createObjectStore({
+    name: 'users',
+    schema: z.object({
       id: z.string(),
       name: z.string(),
     }),
-    {
-      primaryKey: 'id',
-      autoIncrement: true,
-    }
-  )
+    primaryKey: 'id',
+    autoIncrement: true,
+  })
 )

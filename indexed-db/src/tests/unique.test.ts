@@ -13,14 +13,14 @@ beforeEach(() => {
 test('creates unique index', async () => {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           email: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byEmail', {
@@ -42,14 +42,14 @@ test('creates unique index', async () => {
 test('unique index rejects duplicate values', async () => {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           email: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byEmail', {
@@ -75,14 +75,14 @@ test('unique index rejects duplicate values', async () => {
 test('non-unique index allows duplicate values', async () => {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           email: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.createIndex('byEmail', {

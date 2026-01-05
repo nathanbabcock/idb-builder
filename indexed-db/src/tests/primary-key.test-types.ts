@@ -4,73 +4,69 @@ import { createMigrations } from '../lib/migration-builder'
 
 void function testCreateObjectStoreSupportsPrimaryKeyForKeyPath() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'users',
-      z.object({
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
-      { primaryKey: 'id' }
-    )
+      primaryKey: 'id',
+    })
   )
 }
 
 void function testCreateObjectStorePrimaryKeyIsTypeSafe() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'nonexistent' is not a key of the value type
-    v.createObjectStore(
-      'users',
-      z.object({
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
-      {
-        primaryKey: 'nonexistent',
-      }
-    )
+      primaryKey: 'nonexistent',
+    })
   )
 }
 
 void function testCreateObjectStoreSupportsNestedKeyPath() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'documents',
-      z.object({
+    v.createObjectStore({
+      name: 'documents',
+      schema: z.object({
         metadata: z.object({
           id: z.string(),
           version: z.number(),
         }),
         title: z.string(),
       }),
-      { primaryKey: 'metadata.id' }
-    )
+      primaryKey: 'metadata.id',
+    })
   )
 }
 
 void function testCreateObjectStoreNestedKeyPathIsTypeSafe() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'metadata.nonexistent' is not a valid nested key path
-    v.createObjectStore(
-      'documents',
-      z.object({
+    v.createObjectStore({
+      name: 'documents',
+      schema: z.object({
         metadata: z.object({
           id: z.string(),
           version: z.number(),
         }),
         title: z.string(),
       }),
-      {
-        primaryKey: 'metadata.nonexistent',
-      }
-    )
+      primaryKey: 'metadata.nonexistent',
+    })
   )
 }
 
 void function testCreateObjectStoreSupportsDeeplyNestedKeyPath() {
   createMigrations().version(1, v =>
-    v.createObjectStore(
-      'articles',
-      z.object({
+    v.createObjectStore({
+      name: 'articles',
+      schema: z.object({
         metadata: z.object({
           author: z.object({
             id: z.string(),
@@ -80,17 +76,17 @@ void function testCreateObjectStoreSupportsDeeplyNestedKeyPath() {
         }),
         content: z.string(),
       }),
-      { primaryKey: 'metadata.author.id' }
-    )
+      primaryKey: 'metadata.author.id',
+    })
   )
 }
 
 void function testCreateObjectStoreDeeplyNestedKeyPathIsTypeSafe() {
   createMigrations().version(1, v =>
     // @ts-expect-error 'metadata.author.nonexistent' is not a valid nested key path
-    v.createObjectStore(
-      'articles',
-      z.object({
+    v.createObjectStore({
+      name: 'articles',
+      schema: z.object({
         metadata: z.object({
           author: z.object({
             id: z.string(),
@@ -100,23 +96,21 @@ void function testCreateObjectStoreDeeplyNestedKeyPathIsTypeSafe() {
         }),
         content: z.string(),
       }),
-      {
-        primaryKey: 'metadata.author.nonexistent',
-      }
-    )
+      primaryKey: 'metadata.author.nonexistent',
+    })
   )
 }
 
 void async function testGetKeyType() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'users',
-      z.object({
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
-      { primaryKey: 'id' }
-    )
+      primaryKey: 'id',
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -130,14 +124,14 @@ void async function testGetKeyType() {
 
 void async function testGetNumericKeyType() {
   const migrations = createMigrations().version(1, v =>
-    v.createObjectStore(
-      'counters',
-      z.object({
+    v.createObjectStore({
+      name: 'counters',
+      schema: z.object({
         index: z.number(),
         value: z.string(),
       }),
-      { primaryKey: 'index' }
-    )
+      primaryKey: 'index',
+    })
   )
 
   const db = await openDB('test-db', migrations)
@@ -152,14 +146,14 @@ void async function testGetNumericKeyType() {
 void async function testGetKeyTypeAfterTransform() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'items',
-        z.object({
+      v.createObjectStore({
+        name: 'items',
+        schema: z.object({
           id: z.number(),
           name: z.string(),
         }),
-        { primaryKey: 'id' }
-      )
+        primaryKey: 'id',
+      })
     )
     .version(2, v =>
       v.transformRecords('items', row => ({
@@ -181,7 +175,7 @@ void function testValidEmptyStringPrimaryKey() {
   // Empty string primaryKey means "use the value itself as the key"
   // Valid when value type is a valid IDB key (string, number, Date, etc.)
   createMigrations().version(1, v =>
-    v.createObjectStore('emails', z.string(), { primaryKey: '' })
+    v.createObjectStore({ name: 'emails', schema: z.string(), primaryKey: '' })
   )
 }
 
@@ -189,7 +183,9 @@ void function testInvalidEmptyStringPrimaryKey() {
   // Empty string primaryKey is invalid when value is not a valid IDB key
   createMigrations().version(1, v =>
     // @ts-expect-error value type { id: string } is not a valid IDB key
-    v.createObjectStore('users', z.object({ id: z.string() }), {
+    v.createObjectStore({
+      name: 'users',
+      schema: z.object({ id: z.string() }),
       primaryKey: '',
     })
   )
@@ -199,7 +195,7 @@ void function testInvalidEmptyStringPrimaryKeyAfterTransform() {
   // Transforming from valid IDB key to object invalidates empty string primaryKey
   createMigrations()
     .version(1, v =>
-      v.createObjectStore('emails', z.string(), { primaryKey: '' })
+      v.createObjectStore({ name: 'emails', schema: z.string(), primaryKey: '' })
     )
     .version(2, v =>
       // @ts-expect-error transform makes '' primaryKey invalid (object is not a valid IDB key)

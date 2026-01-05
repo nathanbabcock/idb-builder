@@ -5,22 +5,22 @@ import type { InferSchema } from '../lib/migration-builder.types'
 void function testInferSchemaExtractsCorrectFinalSchemaType() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           name: z.string(),
-        })
-      )
+        }),
+      })
     )
     .version(2, v =>
-      v.createObjectStore(
-        'posts',
-        z.object({
+      v.createObjectStore({
+        name: 'posts',
+        schema: z.object({
           id: z.string(),
           title: z.string(),
-        })
-      )
+        }),
+      })
     )
 
   type Schema = InferSchema<typeof migrations>
@@ -35,13 +35,13 @@ void function testInferSchemaExtractsCorrectFinalSchemaType() {
 void function testInferSchemaShouldReflectTransformations() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           name: z.string(),
-        })
-      )
+        }),
+      })
     )
     .version(2, v =>
       v.transformRecords('users', row => ({

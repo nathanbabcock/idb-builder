@@ -7,13 +7,13 @@ import type { InferSchema } from '../lib/migration-builder.types'
 void function testSimpleExtendPreservesTypeInformation() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'users',
-        z.object({
+      v.createObjectStore({
+        name: 'users',
+        schema: z.object({
           id: z.string(),
           name: z.string(),
-        })
-      )
+        }),
+      })
     )
     .version(2, v =>
       v.alterObjectStore('users', oldSchema =>
@@ -35,15 +35,15 @@ void function testSimpleExtendPreservesTypeInformation() {
 void function testExtendWithNestedObjectReplacement() {
   const migrations = createMigrations()
     .version(1, v =>
-      v.createObjectStore(
-        'triggers',
-        z.object({
+      v.createObjectStore({
+        name: 'triggers',
+        schema: z.object({
           id: z.string(),
           settings: z.object({
             prompt: z.string(),
           }),
-        })
-      )
+        }),
+      })
     )
     .version(2, v =>
       v.alterObjectStore('triggers', oldSchema =>
