@@ -1,9 +1,4 @@
----
-title: Error messages
-# description: How to install and configure Typedex for typesafe Indexed DB usage.
----
-
-## Error messages
+# Error messages
 
 A useful pattern in typesafety libraries is to perform validation
 with a generic helper type like `Validate<T>` and conditionally return an

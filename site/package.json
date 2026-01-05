@@ -1,31 +1,23 @@
 {
-  "name": "@typedex/site",
-  "type": "module",
+  "name": "site-vitepress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "astro dev",
-    "typecheck": "astro check",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "clean": "rimraf .astro dist"
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "devDependencies": {
+    "@shikijs/vitepress-twoslash": "^3.20.0",
+    "vitepress": "2.0.0-alpha.15"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.37.1",
-    "@shikijs/twoslash": "^3.20.0",
-    "@typedex/indexed-db": "workspace:^",
-    "astro": "^5.6.1",
-    "expressive-code-twoslash": "^0.5.3",
-    "sharp": "^0.34.2",
-    "starlight-package-managers": "^0.12.0",
-    "zod": "^4.3.4"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@types/mdast": "^4.0.4",
-    "rimraf": "^6.1.2",
-    "typescript": "^5.9.3",
-    "unist-util-visit": "^5.0.0",
-    "vfile": "^6.0.3"
+    "@typedex/indexed-db": "workspace:*",
+    "zod": "^4.3.5"
   }
 }

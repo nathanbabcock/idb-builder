@@ -1,24 +1,38 @@
 ---
-title: Typedex
-description: Extreme typesafety for Indexed DB
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
+
 hero:
-  tagline: Extreme typesafety for Indexed DB
-  image:
-    file: ../../assets/houston.webp
+  name: Typedex
+  text: Extreme typesafety for Indexed DB
+  # tagline: My great project tagline
   actions:
-    - text: Getting started
-      link: /guides/getting-started/
-      icon: right-arrow
-    # - text: Read the Starlight docs
-    #   link: https://starlight.astro.build
-    #   icon: external
-    #   variant: minimal
+    - theme: brand
+      text: Getting started
+      link: /getting-started
+    # - theme: alt
+    #   text: API Examples
+    #   link: /api-examples
+
+features:
+  - title: Typesafety
+    details:
+      The idiosyncracies of the Indexed DB API are enforced through the type system, catching a
+      wide range of potential errors at compile-time before they happen.
+  - title: Schema validation
+    details:
+      Define and validate the shape of your data with best-in-class schema
+      libraries like Zod. Later, support for any Standard Schema will be added.
+  - title: Declarative migrations
+    details:
+      Use a fluent builder interface to set up your database, capturing granular
+      information about the schema and database architecture as you do so.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components'
 
-## Features
+<!-- Old homepage content: -->
+
+<!-- ## Features
 
 <CardGrid stagger>
   <Card title="Typesafety" icon="approve-check-circle">
@@ -92,4 +106,4 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
     type system, the interface becomes self-documenting and discoverable across
     teams without extra communication overhead.
   </Card>
-</CardGrid>
+</CardGrid> -->

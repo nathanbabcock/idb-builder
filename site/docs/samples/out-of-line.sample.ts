@@ -3,6 +3,7 @@
 import { createMigrations, openDB } from '@typedex/indexed-db'
 import { z } from 'zod/v4'
 
+// ---cut---
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore(
     'events',

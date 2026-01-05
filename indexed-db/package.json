@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "idb": "^8.0.3",
-    "zod": "^4.3.4"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.5",

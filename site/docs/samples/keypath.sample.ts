@@ -3,14 +3,17 @@
 import { createMigrations } from '@typedex/indexed-db'
 import { z } from 'zod/v4'
 
+// ---cut---
 createMigrations().version(1, v =>
   v.createObjectStore(
-    'orders',
+    'users',
     z.object({
-      customerId: z.number(),
-      orderId: z.number(),
-      amount: z.number(),
+      id: z.string(),
+      name: z.string(),
     }),
-    { primaryKey: ['customerId', 'orderId'], autoIncrement: true }
+    {
+      primaryKey: 'id',
+      autoIncrement: true,
+    }
   )
 )
