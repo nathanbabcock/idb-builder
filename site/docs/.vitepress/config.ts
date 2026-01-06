@@ -26,6 +26,7 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: 'Database versions', link: '/typesafety/database-versions' },
+          { text: 'Composite keys', link: '/typesafety/composite-keys' },
           { text: 'Auto increment', link: '/typesafety/auto-increment' },
         ],
       },
