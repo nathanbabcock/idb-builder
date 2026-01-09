@@ -1,7 +1,3 @@
----
-outline: 'deep'
----
-
 # Database versions
 
 In Indexed DB, database version must be positive integers (1, 2, 3, …). More
@@ -12,7 +8,15 @@ enforces this through the type system when you define your migrations. It will
 catch errors like copy-pasting a previous migration and forgetting to increment
 the version number.
 
-## Invalid
+<<< @/samples/monotonically-increasing.sample.ts{ts twoslash}
+
+### Skipping versions
+
+Jumping by more than 1 is totally valid as well:
+
+<<< @/samples/skipping-numbers.sample.ts{ts twoslash}
+
+## Errors
 
 ### Repeating the same version number twice
 
@@ -36,15 +40,3 @@ it also keeps the migration code simple and easy to read.
 If you do require some kind of indirection for version numbers for any reason,
 you just need to ensure that the value is a literal at compile time using e.g.
 `as const` or other devices as needed.
-
-## Valid
-
-### Monotonically increasing by 1
-
-<<< @/samples/monotonically-increasing.sample.ts{ts twoslash}
-
-### Skipping version numbers
-
-Jumping by more than 1 is totally valid as well:
-
-<<< @/samples/skipping-numbers.sample.ts{ts twoslash}

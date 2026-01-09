@@ -12,7 +12,7 @@ import type {
   UpdateStoreInfo,
   ValidateAutoIncrementKey,
   ValidateKeyPath,
-  ValidateMultiEntryIndex,
+  ValidatedKeyPath,
   ValidateVersion,
 } from './migration-builder.types'
 import type {
@@ -20,7 +20,6 @@ import type {
   InvalidAutoIncrementKey,
   InvalidIndexKeyPath,
   InvalidKeyPath,
-  InvalidMultiEntry,
   Stringify,
   TypeName,
 } from './migration-error.types'
@@ -152,43 +151,23 @@ class VersionBuilder<S extends Schema> {
     indexName: IndexName & Exclude<IndexName, keyof Info['indexes']>,
     options: {
       storeName: StoreName
-      keyPath: KeyPath
+      keyPath: ValidatedKeyPath<Info['value'], KeyPath, MultiEntry>
       multiEntry?: MultiEntry
       unique?: Unique
     }
-  ): ValidateKeyPath<Info['value'], KeyPath> extends never
-    ? InvalidKeyPath<`Index keyPath '${Stringify<KeyPath>}' is not a valid path in store '${StoreName}'`>
-    : KeyPath extends string
-      ? ValidateMultiEntryIndex<Info['value'], KeyPath, MultiEntry> extends true
-        ? VersionBuilder<
-            UpdateStore<
-              S,
-              StoreName,
-              UpdateStoreInfo<
-                Info,
-                {
-                  indexes: Info['indexes'] &
-                    Record<IndexName, IndexInfo<KeyPath, MultiEntry, Unique>>
-                }
-              >
-            >
-          >
-        : InvalidMultiEntry<`multiEntry index '${IndexName}' requires keyPath to point to an array of valid IDB keys`>
-      : MultiEntry extends true
-        ? InvalidMultiEntry<`multiEntry cannot be used with composite keyPath`>
-        : VersionBuilder<
-            UpdateStore<
-              S,
-              StoreName,
-              UpdateStoreInfo<
-                Info,
-                {
-                  indexes: Info['indexes'] &
-                    Record<IndexName, IndexInfo<KeyPath, MultiEntry, Unique>>
-                }
-              >
-            >
-          > {
+  ): VersionBuilder<
+    UpdateStore<
+      S,
+      StoreName,
+      UpdateStoreInfo<
+        Info,
+        {
+          indexes: Info['indexes'] &
+            Record<IndexName, IndexInfo<KeyPath, MultiEntry, Unique>>
+        }
+      >
+    >
+  > {
     return this.chain<any>({
       action: 'create-index',
       storeName: options.storeName,

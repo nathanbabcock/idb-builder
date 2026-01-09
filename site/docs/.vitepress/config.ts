@@ -9,6 +9,10 @@ export default defineConfig({
   lastUpdated: true,
 
   themeConfig: {
+    outline: {
+      level: 'deep',
+    },
+
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
@@ -22,12 +26,16 @@ export default defineConfig({
         items: [{ text: 'Getting started', link: '/getting-started' }],
       },
       {
-        text: 'Typesafety',
+        text: 'Features',
         collapsed: true,
         items: [
-          { text: 'Database versions', link: '/typesafety/database-versions' },
-          { text: 'Composite keys', link: '/typesafety/composite-keys' },
-          { text: 'Auto increment', link: '/typesafety/auto-increment' },
+          { text: 'Database versions', link: '/features/database-versions' },
+          { text: 'Composite keys', link: '/features/composite-keys' },
+          { text: 'Auto increment', link: '/features/auto-increment' },
+          {
+            text: 'Multi-entry indexes',
+            link: '/features/multi-entry-indexes',
+          },
         ],
       },
       {

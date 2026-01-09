@@ -45,9 +45,9 @@ void function testMultiEntryRejectsObjectArrayElements() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error multiEntry requires array elements to be valid IDB keys
       v.createIndex('byAuthor', {
         storeName: 'posts',
+        // @ts-expect-error multiEntry requires array elements to be valid IDB keys
         keyPath: 'authors',
         multiEntry: true,
       })
@@ -68,9 +68,9 @@ void function testMultiEntryRejectsCompositeKeyPath() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error multiEntry cannot be used with composite keyPath
       v.createIndex('byCategory', {
         storeName: 'posts',
+        // @ts-expect-error multiEntry cannot be used with composite keyPath
         keyPath: ['category', 'subcategory'],
         multiEntry: true,
       })
@@ -90,9 +90,9 @@ void function testMultiEntryRejectsNonArrayKeyPath() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error multiEntry requires keyPath to point to an array
       v.createIndex('byTitle', {
         storeName: 'posts',
+        // @ts-expect-error multiEntry requires keyPath to point to an array
         keyPath: 'title',
         multiEntry: true,
       })

@@ -1,7 +1,3 @@
----
-outline: 'deep'
----
-
 # Auto increment
 
 Defining an object store as [`autoIncrement`](https://developer.mozilla.org/en-US/docs/Web/API/IDBObjectStore/autoIncrement) imposes some additional constraints on the types of keys that can be used with that object store.

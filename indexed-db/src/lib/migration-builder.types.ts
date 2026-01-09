@@ -1,6 +1,7 @@
 import type z from 'zod/v4'
 import type { IsGreaterThan } from './greater-than.types'
 import type { MigrationBuilder } from './migration-builder'
+import type { TypeName } from './migration-error.types'
 
 // Index info tracks the keyPath, multiEntry, and unique flags for each index
 export type IndexInfo<
@@ -182,6 +183,26 @@ export type ValidateMultiEntryIndex<
       : false // Array elements are not valid IDB keys
     : false // multiEntry requires keyPath to point to an array
   : true // Not multiEntry, no validation needed
+
+/**
+ * Validates a keyPath for createIndex, returning the keyPath if valid or a
+ * `string & Error` type if invalid. This causes TypeScript to show errors
+ * directly on the keyPath property rather than the entire call.
+ */
+export type ValidatedKeyPath<Value, KeyPath, MultiEntry extends boolean> =
+  ValidateKeyPath<Value, KeyPath> extends never
+    ? TypedexError<`keyPath '${KeyPath extends string ? KeyPath : TypeName<KeyPath>}' is not a valid path in the store schema`>
+    : MultiEntry extends true
+      ? KeyPath extends string
+        ? ValidateMultiEntryIndex<Value, KeyPath, MultiEntry> extends true
+          ? KeyPath
+          : TypedexError<`The specified keypath '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}' and multi-entry requires an array.`>
+        : TypedexError<'multiEntry cannot be used with composite keyPath'>
+      : KeyPath
+
+// named containers for error messages:
+const error = Symbol('Error')
+type TypedexError<ErrorMsg> = { [error]: ErrorMsg }
 
 /**
  * Resolves a single string keypath to its actual type within a value type.

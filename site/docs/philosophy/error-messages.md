@@ -20,19 +20,24 @@ should concisely describe the set of values which satisfy the relevant
 validation constraint.
 
 As an example, when enforcing valid [database
-versions](/typesafety/database-versions), an invalid version number will
+versions](/features/database-versions), an invalid version number will
 produce an error such as:
 
 ```
 Error ts(2345) ― Argument of type '1' is not assignable to parameter of type '"integer greater than 1"'.
 ```
 
-If the input type being validated is a `string`, wrap the error
-message in a array literal:
+To ensure the error triggers non-assignability for any input type (including
+strings), intersect the error message with `Error`:
+
+```typescript
+type ValidatedInput<T> = T extends ValidCondition
+  ? T
+  : 'a descriptive error message' & Error
+```
+
+This produces clear, readable errors:
 
 ```
-Error ts(2345) ― Argument of type '""' is not assignable to parameter of type '["any non-empty string"]'.
+Error ts(2345) ― Argument of type '"foo"' is not assignable to parameter of type '"a descriptive error message" & Error'.
 ```
-
-That way it correctly triggers the non-assignability error (`string` vs `[string]`)
-but is still concise and readable at a glance.

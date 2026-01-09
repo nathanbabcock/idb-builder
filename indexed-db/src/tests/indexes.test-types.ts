@@ -29,9 +29,9 @@ void function testCreateIndexRejectsInvalidKeyPath() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error 'nonexistent' is not a key of users
       v.createIndex('byFoo', {
         storeName: 'users',
+        // @ts-expect-error 'nonexistent' is not a key of users
         keyPath: 'nonexistent',
       })
     )
@@ -199,9 +199,9 @@ void function testInvalidateCompositeKeyPath() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error 'middleName' is not a key of users
       v.createIndex('byFullName', {
         storeName: 'users',
+        // @ts-expect-error 'middleName' is not a key of users
         keyPath: ['firstName', 'middleName'],
       })
     )
@@ -280,9 +280,9 @@ void function testIndexKeyPathMustPointAtValidType_Nested() {
       v.createIndex('byName', { storeName: 'users', keyPath: 'profile.name' })
     )
     .version(3, v =>
-      // @ts-expect-error 'profile.settings' points at object, not a valid IDB key
       v.createIndex('bySettings', {
         storeName: 'users',
+        // @ts-expect-error 'profile.settings' points at object, not a valid IDB key
         keyPath: 'profile.settings',
       })
     )
@@ -310,9 +310,9 @@ void function testIndexKeyPathMustPointAtValidType_Composite() {
       })
     )
     .version(3, v =>
-      // @ts-expect-error 'profile.settings' points at object, not a valid IDB key
       v.createIndex('byIdAndSettings', {
         storeName: 'users',
+        // @ts-expect-error 'profile.settings' points at object, not a valid IDB key
         keyPath: ['id', 'profile.settings'],
       })
     )

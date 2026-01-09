@@ -1,7 +1,3 @@
----
-outline: 'deep'
----
-
 # Composite keys
 
 More than one property of an object can be used to form a composite (or
