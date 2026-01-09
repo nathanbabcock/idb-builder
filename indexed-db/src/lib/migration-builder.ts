@@ -16,10 +16,7 @@ import type {
   ValidateVersion,
 } from './migration-builder.types'
 import type {
-  InvalidAlteration,
-  InvalidAutoIncrementKey,
-  InvalidIndexKeyPath,
-  InvalidKeyPath,
+  MigrationError,
   Stringify,
   TypeName,
 } from './migration-error.types'
@@ -45,13 +42,13 @@ class VersionBuilder<S extends Schema> {
     primaryKey?: PrimaryKey
     autoIncrement?: AutoIncrement
   }): ValidateKeyPath<z.infer<ZodSchema>, PrimaryKey> extends never
-    ? InvalidKeyPath<`Primary key '${Stringify<PrimaryKey>}' is not a valid path in the schema`>
+    ? MigrationError<`Primary key '${Stringify<PrimaryKey>}' is not a valid path in the schema`>
     : ValidateAutoIncrementKey<
           z.infer<ZodSchema>,
           PrimaryKey,
           AutoIncrement
         > extends never
-      ? InvalidAutoIncrementKey<`autoIncrement requires keyPath to resolve to number, but '${Stringify<PrimaryKey>}' resolves to ${TypeName<
+      ? MigrationError<`autoIncrement requires keyPath to resolve to number, but '${Stringify<PrimaryKey>}' resolves to ${TypeName<
           ResolveKeyPath<z.infer<ZodSchema>, PrimaryKey>
         >}`>
       : VersionBuilder<
@@ -97,7 +94,7 @@ class VersionBuilder<S extends Schema> {
     name: Name,
     transform: (row: S[Name]['value']) => NewValue
   ): ValidateKeyPath<NewValue, Info['primaryKeyPath']> extends never
-    ? InvalidKeyPath<`Transform invalidates primaryKey '${Stringify<
+    ? MigrationError<`Transform invalidates primaryKey '${Stringify<
         Info['primaryKeyPath']
       >}': keyPath no longer valid for new value type`>
     : ValidateAutoIncrementKey<
@@ -105,7 +102,7 @@ class VersionBuilder<S extends Schema> {
           Info['primaryKeyPath'],
           Info['autoIncrement']
         > extends never
-      ? InvalidAutoIncrementKey<`autoIncrement requires keyPath to resolve to number after transform, but '${Stringify<
+      ? MigrationError<`autoIncrement requires keyPath to resolve to number after transform, but '${Stringify<
           Info['primaryKeyPath']
         >}' resolves to ${TypeName<
           ResolveKeyPath<NewValue, Info['primaryKeyPath']>
@@ -124,7 +121,7 @@ class VersionBuilder<S extends Schema> {
               >
             >
           >
-        : InvalidIndexKeyPath<`Transform invalidates index '${InvalidIndex}': keyPath no longer valid for new value type`> {
+        : MigrationError<`Transform invalidates index '${InvalidIndex}': keyPath no longer valid for new value type`> {
     return this.chain<any>({
       action: 'transform-object-store',
       storeName: name,
@@ -172,7 +169,7 @@ class VersionBuilder<S extends Schema> {
       action: 'create-index',
       storeName: options.storeName,
       indexName,
-      keyPath: options.keyPath,
+      keyPath: options.keyPath as string | readonly string[],
       multiEntry: options.multiEntry,
       unique: options.unique,
     }) as any
@@ -250,7 +247,7 @@ class VersionBuilder<S extends Schema> {
           >
         >
       >
-    : InvalidAlteration<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'> {
+    : MigrationError<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'> {
     // No runtime action needed - this is purely a type-level transformation
     return this as any
   }

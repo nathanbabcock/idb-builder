@@ -1,7 +1,31 @@
 /**
  * Type-level error types for migration validation failures.
  * These produce helpful error messages when type validation fails.
+ *
+ * Uses a unique symbol brand with `never` to create uninhabitable types
+ * that cannot be satisfied by any runtime value, including string literals
+ * that match the error message itself.
  */
+
+/**
+ * Unique symbol used to brand error types. The symbol is private and
+ * cannot be referenced externally, making it impossible to construct
+ * a value that satisfies this type.
+ */
+declare const error: unique symbol
+
+/**
+ * Base migration error type. Produces clear error messages like:
+ * `Type 'X' is not assignable to type 'MigrationError<"error message">'`
+ *
+ * Uses a branded wrapper object with a unique symbol key:
+ * 1. The unique symbol cannot be referenced externally
+ * 2. No runtime value can accidentally satisfy this type
+ * 3. The error message is visible in IDE tooltips and error output
+ */
+export type MigrationError<Message extends string> = {
+  [error]: Message
+}
 
 /**
  * Converts a string or string array to a string representation for error messages.
@@ -43,71 +67,3 @@ export type TypeName<T> = T extends string
               : T extends null
                 ? 'null'
                 : 'object'
-
-/**
- * Base structure for migration error types.
- * The __error field identifies the error kind, and __message provides context.
- */
-type MigrationError<Kind extends string, Message extends string> = {
-  __error: Kind
-  __message: Message
-}
-
-/**
- * Error returned when a keyPath doesn't exist in the schema.
- */
-export type InvalidKeyPath<Message extends string> = MigrationError<
-  'InvalidKeyPath',
-  Message
->
-
-/**
- * Error returned when autoIncrement is used with a non-numeric keyPath.
- */
-export type InvalidAutoIncrementKey<Message extends string> = MigrationError<
-  'InvalidAutoIncrementKey',
-  Message
->
-
-/**
- * Error returned when alterObjectStore produces a schema that existing data
- * cannot satisfy (e.g., adding a required field without transformRecords).
- */
-export type InvalidAlteration<Message extends string> = MigrationError<
-  'InvalidAlteration',
-  Message
->
-
-/**
- * Error returned when a transform invalidates an existing index keyPath.
- */
-export type InvalidIndexKeyPath<Message extends string> = MigrationError<
-  'InvalidIndexKeyPath',
-  Message
->
-
-/**
- * Error returned when multiEntry index points to array with non-IDB-key elements.
- */
-export type InvalidMultiEntry<Message extends string> = MigrationError<
-  'InvalidMultiEntry',
-  Message
->
-
-/**
- * Error returned when a migration version is not greater than the previous version.
- */
-export type InvalidVersionOrder<Message extends string> = MigrationError<
-  'InvalidVersionOrder',
-  Message
->
-
-/**
- * Brand type that produces a clear error message when version ordering is invalid.
- * Error will show: "number is not assignable to GreaterThan<X>"
- */
-// oxlint-disable-next-line no-redundant-type-constituents
-export type InvalidVersionNumber<Message extends string> = MigrationError<
-  'InvalidVersionNumber',
-  Message
->
