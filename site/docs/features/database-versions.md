@@ -8,25 +8,25 @@ enforces this through the type system when you define your migrations. It will
 catch errors like copy-pasting a previous migration and forgetting to increment
 the version number.
 
-<<< @/samples/monotonically-increasing.sample.ts{ts twoslash}
+<<< @/samples/database-versions/monotonically-increasing.sample.ts{ts twoslash}
 
 ### Skipping versions
 
 Jumping by more than 1 is totally valid as well:
 
-<<< @/samples/skipping-numbers.sample.ts{ts twoslash}
+<<< @/samples/database-versions/skipping-numbers.sample.ts{ts twoslash}
 
 ## Errors
 
 ### Repeating the same version number twice
 
-<<< @/samples/same-version-twice.sample.ts{ts twoslash}
+<<< @/samples/database-versions/same-version-twice.sample.ts{ts twoslash}
 
 This can easily happen as an oversight when copy-pasting from previous migrations.
 
 ### Explicit version number can't be inferred
 
-<<< @/samples/broad-version-number.sample.ts{ts twoslash}
+<<< @/samples/database-versions/broad-version-number.sample.ts{ts twoslash}
 
 In this case Typescript doesn't evaluate `1 + 1` to `2` at compile time
 (although there are some very cool alternative typecheckers like

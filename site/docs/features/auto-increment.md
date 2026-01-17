@@ -4,15 +4,15 @@ Defining an object store as [`autoIncrement`](https://developer.mozilla.org/en-U
 
 ## Keypath must point to a number
 
-<<< @/samples/keypath.sample.ts{ts twoslash}
+<<< @/samples/auto-increment/keypath.sample.ts{ts twoslash}
 
 ## Out-of-line keys must be numbers
 
-<<< @/samples/out-of-line.sample.ts{ts twoslash}
+<<< @/samples/auto-increment/out-of-line.sample.ts{ts twoslash}
 
 ## Auto increment cannot be used with composite keys
 
 The IndexedDB spec specifically disallows using `autoIncrement` with composite
 (array) primary keys.
 
-<<< @/samples/composite.sample.ts{ts twoslash}
+<<< @/samples/auto-increment/composite.sample.ts{ts twoslash}
