@@ -432,4 +432,4 @@ export type ValidateVersion<
     ? V // First version - any literal number allowed
     : IsGreaterThan<V, PrevVersion & number> extends true
       ? V
-      : MigrationError<`an integer greater than ${PrevVersion}`>
+      : MigrationError<`specified version ${PrevVersion} is the same as previous version`>

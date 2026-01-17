@@ -56,7 +56,7 @@ export default defineConfig({
   },
 
   markdown: {
-    codeTransformers: [transformerTwoslash({})],
+    codeTransformers: [transformerTwoslash()],
     // Explicitly load these languages for types highlighting
     languages: ['ts'],
   },
