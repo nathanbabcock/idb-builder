@@ -24,7 +24,7 @@ versions](/features/database-versions), an invalid version number will
 produce an error such as:
 
 ```
-Error ts(2345) ― Argument of type '1' is not assignable to parameter of type 'MigrationError<"integer greater than 1">'.
+Error ts(2345) ― Argument of type '1' is not assignable to parameter of type 'MigrationError<"an integer greater than 1">'.
 ```
 
 ## The MigrationError type

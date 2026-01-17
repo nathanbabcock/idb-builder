@@ -427,9 +427,9 @@ export type ValidateVersion<
   V extends number,
   PrevVersion extends number | undefined,
 > = number extends V
-  ? `specific numeric literal or static constant (e.g. 1, 2, 3, …)`
+  ? MigrationError<'a specific numeric literal (e.g. 1, 2, 3, …)'>
   : PrevVersion extends undefined
     ? V // First version - any literal number allowed
     : IsGreaterThan<V, PrevVersion & number> extends true
       ? V
-      : `integer greater than ${PrevVersion}`
+      : MigrationError<`an integer greater than ${PrevVersion}`>
