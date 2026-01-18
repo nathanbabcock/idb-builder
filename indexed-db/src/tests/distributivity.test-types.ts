@@ -26,7 +26,7 @@ void function testInferSchemaPreservesDiscriminatedUnions() {
     .version(2, v =>
       // todo: we want to use oldSchema to transform into the one without
       // redefining every field, but still retain typesafety
-      v.alterObjectStore('files', _oldSchema =>
+      v.alterSchema('files', _oldSchema =>
         z.discriminatedUnion('type', [
           z.object({
             id: z.string(),

@@ -2,11 +2,11 @@ import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
 import type { InferSchema } from '../lib/migration-builder.types'
 
-void function testAlterTableAddsOptionalProperties() {
+void function testAlterSchemaAddsOptionalProperties() {
   const migrations = createMigrations()
     .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
-      v.alterObjectStore('users', oldSchema =>
+      v.alterSchema('users', oldSchema =>
         oldSchema.extend({
           email: z.string().optional(),
         })
@@ -25,11 +25,11 @@ void function testAlterTableAddsOptionalProperties() {
   void ({ id: 'asdf', email: undefined } satisfies User)
 }
 
-void function testAlterTableCanExtendNestedObjects() {
+void function testAlterSchemaCanExtendNestedObjects() {
   const migrations = createMigrations()
     .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
-      v.alterObjectStore('users', oldSchema =>
+      v.alterSchema('users', oldSchema =>
         oldSchema.extend({
           settings: z.object({ theme: z.string().optional() }).optional(),
         })
@@ -56,18 +56,18 @@ void function testAlterTableCanExtendNestedObjects() {
 // Backwards-compatibility validation
 // =============================================================================
 
-void function testAlterObjectStoreRejectsAddingRequiredField() {
+void function testAlterSchemaRejectsAddingRequiredField() {
   createMigrations()
     .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
-      v.alterObjectStore('users', oldSchema =>
+      v.alterSchema('users', oldSchema =>
         // @ts-expect-error adding required field is not backwards-compatible
         oldSchema.extend({ email: z.string() })
       )
     )
 }
 
-void function testAlterObjectStoreAllowsWideningType() {
+void function testAlterSchemaAllowsWideningType() {
   createMigrations()
     .version(1, v =>
       v.createObjectStore({
@@ -76,13 +76,13 @@ void function testAlterObjectStoreAllowsWideningType() {
       })
     )
     .version(2, v =>
-      v.alterObjectStore('items', oldSchema =>
+      v.alterSchema('items', oldSchema =>
         oldSchema.extend({ status: z.string() })
       )
     )
 }
 
-void function testAlterObjectStoreRejectsNarrowingType() {
+void function testAlterSchemaRejectsNarrowingType() {
   createMigrations()
     .version(1, v =>
       v.createObjectStore({
@@ -91,14 +91,14 @@ void function testAlterObjectStoreRejectsNarrowingType() {
       })
     )
     .version(2, v =>
-      v.alterObjectStore('items', oldSchema =>
+      v.alterSchema('items', oldSchema =>
         // @ts-expect-error narrowing type is not backwards-compatible
         oldSchema.extend({ status: z.literal('active') })
       )
     )
 }
 
-void function testAlterObjectStoreRejectsChangingFieldType() {
+void function testAlterSchemaRejectsChangingFieldType() {
   createMigrations()
     .version(1, v =>
       v.createObjectStore({
@@ -107,7 +107,7 @@ void function testAlterObjectStoreRejectsChangingFieldType() {
       })
     )
     .version(2, v =>
-      v.alterObjectStore('counters', oldSchema =>
+      v.alterSchema('counters', oldSchema =>
         // @ts-expect-error changing field type is not backwards-compatible
         oldSchema.extend({ count: z.string() })
       )

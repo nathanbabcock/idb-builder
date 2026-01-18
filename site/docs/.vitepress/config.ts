@@ -30,7 +30,7 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: 'Database versions', link: '/features/database-versions' },
-          { text: 'Alter object store', link: '/features/alter-object-store' },
+          { text: 'Alter schema', link: '/features/alter-schema' },
           { text: 'Composite keys', link: '/features/composite-keys' },
           { text: 'Auto increment', link: '/features/auto-increment' },
           {

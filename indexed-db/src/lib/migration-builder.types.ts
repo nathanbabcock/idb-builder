@@ -348,7 +348,7 @@ export type RequiredKeys<Changes> = Exclude<
   OptionalKeys<Changes>
 >
 
-// Type helper for alterTable - merges Zod schema changes into existing type
+// Type helper for alterSchema - merges Zod schema changes into existing type
 // Properly handles optional properties with the ?: modifier
 // Made distributive to preserve discriminated unions
 export type MergeSchemaChanges<

@@ -2,7 +2,7 @@ import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
 import type { InferSchema } from '../lib/migration-builder.types'
 
-// refactor: unify w/ alterObjectStore tests
+// refactor: unify w/ alterSchema tests
 
 void function testSimpleExtendPreservesTypeInformation() {
   const migrations = createMigrations()
@@ -16,7 +16,7 @@ void function testSimpleExtendPreservesTypeInformation() {
       })
     )
     .version(2, v =>
-      v.alterObjectStore('users', oldSchema =>
+      v.alterSchema('users', oldSchema =>
         oldSchema.extend({
           email: z.string().optional(),
         })
@@ -46,7 +46,7 @@ void function testExtendWithNestedObjectReplacement() {
       })
     )
     .version(2, v =>
-      v.alterObjectStore('triggers', oldSchema =>
+      v.alterSchema('triggers', oldSchema =>
         oldSchema.extend({
           settings: z.object({
             prompt: z.string(),

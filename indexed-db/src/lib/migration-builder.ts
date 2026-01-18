@@ -202,18 +202,18 @@ class VersionBuilder<S extends Schema> {
   }
 
   /**
-   * Alter object store schema by transforming the old schema into a new one.
+   * Alter a store's schema by transforming the old schema into a new one.
    * This is a type-only operation - no runtime migration is performed.
    *
    * The new schema must be backwards-compatible: existing data must satisfy
    * the new type. For breaking changes, use transformRecords instead.
    *
    * @example
-   * .alterObjectStore('users', oldSchema =>
+   * .alterSchema('users', oldSchema =>
    *   oldSchema.extend({ email: z.string().optional() })
    * )
    */
-  alterObjectStore<
+  alterSchema<
     StoreName extends keyof S & string,
     NewSchema extends z.ZodTypeAny,
     Info extends ExtractStoreInfo<S, StoreName> = ExtractStoreInfo<

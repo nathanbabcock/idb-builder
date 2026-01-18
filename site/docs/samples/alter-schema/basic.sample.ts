@@ -14,7 +14,7 @@ const migrations = createMigrations()
     })
   )
   .version(2, v =>
-    v.alterObjectStore('users', oldSchema =>
+    v.alterSchema('users', oldSchema =>
       oldSchema.extend({
         email: z.string().optional(),
       })

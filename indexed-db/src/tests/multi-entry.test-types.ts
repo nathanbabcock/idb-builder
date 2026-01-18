@@ -148,7 +148,7 @@ void async function testMultiEntryWidenedArrayTypeAllowsBothTypes() {
     )
     // Widen codes from number[] to (string | number)[]
     .version(3, v =>
-      v.alterObjectStore('posts', schema =>
+      v.alterSchema('posts', schema =>
         schema.extend({ codes: z.array(z.union([z.string(), z.number()])) })
       )
     )
