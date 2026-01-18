@@ -239,8 +239,15 @@ export type ValidatedPrimaryKey<
 export type ValidatedSchemaAlteration<
   OldSchema extends z.ZodTypeAny,
   NewSchema extends z.ZodTypeAny,
+  PrimaryKeyPath extends string | undefined = undefined,
 > = z.infer<OldSchema> extends z.infer<NewSchema>
-  ? NewSchema
+  ? PrimaryKeyPath extends string
+    ? PrimaryKeyPath extends keyof z.infer<NewSchema>
+      ? undefined extends z.infer<NewSchema>[PrimaryKeyPath]
+        ? MigrationError<`Schema alteration makes primaryKey '${PrimaryKeyPath}' optional, which is not allowed`>
+        : NewSchema
+      : MigrationError<`Schema alteration removes primaryKey '${PrimaryKeyPath}'`>
+    : NewSchema
   : MigrationError<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'>
 
 /**

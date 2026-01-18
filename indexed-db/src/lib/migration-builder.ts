@@ -224,7 +224,11 @@ class VersionBuilder<S extends Schema> {
     _storeName: StoreName,
     _transform: (
       oldSchema: S[StoreName]['schema']
-    ) => ValidatedSchemaAlteration<Info['schema'], NewSchema>
+    ) => ValidatedSchemaAlteration<
+      Info['schema'],
+      NewSchema,
+      Info['primaryKeyPath'] extends string ? Info['primaryKeyPath'] : undefined
+    >
   ): VersionBuilder<
     UpdateStore<
       S,
