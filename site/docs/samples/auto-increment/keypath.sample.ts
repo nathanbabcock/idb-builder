@@ -1,4 +1,4 @@
-// @errors: 2740
+// @errors: 2322
 
 import { createMigrations } from '@typedex/indexed-db'
 import { z } from 'zod/v4'

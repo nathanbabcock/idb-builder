@@ -1,7 +1,7 @@
 import type z from 'zod/v4'
 import type { IsGreaterThan } from './greater-than.types'
 import type { MigrationBuilder } from './migration-builder'
-import type { MigrationError, TypeName } from './migration-error.types'
+import type { MigrationError, Stringify, TypeName } from './migration-error.types'
 
 // Index info tracks the keyPath, multiEntry, and unique flags for each index
 export type IndexInfo<
@@ -199,6 +199,34 @@ export type ValidatedKeyPath<Value, KeyPath, MultiEntry extends boolean> =
           : MigrationError<`The specified keypath '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}' and multi-entry requires an array.`>
         : MigrationError<'multiEntry cannot be used with composite keyPath'>
       : KeyPath
+
+/**
+ * Validates a primaryKey for createObjectStore, returning the key path if valid
+ * or an error type if invalid. This causes TypeScript to show errors directly
+ * on the primaryKey property rather than the entire call.
+ *
+ * Checks:
+ * 1. The keyPath must be valid within the schema
+ * 2. Composite keys (arrays) cannot be used with autoIncrement
+ * 3. When autoIncrement is true, the keyPath must point to a number type
+ */
+export type ValidatedPrimaryKey<
+  Value,
+  KeyPath,
+  AutoIncrement extends boolean,
+> = ValidateKeyPath<Value, KeyPath> extends never
+  ? MigrationError<`Primary key '${Stringify<KeyPath>}' is not a valid path in the schema`>
+  : AutoIncrement extends true
+    ? KeyPath extends readonly string[]
+      ? MigrationError<'autoIncrement cannot be used with composite (array) primary keys'>
+      : KeyPath extends string
+        ? number extends ResolveSingleKeyPath<Value, KeyPath>
+          ? KeyPath
+          : ResolveSingleKeyPath<Value, KeyPath> extends number
+            ? KeyPath
+            : MigrationError<`autoIncrement requires primaryKey to resolve to number, but '${KeyPath}' resolves to ${TypeName<ResolveSingleKeyPath<Value, KeyPath>>}`>
+        : KeyPath // undefined case - out-of-line keys are allowed with autoIncrement
+    : KeyPath
 
 /**
  * Resolves a single string keypath to its actual type within a value type.

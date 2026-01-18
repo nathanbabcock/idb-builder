@@ -17,7 +17,6 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysFlat() {
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeFlat() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'nonexistent' is not a key of the value type
     v.createObjectStore({
       name: 'orders',
       schema: z.object({
@@ -25,6 +24,7 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeFlat() {
         orderId: z.string(),
         amount: z.number(),
       }),
+      // @ts-expect-error 'nonexistent' is not a key of the value type
       primaryKey: ['customerId', 'nonexistent'],
     })
   )
@@ -52,7 +52,6 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysNested() {
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeNested() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'user.nonexistent' is not a valid nested key path
     v.createObjectStore({
       name: 'events',
       schema: z.object({
@@ -66,6 +65,7 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeNested() {
         }),
         timestamp: z.number(),
       }),
+      // @ts-expect-error 'user.nonexistent' is not a valid nested key path
       primaryKey: ['user.id', 'user.nonexistent'],
     })
   )
@@ -90,7 +90,6 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysMixed() {
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeMixed() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'transaction.nonexistent' is not a valid nested key path
     v.createObjectStore({
       name: 'transactions',
       schema: z.object({
@@ -101,6 +100,7 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeMixed() {
         }),
         amount: z.number(),
       }),
+      // @ts-expect-error 'transaction.nonexistent' is not a valid nested key path
       primaryKey: ['accountId', 'transaction.nonexistent'],
     })
   )
@@ -130,7 +130,6 @@ void function testCreateObjectStoreSupportsCompositePrimaryKeysDeeplyNested() {
 
 void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeDeeplyNested() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'system.server.nonexistent' is not a valid nested key path
     v.createObjectStore({
       name: 'logs',
       schema: z.object({
@@ -146,6 +145,7 @@ void function testCreateObjectStoreCompositePrimaryKeysAreTypeSafeDeeplyNested()
           message: z.string(),
         }),
       }),
+      // @ts-expect-error 'system.server.nonexistent' is not a valid nested key path
       primaryKey: ['system.server.id', 'system.server.nonexistent'],
     })
   )

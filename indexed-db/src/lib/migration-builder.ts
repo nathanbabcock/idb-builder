@@ -13,6 +13,7 @@ import type {
   ValidateAutoIncrementKey,
   ValidateKeyPath,
   ValidatedKeyPath,
+  ValidatedPrimaryKey,
   ValidateVersion,
 } from './migration-builder.types'
 import type {
@@ -39,35 +40,23 @@ class VersionBuilder<S extends Schema> {
   >(options: {
     name: Name & Exclude<Name, keyof S>
     schema: ZodSchema
-    primaryKey?: PrimaryKey
+    primaryKey?: ValidatedPrimaryKey<
+      z.infer<ZodSchema>,
+      PrimaryKey,
+      AutoIncrement
+    >
     autoIncrement?: AutoIncrement
-  }): ValidateKeyPath<z.infer<ZodSchema>, PrimaryKey> extends never
-    ? MigrationError<`Primary key '${Stringify<PrimaryKey>}' is not a valid path in the schema`>
-    : ValidateAutoIncrementKey<
-          z.infer<ZodSchema>,
-          PrimaryKey,
-          AutoIncrement
-        > extends never
-      ? MigrationError<`autoIncrement requires keyPath to resolve to number, but '${Stringify<PrimaryKey>}' resolves to ${TypeName<
-          ResolveKeyPath<z.infer<ZodSchema>, PrimaryKey>
-        >}`>
-      : VersionBuilder<
-          UpdateStore<
-            S,
-            Name,
-            StoreInfo<
-              z.infer<ZodSchema>,
-              {},
-              ZodSchema,
-              PrimaryKey,
-              AutoIncrement
-            >
-          >
-        > {
+  }): VersionBuilder<
+    UpdateStore<
+      S,
+      Name,
+      StoreInfo<z.infer<ZodSchema>, {}, ZodSchema, PrimaryKey, AutoIncrement>
+    >
+  > {
     return this.chain<any>({
       action: 'create-object-store',
       storeName: options.name,
-      keyPath: options.primaryKey,
+      keyPath: options.primaryKey as PrimaryKey,
       autoIncrement: options.autoIncrement,
     }) as any
   }

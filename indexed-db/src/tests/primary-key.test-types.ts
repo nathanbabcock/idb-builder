@@ -17,13 +17,13 @@ void function testCreateObjectStoreSupportsPrimaryKeyForKeyPath() {
 
 void function testCreateObjectStorePrimaryKeyIsTypeSafe() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'nonexistent' is not a key of the value type
     v.createObjectStore({
       name: 'users',
       schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
+      // @ts-expect-error 'nonexistent' is not a key of the value type
       primaryKey: 'nonexistent',
     })
   )
@@ -47,7 +47,6 @@ void function testCreateObjectStoreSupportsNestedKeyPath() {
 
 void function testCreateObjectStoreNestedKeyPathIsTypeSafe() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'metadata.nonexistent' is not a valid nested key path
     v.createObjectStore({
       name: 'documents',
       schema: z.object({
@@ -57,6 +56,7 @@ void function testCreateObjectStoreNestedKeyPathIsTypeSafe() {
         }),
         title: z.string(),
       }),
+      // @ts-expect-error 'metadata.nonexistent' is not a valid nested key path
       primaryKey: 'metadata.nonexistent',
     })
   )
@@ -83,7 +83,6 @@ void function testCreateObjectStoreSupportsDeeplyNestedKeyPath() {
 
 void function testCreateObjectStoreDeeplyNestedKeyPathIsTypeSafe() {
   createMigrations().version(1, v =>
-    // @ts-expect-error 'metadata.author.nonexistent' is not a valid nested key path
     v.createObjectStore({
       name: 'articles',
       schema: z.object({
@@ -96,6 +95,7 @@ void function testCreateObjectStoreDeeplyNestedKeyPathIsTypeSafe() {
         }),
         content: z.string(),
       }),
+      // @ts-expect-error 'metadata.author.nonexistent' is not a valid nested key path
       primaryKey: 'metadata.author.nonexistent',
     })
   )
@@ -182,10 +182,10 @@ void function testValidEmptyStringPrimaryKey() {
 void function testInvalidEmptyStringPrimaryKey() {
   // Empty string primaryKey is invalid when value is not a valid IDB key
   createMigrations().version(1, v =>
-    // @ts-expect-error value type { id: string } is not a valid IDB key
     v.createObjectStore({
       name: 'users',
       schema: z.object({ id: z.string() }),
+      // @ts-expect-error value type { id: string } is not a valid IDB key
       primaryKey: '',
     })
   )

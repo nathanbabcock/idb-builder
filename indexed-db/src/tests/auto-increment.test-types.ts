@@ -28,13 +28,13 @@ void function testAutoIncrementWithNumericKeyPathIsValid() {
 
 void function testAutoIncrementWithStringKeyPathIsInvalid() {
   createMigrations().version(1, v =>
-    // @ts-expect-error autoIncrement requires keyPath to point at a number type, not string
     v.createObjectStore({
       name: 'users',
       schema: z.object({
         id: z.string(),
         name: z.string(),
       }),
+      // @ts-expect-error autoIncrement requires keyPath to point at a number type, not string
       primaryKey: 'id',
       autoIncrement: true,
     })
@@ -60,7 +60,6 @@ void function testAutoIncrementWithNestedNumericKeyPathIsValid() {
 
 void function testAutoIncrementWithNestedStringKeyPathIsInvalid() {
   createMigrations().version(1, v =>
-    // @ts-expect-error autoIncrement requires keyPath to point at a number type, not string
     v.createObjectStore({
       name: 'documents',
       schema: z.object({
@@ -70,6 +69,7 @@ void function testAutoIncrementWithNestedStringKeyPathIsInvalid() {
         }),
         title: z.string(),
       }),
+      // @ts-expect-error autoIncrement requires keyPath to point at a number type, not string
       primaryKey: 'metadata.id',
       autoIncrement: true,
     })
@@ -82,7 +82,6 @@ void function testAutoIncrementWithNestedStringKeyPathIsInvalid() {
 
 void function testCompositeKeysWithAutoIncrementIsInvalid() {
   createMigrations().version(1, v =>
-    // @ts-expect-error composite keys (array keyPath) cannot be used with autoIncrement
     v.createObjectStore({
       name: 'orders',
       schema: z.object({
@@ -90,6 +89,7 @@ void function testCompositeKeysWithAutoIncrementIsInvalid() {
         orderId: z.number(),
         amount: z.number(),
       }),
+      // @ts-expect-error composite keys (array keyPath) cannot be used with autoIncrement
       primaryKey: ['customerId', 'orderId'],
       autoIncrement: true,
     })
