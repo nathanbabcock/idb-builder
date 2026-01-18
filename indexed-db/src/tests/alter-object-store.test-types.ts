@@ -60,8 +60,8 @@ void function testAlterObjectStoreRejectsAddingRequiredField() {
   createMigrations()
     .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
     .version(2, v =>
-      // @ts-expect-error adding required field is not backwards-compatible
       v.alterObjectStore('users', oldSchema =>
+        // @ts-expect-error adding required field is not backwards-compatible
         oldSchema.extend({ email: z.string() })
       )
     )
@@ -91,8 +91,8 @@ void function testAlterObjectStoreRejectsNarrowingType() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error narrowing type is not backwards-compatible
       v.alterObjectStore('items', oldSchema =>
+        // @ts-expect-error narrowing type is not backwards-compatible
         oldSchema.extend({ status: z.literal('active') })
       )
     )
@@ -107,8 +107,8 @@ void function testAlterObjectStoreRejectsChangingFieldType() {
       })
     )
     .version(2, v =>
-      // @ts-expect-error changing field type is not backwards-compatible
       v.alterObjectStore('counters', oldSchema =>
+        // @ts-expect-error changing field type is not backwards-compatible
         oldSchema.extend({ count: z.string() })
       )
     )

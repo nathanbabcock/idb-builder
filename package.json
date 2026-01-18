@@ -7,7 +7,8 @@
     "preview": "pnpm run --parallel preview",
     "build": "pnpm run --parallel build",
     "format": "oxfmt",
-    "lint": "oxlint --type-aware"
+    "lint": "oxlint --type-aware",
+    "verify": "pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
     "@typescript/native-preview": "7.0.0-dev.20260101.1",

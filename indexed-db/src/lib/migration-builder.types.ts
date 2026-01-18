@@ -229,6 +229,21 @@ export type ValidatedPrimaryKey<
     : KeyPath
 
 /**
+ * Validates that a schema alteration is backwards-compatible.
+ * Returns the new schema if valid, or a MigrationError if the alteration
+ * would break existing data.
+ *
+ * The old schema's data must satisfy the new schema's type for the
+ * alteration to be considered backwards-compatible.
+ */
+export type ValidatedSchemaAlteration<
+  OldSchema extends z.ZodTypeAny,
+  NewSchema extends z.ZodTypeAny,
+> = z.infer<OldSchema> extends z.infer<NewSchema>
+  ? NewSchema
+  : MigrationError<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'>
+
+/**
  * Resolves a single string keypath to its actual type within a value type.
  * Handles dotted paths like "user.id".
  */

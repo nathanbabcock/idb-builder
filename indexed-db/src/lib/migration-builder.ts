@@ -14,6 +14,7 @@ import type {
   ValidateKeyPath,
   ValidatedKeyPath,
   ValidatedPrimaryKey,
+  ValidatedSchemaAlteration,
   ValidateVersion,
 } from './migration-builder.types'
 import type {
@@ -221,22 +222,22 @@ class VersionBuilder<S extends Schema> {
     >,
   >(
     _storeName: StoreName,
-    _transform: (oldSchema: S[StoreName]['schema']) => NewSchema
-  ): z.infer<Info['schema']> extends z.infer<NewSchema>
-    ? VersionBuilder<
-        UpdateStore<
-          S,
-          StoreName,
-          StoreInfo<
-            z.infer<NewSchema>,
-            Info['indexes'],
-            NewSchema,
-            Info['primaryKeyPath'],
-            Info['autoIncrement']
-          >
-        >
+    _transform: (
+      oldSchema: S[StoreName]['schema']
+    ) => ValidatedSchemaAlteration<Info['schema'], NewSchema>
+  ): VersionBuilder<
+    UpdateStore<
+      S,
+      StoreName,
+      StoreInfo<
+        z.infer<NewSchema>,
+        Info['indexes'],
+        NewSchema,
+        Info['primaryKeyPath'],
+        Info['autoIncrement']
       >
-    : MigrationError<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'> {
+    >
+  > {
     // No runtime action needed - this is purely a type-level transformation
     return this as any
   }
