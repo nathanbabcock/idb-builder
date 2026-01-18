@@ -46,19 +46,6 @@ This pattern creates an **uninhabitable type** that no runtime value can satisfy
 2. No runtime value can accidentally satisfy this type
 3. The error message is visible in IDE tooltips and error output
 
-## Why not `'message' & Error`?
-
-A simpler pattern uses `'message' & Error`, but this has a subtle weakness:
-someone could potentially bypass the type check with an assertion like
-`value as string & Error`. While `Error` is a real interface, the intersection
-might appear "constructable" to developers unfamiliar with the pattern.
-
-The branded wrapper object approach is more robust:
-
-- The symbol is unexportable, so it can't be referenced in type assertions
-- The wrapper object clearly signals "this is not a real value type"
-- It's unambiguously a compile-time-only construct
-
 ## Usage
 
 ```typescript
@@ -72,3 +59,9 @@ This produces clear, readable errors:
 ```
 Error ts(2345) ― Argument of type '"foo"' is not assignable to parameter of type 'MigrationError<"a descriptive error message">'.
 ```
+
+## Error message position
+
+Error messages should be always be as localized as possible to the point of
+failure. If an individual parameter is invalid, the error should show up on that
+exact parameter, rather than bubbling up to a higher-level construct.
