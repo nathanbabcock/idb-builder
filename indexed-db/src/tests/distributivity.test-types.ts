@@ -23,28 +23,8 @@ void function testInferSchemaPreservesDiscriminatedUnions() {
         ]),
       })
     )
-    .version(2, v =>
-      // todo: we want to use oldSchema to transform into the one without
-      // redefining every field, but still retain typesafety
-      v.alterSchema('files', _oldSchema =>
-        z.discriminatedUnion('type', [
-          z.object({
-            id: z.string(),
-            type: z.literal('local'),
-            name: z.string(),
-            path: z.string(),
-            timestamp: z.date().optional(),
-          }),
-          z.object({
-            id: z.string(),
-            type: z.literal('remote'),
-            name: z.string(),
-            url: z.string(),
-            timestamp: z.date().optional(),
-          }),
-        ])
-      )
-    )
+    // updateSchema deep-merges into each variant of the discriminated union
+    .version(2, v => v.updateSchema<'files', { timestamp?: Date }>())
 
   type Schema = InferSchema<typeof migrations>
 

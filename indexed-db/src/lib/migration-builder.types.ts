@@ -236,6 +236,9 @@ export type ValidatedPrimaryKey<
  * The old schema's data must satisfy the new schema's type for the
  * alteration to be considered backwards-compatible.
  */
+/**
+ * @deprecated Use ValidatedSchemaUpdate instead
+ */
 export type ValidatedSchemaAlteration<
   OldSchema extends z.ZodTypeAny,
   NewSchema extends z.ZodTypeAny,
@@ -249,6 +252,86 @@ export type ValidatedSchemaAlteration<
       : MigrationError<`Schema alteration removes primaryKey '${PrimaryKeyPath}'`>
     : NewSchema
   : MigrationError<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'>
+
+// ============================================================================
+// updateSchema types
+// ============================================================================
+
+/**
+ * Check if a type is a plain object (not array, Date, etc.).
+ * Used to determine when to deep merge vs replace.
+ */
+type IsPlainObject<T> = [T] extends [object]
+  ? [T] extends [any[] | Date | RegExp | Function | z.ZodTypeAny]
+    ? false
+    : true
+  : false
+
+/**
+ * Deep merge type utility for updateSchema.
+ * Recursively merges Update into Base with these behaviors:
+ * - Properties set to `never` are deleted
+ * - Plain objects are deep merged
+ * - Arrays and primitives are replaced entirely
+ * - Optional properties (with ?) are preserved
+ *
+ * Made distributive to preserve discriminated unions.
+ */
+export type DeepMerge<Base, Update> = Base extends any
+  ? [Update] extends [never]
+    ? never
+    : IsPlainObject<Base> extends true
+      ? IsPlainObject<Update> extends true
+        ? Prettify<MergeObjects<Base, Update>>
+        : Update
+      : Update
+  : never
+
+/**
+ * Merge two object types, with Update taking precedence.
+ * Handles required/optional preservation.
+ */
+type MergeObjects<Base, Update> = FilterNever<{
+  // Keys only in Base - preserve as-is
+  [K in keyof Base as K extends keyof Update ? never : K]: Base[K]
+}> &
+  FilterNever<{
+    // Keys in Update - take from Update (possibly merged if nested objects)
+    [K in keyof Update]: K extends keyof Base
+      ? DeepMerge<Base[K], Update[K]>
+      : Update[K]
+  }>
+
+/**
+ * Remove keys whose values are never.
+ */
+type FilterNever<T> = {
+  [K in keyof T as [T[K]] extends [never] ? never : K]: T[K]
+}
+
+/**
+ * Validates that a schema update is backwards-compatible and preserves primary key.
+ * Returns the merged value type if valid, or a MigrationError if:
+ * - The update adds required properties (not backwards-compatible)
+ * - The update narrows types (not backwards-compatible)
+ * - The update removes or makes the primary key optional
+ */
+export type ValidatedSchemaUpdate<
+  OldValue,
+  MergedValue,
+  PrimaryKeyPath extends string | undefined,
+> =
+  // Check backwards-compatibility: old data must satisfy new schema
+  OldValue extends MergedValue
+    ? // Check primary key constraints
+      PrimaryKeyPath extends string
+      ? PrimaryKeyPath extends keyof MergedValue
+        ? undefined extends MergedValue[PrimaryKeyPath]
+          ? MigrationError<`Schema update makes primaryKey '${PrimaryKeyPath}' optional, which is not allowed`>
+          : MergedValue
+        : MigrationError<`Schema update removes primaryKey '${PrimaryKeyPath}'`>
+      : MergedValue
+    : MigrationError<'Schema update is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'>
 
 /**
  * Resolves a single string keypath to its actual type within a value type.
@@ -460,7 +543,7 @@ export type DeepPrettify<T> = T extends object
 export type InferSchema<T> =
   T extends MigrationBuilder<infer S, any>
     ? Prettify<{
-        [K in keyof S]: S[K] extends StoreInfo<infer Value, any>
+        [K in keyof S]: S[K] extends StoreInfo<infer Value, any, any, any, any>
           ? Prettify<Value>
           : never
       }>

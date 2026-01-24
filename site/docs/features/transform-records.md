@@ -1,6 +1,6 @@
 # Transform records
 
-Use `transformRecords` to perform breaking schema changes that require migrating existing data. Unlike [`alterSchema`](/features/alter-schema), which only allows backwards-compatible changes, `transformRecords` runs a migration function on every record in the object store.
+Use `transformRecords` to perform breaking schema changes that require migrating existing data. Unlike [`updateSchema`](/features/update-schema), which only allows backwards-compatible changes, `transformRecords` runs a migration function on every record in the object store.
 
 ## When to use transformRecords
 

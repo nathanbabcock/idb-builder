@@ -1,24 +1,18 @@
-// @errors: 2741
-
 import { createMigrations } from '@typedex/indexed-db'
 import { z } from 'zod/v4'
 
 // ---cut---
-createMigrations()
+const migrations = createMigrations()
   .version(1, v =>
     v.createObjectStore({
       name: 'users',
       schema: z.object({
         id: z.string(),
         name: z.string(),
+        legacyField: z.string(),
       }),
       primaryKey: 'id',
     })
   )
-  .version(2, v =>
-    v.alterSchema('users', oldSchema =>
-      oldSchema.extend({
-        email: z.string(),
-      })
-    )
-  )
+  // Delete a field by setting it to never
+  .version(2, v => v.updateSchema<'users', { legacyField: never }>())

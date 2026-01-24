@@ -8,15 +8,14 @@ const migrations = createMigrations()
       name: 'users',
       schema: z.object({
         id: z.string(),
-        name: z.string(),
+        address: z.object({
+          street: z.string(),
+          city: z.string(),
+        }),
       }),
       primaryKey: 'id',
     })
   )
-  .version(2, v =>
-    v.alterSchema('users', oldSchema =>
-      oldSchema.extend({
-        email: z.string().optional(),
-      })
-    )
-  )
+  // Deep merge adds zip to the nested address object
+  // while preserving street and city
+  .version(2, v => v.updateSchema<'users', { address: { zip?: string } }>())

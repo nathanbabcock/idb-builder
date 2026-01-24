@@ -2,8 +2,6 @@ import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
 import type { InferSchema } from '../lib/migration-builder.types'
 
-// refactor: unify w/ alterSchema tests
-
 void function testSimpleExtendPreservesTypeInformation() {
   const migrations = createMigrations()
     .version(1, v =>
@@ -15,13 +13,7 @@ void function testSimpleExtendPreservesTypeInformation() {
         }),
       })
     )
-    .version(2, v =>
-      v.alterSchema('users', oldSchema =>
-        oldSchema.extend({
-          email: z.string().optional(),
-        })
-      )
-    )
+    .version(2, v => v.updateSchema<'users', { email?: string }>())
 
   type Schema = InferSchema<typeof migrations>
 
@@ -45,16 +37,8 @@ void function testExtendWithNestedObjectReplacement() {
         }),
       })
     )
-    .version(2, v =>
-      v.alterSchema('triggers', oldSchema =>
-        oldSchema.extend({
-          settings: z.object({
-            prompt: z.string(),
-            imageBase64: z.string().optional(),
-          }),
-        })
-      )
-    )
+    // Deep merge adds imageBase64 to the nested settings object
+    .version(2, v => v.updateSchema<'triggers', { settings: { imageBase64?: string } }>())
 
   type Schema = InferSchema<typeof migrations>
   type Trigger = Schema['triggers']

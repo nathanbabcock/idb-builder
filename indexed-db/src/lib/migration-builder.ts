@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { MigrationAction } from './migration-actions.types'
 import type {
+  DeepMerge,
   ExtractStoreInfo,
   FindInvalidIndexKeyPath,
   IndexInfo,
@@ -14,7 +15,7 @@ import type {
   ValidateKeyPath,
   ValidatedKeyPath,
   ValidatedPrimaryKey,
-  ValidatedSchemaAlteration,
+  ValidatedSchemaUpdate,
   ValidateVersion,
 } from './migration-builder.types'
 import type {
@@ -202,46 +203,55 @@ class VersionBuilder<S extends Schema> {
   }
 
   /**
-   * Alter a store's schema by transforming the old schema into a new one.
+   * Update a store's schema by deep-merging type changes.
    * This is a type-only operation - no runtime migration is performed.
    *
-   * The new schema must be backwards-compatible: existing data must satisfy
+   * The update must be backwards-compatible: existing data must satisfy
    * the new type. For breaking changes, use transformRecords instead.
    *
    * @example
-   * .alterSchema('users', oldSchema =>
-   *   oldSchema.extend({ email: z.string().optional() })
-   * )
+   * // Add an optional property
+   * .updateSchema<'users', { email?: string }>()
+   *
+   * // Make a property optional
+   * .updateSchema<'users', { name?: string }>()
+   *
+   * // Delete a property (set to never)
+   * .updateSchema<'users', { legacyField: never }>()
+   *
+   * // Deep merge nested objects
+   * .updateSchema<'users', { address: { zip?: string } }>()
    */
-  alterSchema<
+  updateSchema<
     StoreName extends keyof S & string,
-    NewSchema extends z.ZodTypeAny,
-    Info extends ExtractStoreInfo<S, StoreName> = ExtractStoreInfo<
-      S,
-      StoreName
+    Update,
+    _Merged = DeepMerge<S[StoreName]['value'], Update>,
+    _Validated = ValidatedSchemaUpdate<
+      S[StoreName]['value'],
+      _Merged,
+      S[StoreName]['primaryKeyPath'] extends string
+        ? S[StoreName]['primaryKeyPath']
+        : undefined
     >,
   >(
-    _storeName: StoreName,
-    _transform: (
-      oldSchema: S[StoreName]['schema']
-    ) => ValidatedSchemaAlteration<
-      Info['schema'],
-      NewSchema,
-      Info['primaryKeyPath'] extends string ? Info['primaryKeyPath'] : undefined
-    >
-  ): VersionBuilder<
-    UpdateStore<
-      S,
-      StoreName,
-      StoreInfo<
-        z.infer<NewSchema>,
-        Info['indexes'],
-        NewSchema,
-        Info['primaryKeyPath'],
-        Info['autoIncrement']
-      >
-    >
-  > {
+    // Phantom parameters to help TypeScript with type inference
+    _storeName?: StoreName,
+    _update?: Update
+  ): [_Validated] extends [MigrationError<infer Message>]
+    ? MigrationError<Message>
+    : VersionBuilder<
+        UpdateStore<
+          S,
+          StoreName,
+          StoreInfo<
+            _Validated,
+            S[StoreName]['indexes'],
+            S[StoreName]['schema'],
+            S[StoreName]['primaryKeyPath'],
+            S[StoreName]['autoIncrement']
+          >
+        >
+      > {
     // No runtime action needed - this is purely a type-level transformation
     return this as any
   }

@@ -1,3 +1,6 @@
 packages:
   - indexed-db
   - site
+
+onlyBuiltDependencies:
+  - esbuild
