@@ -1,15 +1,12 @@
-import z from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 void function testCreateObjectStoreSupportsPrimaryKeyForKeyPath() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({
-        id: z.string(),
-        name: z.string(),
-      }),
+      schema: schema<{ id: string; name: string }>(),
       primaryKey: 'id',
     })
   )
@@ -19,10 +16,7 @@ void function testCreateObjectStorePrimaryKeyIsTypeSafe() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({
-        id: z.string(),
-        name: z.string(),
-      }),
+      schema: schema<{ id: string; name: string }>(),
       // @ts-expect-error 'nonexistent' is not a key of the value type
       primaryKey: 'nonexistent',
     })
@@ -33,13 +27,10 @@ void function testCreateObjectStoreSupportsNestedKeyPath() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'documents',
-      schema: z.object({
-        metadata: z.object({
-          id: z.string(),
-          version: z.number(),
-        }),
-        title: z.string(),
-      }),
+      schema: schema<{
+        metadata: { id: string; version: number }
+        title: string
+      }>(),
       primaryKey: 'metadata.id',
     })
   )
@@ -49,13 +40,10 @@ void function testCreateObjectStoreNestedKeyPathIsTypeSafe() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'documents',
-      schema: z.object({
-        metadata: z.object({
-          id: z.string(),
-          version: z.number(),
-        }),
-        title: z.string(),
-      }),
+      schema: schema<{
+        metadata: { id: string; version: number }
+        title: string
+      }>(),
       // @ts-expect-error 'metadata.nonexistent' is not a valid nested key path
       primaryKey: 'metadata.nonexistent',
     })
@@ -66,16 +54,13 @@ void function testCreateObjectStoreSupportsDeeplyNestedKeyPath() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'articles',
-      schema: z.object({
-        metadata: z.object({
-          author: z.object({
-            id: z.string(),
-            name: z.string(),
-          }),
-          publishedAt: z.string(),
-        }),
-        content: z.string(),
-      }),
+      schema: schema<{
+        metadata: {
+          author: { id: string; name: string }
+          publishedAt: string
+        }
+        content: string
+      }>(),
       primaryKey: 'metadata.author.id',
     })
   )
@@ -85,16 +70,13 @@ void function testCreateObjectStoreDeeplyNestedKeyPathIsTypeSafe() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'articles',
-      schema: z.object({
-        metadata: z.object({
-          author: z.object({
-            id: z.string(),
-            name: z.string(),
-          }),
-          publishedAt: z.string(),
-        }),
-        content: z.string(),
-      }),
+      schema: schema<{
+        metadata: {
+          author: { id: string; name: string }
+          publishedAt: string
+        }
+        content: string
+      }>(),
       // @ts-expect-error 'metadata.author.nonexistent' is not a valid nested key path
       primaryKey: 'metadata.author.nonexistent',
     })
@@ -105,10 +87,7 @@ void async function testGetKeyType() {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({
-        id: z.string(),
-        name: z.string(),
-      }),
+      schema: schema<{ id: string; name: string }>(),
       primaryKey: 'id',
     })
   )
@@ -126,10 +105,7 @@ void async function testGetNumericKeyType() {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'counters',
-      schema: z.object({
-        index: z.number(),
-        value: z.string(),
-      }),
+      schema: schema<{ index: number; value: string }>(),
       primaryKey: 'index',
     })
   )
@@ -148,10 +124,7 @@ void async function testGetKeyTypeAfterTransform() {
     .version(1, v =>
       v.createObjectStore({
         name: 'items',
-        schema: z.object({
-          id: z.number(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: number; name: string }>(),
         primaryKey: 'id',
       })
     )
@@ -175,7 +148,7 @@ void function testValidEmptyStringPrimaryKey() {
   // Empty string primaryKey means "use the value itself as the key"
   // Valid when value type is a valid IDB key (string, number, Date, etc.)
   createMigrations().version(1, v =>
-    v.createObjectStore({ name: 'emails', schema: z.string(), primaryKey: '' })
+    v.createObjectStore({ name: 'emails', schema: schema<string>(), primaryKey: '' })
   )
 }
 
@@ -184,7 +157,7 @@ void function testInvalidEmptyStringPrimaryKey() {
   createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({ id: z.string() }),
+      schema: schema<{ id: string }>(),
       // @ts-expect-error value type { id: string } is not a valid IDB key
       primaryKey: '',
     })
@@ -195,7 +168,7 @@ void function testInvalidEmptyStringPrimaryKeyAfterTransform() {
   // Transforming from valid IDB key to object invalidates empty string primaryKey
   createMigrations()
     .version(1, v =>
-      v.createObjectStore({ name: 'emails', schema: z.string(), primaryKey: '' })
+      v.createObjectStore({ name: 'emails', schema: schema<string>(), primaryKey: '' })
     )
     .version(2, v =>
       // @ts-expect-error transform makes '' primaryKey invalid (object is not a valid IDB key)

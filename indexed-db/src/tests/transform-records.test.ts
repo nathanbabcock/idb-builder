@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -14,7 +14,7 @@ test('records are transformed from firstName/lastName to single name field', asy
   const v1Migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({ id: z.string(), firstName: z.string(), lastName: z.string() }),
+      schema: schema<{ id: string; firstName: string; lastName: string }>(),
       primaryKey: 'id',
     })
   )
@@ -30,11 +30,7 @@ test('records are transformed from firstName/lastName to single name field', asy
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          firstName: z.string(),
-          lastName: z.string(),
-        }),
+        schema: schema<{ id: string; firstName: string; lastName: string }>(),
         primaryKey: 'id',
       })
     )

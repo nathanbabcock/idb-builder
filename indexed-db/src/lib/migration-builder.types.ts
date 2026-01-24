@@ -1,5 +1,5 @@
-import type z from 'zod/v4'
 import type { IsGreaterThan } from './greater-than.types'
+import type { Schema as SchemaOf, SchemaAny } from './schema'
 import type { MigrationBuilder } from './migration-builder'
 import type { MigrationError, Stringify, TypeName } from './migration-error.types'
 
@@ -14,17 +14,17 @@ export type IndexInfo<
   unique: Unique
 }
 
-// Store info tracks the value type, indexes, the Zod schema, primary keyPath, and autoIncrement
+// Store info tracks the value type, indexes, the schema, primary keyPath, and autoIncrement
 export type StoreInfo<
   Value = unknown,
   Indexes extends Record<string, IndexInfo<any, any, any>> = {},
-  Schema extends z.ZodTypeAny = z.ZodType<Value>,
+  SchemaType extends SchemaAny = SchemaOf<Value>,
   PrimaryKeyPath extends string | readonly string[] | undefined = undefined,
   AutoIncrement extends boolean = false,
 > = {
   value: Value
   indexes: Indexes
-  schema: Schema
+  schema: SchemaType
   primaryKeyPath: PrimaryKeyPath
   autoIncrement: AutoIncrement
 }
@@ -228,31 +228,6 @@ export type ValidatedPrimaryKey<
         : KeyPath // undefined case - out-of-line keys are allowed with autoIncrement
     : KeyPath
 
-/**
- * Validates that a schema alteration is backwards-compatible.
- * Returns the new schema if valid, or a MigrationError if the alteration
- * would break existing data.
- *
- * The old schema's data must satisfy the new schema's type for the
- * alteration to be considered backwards-compatible.
- */
-/**
- * @deprecated Use ValidatedSchemaUpdate instead
- */
-export type ValidatedSchemaAlteration<
-  OldSchema extends z.ZodTypeAny,
-  NewSchema extends z.ZodTypeAny,
-  PrimaryKeyPath extends string | undefined = undefined,
-> = z.infer<OldSchema> extends z.infer<NewSchema>
-  ? PrimaryKeyPath extends string
-    ? PrimaryKeyPath extends keyof z.infer<NewSchema>
-      ? undefined extends z.infer<NewSchema>[PrimaryKeyPath]
-        ? MigrationError<`Schema alteration makes primaryKey '${PrimaryKeyPath}' optional, which is not allowed`>
-        : NewSchema
-      : MigrationError<`Schema alteration removes primaryKey '${PrimaryKeyPath}'`>
-    : NewSchema
-  : MigrationError<'Schema alteration is not backwards-compatible: existing data may not satisfy new schema. Use transformRecords for breaking changes.'>
-
 // ============================================================================
 // updateSchema types
 // ============================================================================
@@ -262,7 +237,7 @@ export type ValidatedSchemaAlteration<
  * Used to determine when to deep merge vs replace.
  */
 type IsPlainObject<T> = [T] extends [object]
-  ? [T] extends [any[] | Date | RegExp | Function | z.ZodTypeAny]
+  ? [T] extends [any[] | Date | RegExp | Function | SchemaAny]
     ? false
     : true
   : false
@@ -404,53 +379,6 @@ export type ExistingIndexes<
   S extends Schema,
   StoreName extends keyof S,
 > = keyof S[StoreName]['indexes'] & string
-
-// Helper to detect if a Zod type is optional
-export type IsZodOptional<T> = T extends z.ZodOptional<any> ? true : false
-
-// Extract the inferred type from a Zod schema or function
-export type InferZodType<T> = T extends z.ZodTypeAny
-  ? z.infer<T>
-  : T extends (prev: any) => infer R
-    ? R extends z.ZodTypeAny
-      ? z.infer<R>
-      : never
-    : never
-
-// Helper to get optional keys from Changes
-export type OptionalKeys<Changes> = {
-  [K in keyof Changes]: Changes[K] extends z.ZodTypeAny
-    ? IsZodOptional<Changes[K]> extends true
-      ? K
-      : never
-    : Changes[K] extends (prev: any) => infer R
-      ? R extends z.ZodTypeAny
-        ? IsZodOptional<R> extends true
-          ? K
-          : never
-        : never
-      : never
-}[keyof Changes]
-
-// Helper to get required keys from Changes
-export type RequiredKeys<Changes> = Exclude<
-  keyof Changes,
-  OptionalKeys<Changes>
->
-
-// Type helper for alterSchema - merges Zod schema changes into existing type
-// Properly handles optional properties with the ?: modifier
-// Made distributive to preserve discriminated unions
-export type MergeSchemaChanges<
-  T,
-  Changes extends Record<string, z.ZodTypeAny | ((prev: any) => z.ZodTypeAny)>,
-> = T extends any
-  ? Omit<T, keyof Changes> & {
-      [K in RequiredKeys<Changes>]: InferZodType<Changes[K]>
-    } & {
-      [K in OptionalKeys<Changes>]?: InferZodType<Changes[K]>
-    }
-  : never
 
 /**
  * Extracts the value types from an internal migration Schema.

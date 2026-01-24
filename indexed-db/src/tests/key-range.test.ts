@@ -1,9 +1,9 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { KeyRange } from '../lib/key-range'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -15,7 +15,7 @@ test('KeyRange.gte().lt() retrieves records in range', async () => {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'scores',
-      schema: z.object({ id: z.number(), value: z.number() }),
+      schema: schema<{ id: number; value: number }>(),
       primaryKey: 'id',
     })
   )

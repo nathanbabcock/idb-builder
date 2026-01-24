@@ -1,13 +1,12 @@
 // @errors: 2345
 
-import { createMigrations, openDB } from '@typedex/indexed-db'
-import { z } from 'zod/v4'
+import { createMigrations, openDB, schema } from '@typedex/indexed-db'
 
 // ---cut---
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore({
     name: 'events',
-    schema: z.object({ name: z.string(), timestamp: z.date() }),
+    schema: schema<{ name: string; timestamp: Date }>(),
     autoIncrement: true,
   })
 )

@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -15,11 +15,7 @@ test('multi-entry index retrieves records by array element', async () => {
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          title: z.string(),
-          tags: z.array(z.string()),
-        }),
+        schema: schema<{ id: string; title: string; tags: string[] }>(),
         primaryKey: 'id',
       })
     )

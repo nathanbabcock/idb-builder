@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import type { MigrationAction } from './migration-actions.types'
 import type {
   DeepMerge,
@@ -18,6 +17,7 @@ import type {
   ValidatedSchemaUpdate,
   ValidateVersion,
 } from './migration-builder.types'
+import type { Infer, SchemaAny } from './schema'
 import type {
   MigrationError,
   Stringify,
@@ -36,14 +36,14 @@ class VersionBuilder<S extends Schema> {
 
   createObjectStore<
     const Name extends string,
-    const ZodSchema extends z.ZodTypeAny,
+    const StoreSchema extends SchemaAny,
     const PrimaryKey extends string | readonly string[] | undefined = undefined,
     const AutoIncrement extends boolean = false,
   >(options: {
     name: Name & Exclude<Name, keyof S>
-    schema: ZodSchema
+    schema: StoreSchema
     primaryKey?: ValidatedPrimaryKey<
-      z.infer<ZodSchema>,
+      Infer<StoreSchema>,
       PrimaryKey,
       AutoIncrement
     >
@@ -52,7 +52,7 @@ class VersionBuilder<S extends Schema> {
     UpdateStore<
       S,
       Name,
-      StoreInfo<z.infer<ZodSchema>, {}, ZodSchema, PrimaryKey, AutoIncrement>
+      StoreInfo<Infer<StoreSchema>, {}, StoreSchema, PrimaryKey, AutoIncrement>
     >
   > {
     return this.chain<any>({
@@ -301,7 +301,7 @@ class MigrationBuilder<
    * const migrations = createMigrations()
    *   .version(1, v1 => v1.createObjectStore({
    *     name: 'users',
-   *     schema: z.object({ id: z.string(), name: z.string() }),
+   *     schema: schema<{ id: string; name: string }>(),
    *   }))
    *   .expectType<MyDBSchema>()
    */

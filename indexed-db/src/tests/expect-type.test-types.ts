@@ -1,6 +1,6 @@
 import type { DBSchema } from 'idb'
-import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 // Define test schemas in IDBSchema format
 interface UsersSchema extends DBSchema {
@@ -20,10 +20,7 @@ void function testSchemaValidationMatchesExpected() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     .expectType<UsersSchema>()
@@ -34,10 +31,7 @@ void function testSchemaValidationFailsWhenMismatch() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     // @ts-expect-error computed schema has 'users', expected has 'posts'
@@ -50,10 +44,7 @@ void function testSchemaValidationPassesWhenExpectedHasExtraProperties() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     .expectType<UsersWithEmailSchema>()
@@ -65,11 +56,7 @@ void function testSchemaValidationFailsWhenComputedHasExtraProperties() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; name: string; email: string }>(),
       })
     )
     // @ts-expect-error computed has 'email' but expected doesn't

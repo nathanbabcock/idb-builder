@@ -29,6 +29,7 @@ export default defineConfig({
         text: 'Features',
         collapsed: true,
         items: [
+          { text: 'Create object store', link: '/features/create-object-store' },
           { text: 'Database versions', link: '/features/database-versions' },
           { text: 'Update schema', link: '/features/update-schema' },
           { text: 'Transform records', link: '/features/transform-records' },

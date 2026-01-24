@@ -1,5 +1,5 @@
-import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 import type { InferSchema } from '../lib/migration-builder.types'
 
 void function testInferSchemaPreservesDiscriminatedUnions() {
@@ -7,20 +7,10 @@ void function testInferSchemaPreservesDiscriminatedUnions() {
     .version(1, v =>
       v.createObjectStore({
         name: 'files',
-        schema: z.discriminatedUnion('type', [
-          z.object({
-            id: z.string(),
-            type: z.literal('local'),
-            name: z.string(),
-            path: z.string(),
-          }),
-          z.object({
-            id: z.string(),
-            type: z.literal('remote'),
-            name: z.string(),
-            url: z.string(),
-          }),
-        ]),
+        schema: schema<
+          | { id: string; type: 'local'; name: string; path: string }
+          | { id: string; type: 'remote'; name: string; url: string }
+        >(),
       })
     )
     // updateSchema deep-merges into each variant of the discriminated union

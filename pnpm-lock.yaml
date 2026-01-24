@@ -29,9 +29,6 @@ importers:
       idb:
         specifier: ^8.0.3
         version: 8.0.3
-      zod:
-        specifier: ^4.3.5
-        version: 4.3.5
     devDependencies:
       fake-indexeddb:
         specifier: ^6.2.5

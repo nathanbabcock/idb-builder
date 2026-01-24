@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -14,7 +14,7 @@ test('creates object store', async () => {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({}),
+      schema: schema<{}>(),
     })
   )
 
@@ -30,7 +30,7 @@ test('deletes object store', async () => {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({}),
+        schema: schema<{}>(),
       })
     )
     .version(2, v => v.deleteObjectStore('users'))
@@ -47,15 +47,15 @@ test('creates multiple object stores', async () => {
     v
       .createObjectStore({
         name: 'users',
-        schema: z.object({}),
+        schema: schema<{}>(),
       })
       .createObjectStore({
         name: 'posts',
-        schema: z.object({}),
+        schema: schema<{}>(),
       })
       .createObjectStore({
         name: 'comments',
-        schema: z.object({}),
+        schema: schema<{}>(),
       })
   )
 
@@ -74,15 +74,15 @@ test('deletes multiple object stores', async () => {
       v
         .createObjectStore({
           name: 'users',
-          schema: z.object({}),
+          schema: schema<{}>(),
         })
         .createObjectStore({
           name: 'posts',
-          schema: z.object({}),
+          schema: schema<{}>(),
         })
         .createObjectStore({
           name: 'comments',
-          schema: z.object({}),
+          schema: schema<{}>(),
         })
     )
     .version(2, v => v.deleteObjectStore('users').deleteObjectStore('comments'))

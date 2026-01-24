@@ -1,15 +1,12 @@
-import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 void function testCreateIndexKeyPathIsTypeSafe() {
   createMigrations()
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -22,10 +19,7 @@ void function testCreateIndexRejectsInvalidKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -42,13 +36,10 @@ void function testCreateIndexSupportsNestedKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          address: z.object({
-            city: z.string(),
-            zip: z.string(),
-          }),
-        }),
+        schema: schema<{
+          id: string
+          address: { city: string; zip: string }
+        }>(),
       })
     )
     .version(2, v =>
@@ -61,10 +52,7 @@ void function testCreateIndexOnStoreCreatedInSameVersion() {
     v
       .createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
       .createIndex('byEmail', { storeName: 'users', keyPath: 'email' })
   )
@@ -75,10 +63,7 @@ void function testDeleteIndexOnlyAcceptsExistingIndexes() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -92,10 +77,7 @@ void function testDeleteIndexRejectsNonExistentIndexNames() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -109,10 +91,7 @@ void function testDeleteIndexRejectsAlreadyDeletedIndexes() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -130,10 +109,7 @@ void function testCreateIndexCannotBeCalledTwiceWithSameName() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -150,10 +126,7 @@ void function testCreateIndexCanReuseNameAfterDeleteIndex() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
       })
     )
     .version(2, v =>
@@ -170,12 +143,12 @@ void function testValidCompositeKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          firstName: z.string(),
-          lastName: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{
+          id: string
+          firstName: string
+          lastName: string
+          email: string
+        }>(),
       })
     )
     .version(2, v =>
@@ -191,11 +164,7 @@ void function testInvalidateCompositeKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          firstName: z.string(),
-          lastName: z.string(),
-        }),
+        schema: schema<{ id: string; firstName: string; lastName: string }>(),
       })
     )
     .version(2, v =>
@@ -210,7 +179,7 @@ void function testInvalidateCompositeKeyPath() {
 void function testValidEmptyKeyPath() {
   // When value type is a valid IDB key, empty string keyPath should be allowed
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'emails', schema: z.string() }))
+    .version(1, v => v.createObjectStore({ name: 'emails', schema: schema<string>() }))
     .version(2, v =>
       v.createIndex('byValue', { storeName: 'emails', keyPath: '' })
     )
@@ -219,7 +188,7 @@ void function testValidEmptyKeyPath() {
 void function testInvalidEmptyKeyPath() {
   // When value type is NOT a valid IDB key, empty string keyPath should error
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
+    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
     .version(2, v =>
       // @ts-expect-error value type { id: string; name: string } is not a valid IDB key
       v.createIndex('byValue', { storeName: 'users', keyPath: '' })
@@ -230,7 +199,7 @@ void function testInvalidEmptyKeyPathAfterTransform() {
   // Transforming a valid IDB key type into an object should error
   // because the existing empty string keyPath index would become invalid
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'emails', schema: z.string() }))
+    .version(1, v => v.createObjectStore({ name: 'emails', schema: schema<string>() }))
     .version(2, v =>
       v.createIndex('byValue', { storeName: 'emails', keyPath: '' })
     )
@@ -245,10 +214,10 @@ void function testIndexKeyPathMustPointAtValidType_Flat() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          metadata: z.object({ createdAt: z.date() }),
-        }),
+        schema: schema<{
+          id: string
+          metadata: { createdAt: Date }
+        }>(),
       })
     )
     // Valid: 'id' points at string
@@ -266,13 +235,13 @@ void function testIndexKeyPathMustPointAtValidType_Nested() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          profile: z.object({
-            name: z.string(),
-            settings: z.object({ theme: z.string() }),
-          }),
-        }),
+        schema: schema<{
+          id: string
+          profile: {
+            name: string
+            settings: { theme: string }
+          }
+        }>(),
       })
     )
     // Valid: 'profile.name' points at string
@@ -293,13 +262,13 @@ void function testIndexKeyPathMustPointAtValidType_Composite() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          profile: z.object({
-            name: z.string(),
-            settings: z.object({ theme: z.string() }),
-          }),
-        }),
+        schema: schema<{
+          id: string
+          profile: {
+            name: string
+            settings: { theme: string }
+          }
+        }>(),
       })
     )
     // Valid: both 'id' (string) and 'profile.name' (string) are valid IDB keys
@@ -323,10 +292,7 @@ void function testIndexKeyPathMustPointAtValidType_AfterTransform() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     // Valid composite index on flat + nested after we add nested structure

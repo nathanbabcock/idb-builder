@@ -1,17 +1,13 @@
-import z from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 void async function testMultiEntryIndexQueriesByElementType() {
   const migrations = createMigrations()
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          title: z.string(),
-          tags: z.array(z.string()),
-        }),
+        schema: schema<{ id: string; title: string; tags: string[] }>(),
         primaryKey: 'id',
       })
     )
@@ -37,10 +33,10 @@ void function testMultiEntryRejectsObjectArrayElements() {
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          authors: z.array(z.object({ id: z.string(), name: z.string() })),
-        }),
+        schema: schema<{
+          id: string
+          authors: { id: string; name: string }[]
+        }>(),
         primaryKey: 'id',
       })
     )
@@ -59,11 +55,11 @@ void function testMultiEntryRejectsCompositeKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          category: z.string(),
-          subcategory: z.string(),
-        }),
+        schema: schema<{
+          id: string
+          category: string
+          subcategory: string
+        }>(),
         primaryKey: 'id',
       })
     )
@@ -82,10 +78,7 @@ void function testMultiEntryRejectsNonArrayKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          title: z.string(),
-        }),
+        schema: schema<{ id: string; title: string }>(),
         primaryKey: 'id',
       })
     )
@@ -104,10 +97,7 @@ void function testMultiEntryInvalidatedByTransformRemovingKeyPath() {
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          tags: z.array(z.string()),
-        }),
+        schema: schema<{ id: string; tags: string[] }>(),
         primaryKey: 'id',
       })
     )
@@ -132,10 +122,7 @@ void async function testMultiEntryWidenedArrayTypeAllowsBothTypes() {
     .version(1, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          codes: z.array(z.number()),
-        }),
+        schema: schema<{ id: string; codes: number[] }>(),
         primaryKey: 'id',
       })
     )

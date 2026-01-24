@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -15,7 +15,7 @@ test('retrieves record by index', async () => {
     v
       .createObjectStore({
         name: 'users',
-        schema: z.object({ id: z.string(), email: z.string() }),
+        schema: schema<{ id: string; email: string }>(),
         primaryKey: 'id',
       })
       .createIndex('byEmail', { storeName: 'users', keyPath: 'email' })

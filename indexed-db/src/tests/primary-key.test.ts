@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -11,16 +11,10 @@ beforeEach(() => {
 })
 
 test('creates object store with keyPath and verifies lookup', async () => {
-  const userSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string(),
-  })
-
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: userSchema,
+      schema: schema<{ id: string; name: string; email: string }>(),
       primaryKey: 'id',
     })
   )
@@ -48,12 +42,10 @@ test('creates object store with keyPath and verifies lookup', async () => {
 })
 
 test('creates object store without keyPath (out-of-line keys)', async () => {
-  const userSchema = z.object({ name: z.string() })
-
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: userSchema,
+      schema: schema<{ name: string }>(),
     })
   )
 
@@ -72,19 +64,14 @@ test('creates object store without keyPath (out-of-line keys)', async () => {
 })
 
 test('creates object store with nested keyPath', async () => {
-  const documentSchema = z.object({
-    metadata: z.object({
-      id: z.string(),
-      version: z.number(),
-    }),
-    title: z.string(),
-    content: z.string(),
-  })
-
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'documents',
-      schema: documentSchema,
+      schema: schema<{
+        metadata: { id: string; version: number }
+        title: string
+        content: string
+      }>(),
       primaryKey: 'metadata.id',
     })
   )

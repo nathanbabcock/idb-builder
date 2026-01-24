@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -14,7 +14,7 @@ test('out-of-line auto-increment generates sequential keys', async () => {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'events',
-      schema: z.object({ name: z.string() }),
+      schema: schema<{ name: string }>(),
       autoIncrement: true,
     })
   )

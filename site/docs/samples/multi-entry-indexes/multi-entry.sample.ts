@@ -1,17 +1,16 @@
-import { createMigrations, openDB } from '@typedex/indexed-db'
-import { z } from 'zod'
+import { createMigrations, openDB, schema } from '@typedex/indexed-db'
 
 // Create an index pointing to an array field in the schema
 const migrations = createMigrations().version(1, v =>
   v
     .createObjectStore({
       name: 'posts',
-      schema: z.object({
-        id: z.string(),
-        title: z.string(),
-        tags: z.array(z.string()),
-//      ^^^^^^^^^^^^^^^^^^^^^^^^^
-      }),
+      schema: schema<{
+        id: string
+        title: string
+        tags: string[]
+//      ^^^^^^^^^^^^
+      }>(),
       primaryKey: 'id',
     })
     .createIndex('byTag', {

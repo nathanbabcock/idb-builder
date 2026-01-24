@@ -3,9 +3,9 @@
  * Investigating whether index key types are correctly inferred for getFromIndex.
  */
 
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 // Single version with index created in same version as store
 void async function testSingleVersionIndexQuery() {
@@ -13,11 +13,7 @@ void async function testSingleVersionIndexQuery() {
     v
       .createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-          age: z.number(),
-        }),
+        schema: schema<{ id: string; email: string; age: number }>(),
         primaryKey: 'id',
       })
       .createIndex('byEmail', { storeName: 'users', keyPath: 'email' })
@@ -37,11 +33,7 @@ void async function testTwoVersionIndexQuery() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-          age: z.number(),
-        }),
+        schema: schema<{ id: string; email: string; age: number }>(),
         primaryKey: 'id',
       })
     )
@@ -64,11 +56,7 @@ void async function testThreeVersionIndexQuery() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-          age: z.number(),
-        }),
+        schema: schema<{ id: string; email: string; age: number }>(),
         primaryKey: 'id',
       })
     )
@@ -92,10 +80,7 @@ void async function testGetAllFromIndex() {
     v
       .createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          role: z.string(),
-        }),
+        schema: schema<{ id: string; role: string }>(),
         primaryKey: 'id',
       })
       .createIndex('byRole', { storeName: 'users', keyPath: 'role' })
@@ -113,10 +98,7 @@ void async function testMultiEntryIndexQuery() {
     v
       .createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          tags: z.array(z.string()),
-        }),
+        schema: schema<{ id: string; tags: string[] }>(),
         primaryKey: 'id',
       })
       .createIndex('byTag', {

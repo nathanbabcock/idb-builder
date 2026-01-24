@@ -1,10 +1,10 @@
-import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 import type { InferSchema } from '../lib/migration-builder.types'
 
 void function testUpdateSchemaAddsOptionalProperties() {
   const migrations = createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
+    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
     .version(2, v => v.updateSchema<'users', { email?: string }>())
 
   type Schema = InferSchema<typeof migrations>
@@ -25,10 +25,7 @@ void function testUpdateSchemaCanExtendNestedObjects() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          settings: z.object({ theme: z.string() }),
-        }),
+        schema: schema<{ id: string; settings: { theme: string } }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { settings: { notifications?: boolean } }>())
@@ -51,13 +48,7 @@ void function testUpdateSchemaDeepMergesNestedObjects() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          address: z.object({
-            street: z.string(),
-            city: z.string(),
-          }),
-        }),
+        schema: schema<{ id: string; address: { street: string; city: string } }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { address: { zip?: string } }>())
@@ -83,11 +74,7 @@ void function testUpdateSchemaDeletesWithNever() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-          legacyField: z.string(),
-        }),
+        schema: schema<{ id: string; name: string; legacyField: string }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { legacyField: never }>())
@@ -107,14 +94,10 @@ void function testUpdateSchemaDeletesNestedWithNever() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          address: z.object({
-            street: z.string(),
-            city: z.string(),
-            legacyZone: z.string(),
-          }),
-        }),
+        schema: schema<{
+          id: string
+          address: { street: string; city: string; legacyZone: string }
+        }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { address: { legacyZone: never } }>())
@@ -135,7 +118,7 @@ void function testUpdateSchemaDeletesNestedWithNever() {
 
 void function testUpdateSchemaRejectsAddingRequiredField() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: z.object({ id: z.string() }) }))
+    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
     // @ts-expect-error adding required field is not backwards-compatible
     .version(2, v => v.updateSchema<'users', { email: string }>())
 }
@@ -145,7 +128,7 @@ void function testUpdateSchemaAllowsWideningType() {
     .version(1, v =>
       v.createObjectStore({
         name: 'items',
-        schema: z.object({ id: z.string(), status: z.literal('active') }),
+        schema: schema<{ id: string; status: 'active' }>(),
       })
     )
     .version(2, v => v.updateSchema<'items', { status: string }>())
@@ -156,7 +139,7 @@ void function testUpdateSchemaRejectsNarrowingType() {
     .version(1, v =>
       v.createObjectStore({
         name: 'items',
-        schema: z.object({ id: z.string(), status: z.string() }),
+        schema: schema<{ id: string; status: string }>(),
       })
     )
     // @ts-expect-error narrowing type is not backwards-compatible
@@ -168,7 +151,7 @@ void function testUpdateSchemaRejectsChangingFieldType() {
     .version(1, v =>
       v.createObjectStore({
         name: 'counters',
-        schema: z.object({ id: z.string(), count: z.number() }),
+        schema: schema<{ id: string; count: number }>(),
       })
     )
     // @ts-expect-error changing field type is not backwards-compatible
@@ -180,7 +163,7 @@ void function testUpdateSchemaMakesPropertyOptional() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({ id: z.string(), name: z.string() }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { name?: string }>())
@@ -199,7 +182,7 @@ void function testUpdateSchemaReplacesArraysEntirely() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({ id: z.string(), tags: z.array(z.string()) }),
+        schema: schema<{ id: string; tags: string[] }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { tags: (string | number)[] }>())
@@ -212,12 +195,16 @@ void function testUpdateSchemaReplacesArraysEntirely() {
 }
 
 void function testUpdateSchemaPreservesDiscriminatedUnions() {
-  const dogSchema = z.object({ type: z.literal('dog'), breed: z.string() })
-  const catSchema = z.object({ type: z.literal('cat'), indoor: z.boolean() })
-  const petSchema = z.discriminatedUnion('type', [dogSchema, catSchema])
-
   const migrations = createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'pets', schema: petSchema }))
+    .version(1, v =>
+      v.createObjectStore({
+        name: 'pets',
+        schema: schema<
+          | { type: 'dog'; breed: string }
+          | { type: 'cat'; indoor: boolean }
+        >(),
+      })
+    )
     .version(2, v => v.updateSchema<'pets', { name?: string }>())
 
   type Schema = InferSchema<typeof migrations>

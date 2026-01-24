@@ -1,5 +1,4 @@
-import { createMigrations } from '@typedex/indexed-db'
-import { z } from 'zod'
+import { createMigrations, schema } from '@typedex/indexed-db'
 
 // @errors: 2322
 // ---cut---
@@ -7,10 +6,7 @@ createMigrations().version(1, v =>
   v
     .createObjectStore({
       name: 'posts',
-      schema: z.object({
-        id: z.string(),
-        title: z.string(),
-      }),
+      schema: schema<{ id: string; title: string }>(),
       primaryKey: 'id',
     })
     .createIndex('byTitle', {

@@ -1,15 +1,14 @@
-import { createMigrations, openDB } from '@typedex/indexed-db'
-import { z } from 'zod/v4'
+import { createMigrations, openDB, schema } from '@typedex/indexed-db'
 
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore({
     name: 'orders',
-    schema: z.object({
-      customerId: z.string(),
-      orderNumber: z.number(),
-      amount: z.number(),
-      status: z.string(),
-    }),
+    schema: schema<{
+      customerId: string
+      orderNumber: number
+      amount: number
+      status: string
+    }>(),
     primaryKey: ['customerId', 'orderNumber'],
   })
 )

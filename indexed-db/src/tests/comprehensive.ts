@@ -5,10 +5,10 @@
 
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { KeyRange } from '../lib/key-range'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -25,47 +25,44 @@ test('complete migration lifecycle with all features', async () => {
       // Store with simple string primaryKey
       .createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-          email: z.string(),
-          role: z.string(),
-          createdAt: z.number(),
-        }),
+        schema: schema<{
+          id: string
+          name: string
+          email: string
+          role: string
+          createdAt: number
+        }>(),
         primaryKey: 'id',
       })
       // Store with composite primaryKey
       .createObjectStore({
         name: 'orders',
-        schema: z.object({
-          customerId: z.string(),
-          orderId: z.string(),
-          amount: z.number(),
-          status: z.string(),
-        }),
+        schema: schema<{
+          customerId: string
+          orderId: string
+          amount: number
+          status: string
+        }>(),
         primaryKey: ['customerId', 'orderId'],
       })
       // Store with out-of-line autoIncrement keys
       .createObjectStore({
         name: 'logs',
-        schema: z.object({
-          level: z.string(),
-          message: z.string(),
-          timestamp: z.number(),
-        }),
+        schema: schema<{
+          level: string
+          message: string
+          timestamp: number
+        }>(),
         autoIncrement: true,
       })
       // Store with nested primaryKey
       .createObjectStore({
         name: 'documents',
-        schema: z.object({
-          metadata: z.object({
-            id: z.string(),
-            version: z.number(),
-          }),
-          title: z.string(),
-          content: z.string(),
-        }),
+        schema: schema<{
+          metadata: { id: string; version: number }
+          title: string
+          content: string
+        }>(),
         primaryKey: 'metadata.id',
       })
   )
@@ -248,12 +245,12 @@ test('complete migration lifecycle with all features', async () => {
       // New store with array field for multiEntry
       .createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          title: z.string(),
-          tags: z.array(z.string()),
-          authorId: z.string(),
-        }),
+        schema: schema<{
+          id: string
+          title: string
+          tags: string[]
+          authorId: string
+        }>(),
         primaryKey: 'id',
       })
       // multiEntry index on tags
@@ -384,12 +381,12 @@ test('complete migration lifecycle with all features', async () => {
       // Add a store with numeric IDs for KeyRange testing
       .createObjectStore({
         name: 'scores',
-        schema: z.object({
-          id: z.number(),
-          playerId: z.string(),
-          score: z.number(),
-          level: z.number(),
-        }),
+        schema: schema<{
+          id: number
+          playerId: string
+          score: number
+          level: number
+        }>(),
         primaryKey: 'id',
       })
       .createIndex('byScore', { storeName: 'scores', keyPath: 'score' })

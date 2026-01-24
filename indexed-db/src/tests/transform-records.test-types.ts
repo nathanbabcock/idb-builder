@@ -1,15 +1,12 @@
-import z from 'zod'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 void function testTransformRecordsAcceptsValidObjectStoreNames() {
   createMigrations()
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     .version(2, v =>

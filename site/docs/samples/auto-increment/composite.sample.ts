@@ -1,17 +1,16 @@
 // @errors: 2741
 
-import { createMigrations } from '@typedex/indexed-db'
-import { z } from 'zod/v4'
+import { createMigrations, schema } from '@typedex/indexed-db'
 
 // ---cut---
 createMigrations().version(1, v =>
   v.createObjectStore({
     name: 'orders',
-    schema: z.object({
-      customerId: z.number(),
-      orderId: z.number(),
-      amount: z.number(),
-    }),
+    schema: schema<{
+      customerId: number
+      orderId: number
+      amount: number
+    }>(),
     primaryKey: ['customerId', 'orderId'],
     autoIncrement: true,
   })

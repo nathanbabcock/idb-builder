@@ -1,7 +1,7 @@
-import z from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { KeyRange } from '../lib/key-range'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 // TODO: Type-safe KeyRange queries require a wrapper around idb.
 // The idb library accepts IDBKeyRange for any store/index, so TypedKeyRange<K>
@@ -12,10 +12,7 @@ void async function testGetAllWithKeyRangeOnStringPrimaryKey() {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'users',
-      schema: z.object({
-        id: z.string(),
-        name: z.string(),
-      }),
+      schema: schema<{ id: string; name: string }>(),
       primaryKey: 'id',
     })
   )
@@ -40,10 +37,7 @@ void async function testGetAllWithKeyRangeOnNumberPrimaryKey() {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'products',
-      schema: z.object({
-        sku: z.number(),
-        name: z.string(),
-      }),
+      schema: schema<{ sku: number; name: string }>(),
       primaryKey: 'sku',
     })
   )
@@ -65,11 +59,7 @@ void async function testGetAllFromIndexWithKeyRange() {
     .version(1, v =>
       v.createObjectStore({
         name: 'orders',
-        schema: z.object({
-          id: z.string(),
-          customerId: z.string(),
-          total: z.number(),
-        }),
+        schema: schema<{ id: string; customerId: string; total: number }>(),
         primaryKey: 'id',
       })
     )

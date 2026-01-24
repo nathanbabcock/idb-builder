@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 import type { InferSchema } from '../lib/migration-builder.types'
 
 void function testInferSchemaExtractsCorrectFinalSchemaType() {
@@ -7,19 +7,13 @@ void function testInferSchemaExtractsCorrectFinalSchemaType() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     .version(2, v =>
       v.createObjectStore({
         name: 'posts',
-        schema: z.object({
-          id: z.string(),
-          title: z.string(),
-        }),
+        schema: schema<{ id: string; title: string }>(),
       })
     )
 
@@ -37,10 +31,7 @@ void function testInferSchemaShouldReflectTransformations() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
+        schema: schema<{ id: string; name: string }>(),
       })
     )
     .version(2, v =>

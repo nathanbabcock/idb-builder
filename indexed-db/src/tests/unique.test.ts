@@ -1,8 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, expect, test } from 'vitest'
-import { z } from 'zod'
 import { openDB } from '../lib/idb-adapter'
 import { createMigrations } from '../lib/migration-builder'
+import { schema } from '../lib/schema'
 
 import 'fake-indexeddb/auto'
 
@@ -15,10 +15,7 @@ test('creates unique index', async () => {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
         primaryKey: 'id',
       })
     )
@@ -44,10 +41,7 @@ test('unique index rejects duplicate values', async () => {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
         primaryKey: 'id',
       })
     )
@@ -77,10 +71,7 @@ test('non-unique index allows duplicate values', async () => {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: z.object({
-          id: z.string(),
-          email: z.string(),
-        }),
+        schema: schema<{ id: string; email: string }>(),
         primaryKey: 'id',
       })
     )
