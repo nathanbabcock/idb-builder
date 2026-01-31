@@ -1,7 +1,11 @@
 import type { IsGreaterThan } from './greater-than.types'
 import type { Schema as SchemaOf, SchemaAny } from './schema'
 import type { MigrationBuilder } from './migration-builder'
-import type { MigrationError, Stringify, TypeName } from './migration-error.types'
+import type {
+  MigrationError,
+  Stringify,
+  TypeName,
+} from './migration-error.types'
 
 // Index info tracks the keyPath, multiEntry, and unique flags for each index
 export type IndexInfo<
@@ -203,22 +207,25 @@ export type ValidateMultiEntryIndex<
  * `string & Error` type if invalid. This causes TypeScript to show errors
  * directly on the keyPath property rather than the entire call.
  */
-export type ValidatedKeyPath<Value, KeyPath, MultiEntry extends boolean> =
-  MultiEntry extends true
-    ? // For multiEntry, use path existence check (not IDBValidKey check)
-      KeyPath extends string
-      ? ValidatePathExists<Value, KeyPath> extends never
-        ? MigrationError<`keyPath '${KeyPath}' is not a valid path in the store schema`>
-        : ValidateMultiEntryIndex<Value, KeyPath, MultiEntry> extends true
-          ? KeyPath
-          : ResolveKeyPath<Value, KeyPath> extends (infer E)[]
-            ? MigrationError<`multiEntry index '${KeyPath}' has array elements of type '${TypeName<E>}', but IndexedDB requires elements to be valid keys (string, number, Date, ArrayBuffer, or arrays of these)`>
-            : MigrationError<`multiEntry requires keyPath to point to an array, but '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}'`>
-      : MigrationError<'multiEntry cannot be used with composite keyPath'>
-    : // For non-multiEntry, use full IDBValidKey validation
-      ValidateKeyPath<Value, KeyPath> extends never
-      ? MigrationError<`keyPath '${KeyPath extends string ? KeyPath : TypeName<KeyPath>}' is not a valid path in the store schema`>
-      : KeyPath
+export type ValidatedKeyPath<
+  Value,
+  KeyPath,
+  MultiEntry extends boolean,
+> = MultiEntry extends true
+  ? // For multiEntry, use path existence check (not IDBValidKey check)
+    KeyPath extends string
+    ? ValidatePathExists<Value, KeyPath> extends never
+      ? MigrationError<`keyPath '${KeyPath}' is not a valid path in the store schema`>
+      : ValidateMultiEntryIndex<Value, KeyPath, MultiEntry> extends true
+        ? KeyPath
+        : ResolveKeyPath<Value, KeyPath> extends (infer E)[]
+          ? MigrationError<`multiEntry index '${KeyPath}' has array elements of type '${TypeName<E>}', but IndexedDB requires elements to be valid keys (string, number, Date, ArrayBuffer, or arrays of these)`>
+          : MigrationError<`multiEntry requires keyPath to point to an array, but '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}'`>
+    : MigrationError<'multiEntry cannot be used with composite keyPath'>
+  : // For non-multiEntry, use full IDBValidKey validation
+    ValidateKeyPath<Value, KeyPath> extends never
+    ? MigrationError<`keyPath '${KeyPath extends string ? KeyPath : TypeName<KeyPath>}' is not a valid path in the store schema`>
+    : KeyPath
 
 /**
  * Validates a primaryKey for createObjectStore, returning the key path if valid
@@ -231,27 +238,24 @@ export type ValidatedKeyPath<Value, KeyPath, MultiEntry extends boolean> =
  * 3. Composite keys (arrays) cannot be used with autoIncrement
  * 4. When autoIncrement is true, the keyPath must point to a number type
  */
-export type ValidatedPrimaryKey<
-  Value,
-  KeyPath,
-  AutoIncrement extends boolean,
-> = ValidateKeyPath<Value, KeyPath> extends never
-  ? KeyPath extends string
-    ? ValidatePathExists<Value, KeyPath> extends never
-      ? MigrationError<`Primary key '${KeyPath}' is not a valid path in the schema`>
-      : MigrationError<`Primary key '${KeyPath}' resolves to '${TypeName<ResolveSingleKeyPath<Value, KeyPath>>}', but must be a valid IndexedDB key (string, number, Date, ArrayBuffer, or array of these)`>
-    : MigrationError<`Primary key '${Stringify<KeyPath>}' is not a valid path in the schema`>
-  : AutoIncrement extends true
-    ? KeyPath extends readonly string[]
-      ? MigrationError<'autoIncrement cannot be used with composite (array) primary keys'>
-      : KeyPath extends string
-        ? number extends ResolveSingleKeyPath<Value, KeyPath>
-          ? KeyPath
-          : ResolveSingleKeyPath<Value, KeyPath> extends number
+export type ValidatedPrimaryKey<Value, KeyPath, AutoIncrement extends boolean> =
+  ValidateKeyPath<Value, KeyPath> extends never
+    ? KeyPath extends string
+      ? ValidatePathExists<Value, KeyPath> extends never
+        ? MigrationError<`Primary key '${KeyPath}' is not a valid path in the schema`>
+        : MigrationError<`Primary key '${KeyPath}' resolves to '${TypeName<ResolveSingleKeyPath<Value, KeyPath>>}', but must be a valid IndexedDB key (string, number, Date, ArrayBuffer, or array of these)`>
+      : MigrationError<`Primary key '${Stringify<KeyPath>}' is not a valid path in the schema`>
+    : AutoIncrement extends true
+      ? KeyPath extends readonly string[]
+        ? MigrationError<'autoIncrement cannot be used with composite (array) primary keys'>
+        : KeyPath extends string
+          ? number extends ResolveSingleKeyPath<Value, KeyPath>
             ? KeyPath
-            : MigrationError<`autoIncrement requires primaryKey to resolve to number, but '${KeyPath}' resolves to ${TypeName<ResolveSingleKeyPath<Value, KeyPath>>}`>
-        : KeyPath // undefined case - out-of-line keys are allowed with autoIncrement
-    : KeyPath
+            : ResolveSingleKeyPath<Value, KeyPath> extends number
+              ? KeyPath
+              : MigrationError<`autoIncrement requires primaryKey to resolve to number, but '${KeyPath}' resolves to ${TypeName<ResolveSingleKeyPath<Value, KeyPath>>}`>
+          : KeyPath // undefined case - out-of-line keys are allowed with autoIncrement
+      : KeyPath
 
 // ============================================================================
 // updateSchema types

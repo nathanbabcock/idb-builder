@@ -148,7 +148,11 @@ void function testValidEmptyStringPrimaryKey() {
   // Empty string primaryKey means "use the value itself as the key"
   // Valid when value type is a valid IDB key (string, number, Date, etc.)
   createMigrations().version(1, v =>
-    v.createObjectStore({ name: 'emails', schema: schema<string>(), primaryKey: '' })
+    v.createObjectStore({
+      name: 'emails',
+      schema: schema<string>(),
+      primaryKey: '',
+    })
   )
 }
 
@@ -168,7 +172,11 @@ void function testInvalidEmptyStringPrimaryKeyAfterTransform() {
   // Transforming from valid IDB key to object invalidates empty string primaryKey
   createMigrations()
     .version(1, v =>
-      v.createObjectStore({ name: 'emails', schema: schema<string>(), primaryKey: '' })
+      v.createObjectStore({
+        name: 'emails',
+        schema: schema<string>(),
+        primaryKey: '',
+      })
     )
     .version(2, v =>
       // @ts-expect-error transform makes '' primaryKey invalid (object is not a valid IDB key)

@@ -26,20 +26,32 @@ void function testFirstVersionCanBeAnyNumber() {
 void function testSuccessiveVersionsMustBeGreater() {
   // Valid: 1 -> 2 -> 3
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
-    .version(2, v => v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
+    .version(2, v =>
+      v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
+    )
     .version(3, v =>
-      v.createObjectStore({ name: 'comments', schema: schema<{ id: string }>() })
+      v.createObjectStore({
+        name: 'comments',
+        schema: schema<{ id: string }>(),
+      })
     )
 
   // Valid: large gaps are allowed
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(100, v =>
       v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
     )
     .version(1000, v =>
-      v.createObjectStore({ name: 'comments', schema: schema<{ id: string }>() })
+      v.createObjectStore({
+        name: 'comments',
+        schema: schema<{ id: string }>(),
+      })
     )
 
   // Valid: starting from negative and going up
@@ -51,28 +63,43 @@ void function testSuccessiveVersionsMustBeGreater() {
       v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
     )
     .version(0, v =>
-      v.createObjectStore({ name: 'comments', schema: schema<{ id: string }>() })
+      v.createObjectStore({
+        name: 'comments',
+        schema: schema<{ id: string }>(),
+      })
     )
-    .version(1, v => v.createObjectStore({ name: 'tags', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'tags', schema: schema<{ id: string }>() })
+    )
 }
 
 void function testInvalidVersionSameAsPrevious() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     // @ts-expect-error Version 1 must be greater than previous version 1
-    .version(1, v => v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
+    )
 }
 
 void function testInvalidVersionLessThanPrevious() {
   createMigrations()
-    .version(5, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(5, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     // @ts-expect-error Version 3 must be greater than previous version 5
-    .version(3, v => v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() }))
+    .version(3, v =>
+      v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
+    )
 }
 
 void function testInvalidVersionNegativeWhenPreviousPositive() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     // @ts-expect-error Version -5 must be greater than previous version 1
     .version(-5, v =>
       v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
@@ -81,7 +108,11 @@ void function testInvalidVersionNegativeWhenPreviousPositive() {
 
 void function testInvalidVersionZeroWhenPreviousPositive() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     // @ts-expect-error Version 0 must be greater than previous version 1
-    .version(0, v => v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() }))
+    .version(0, v =>
+      v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
+    )
 }

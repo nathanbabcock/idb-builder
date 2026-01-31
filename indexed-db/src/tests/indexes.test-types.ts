@@ -179,7 +179,9 @@ void function testInvalidateCompositeKeyPath() {
 void function testValidEmptyKeyPath() {
   // When value type is a valid IDB key, empty string keyPath should be allowed
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'emails', schema: schema<string>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'emails', schema: schema<string>() })
+    )
     .version(2, v =>
       v.createIndex('byValue', { storeName: 'emails', keyPath: '' })
     )
@@ -188,7 +190,9 @@ void function testValidEmptyKeyPath() {
 void function testInvalidEmptyKeyPath() {
   // When value type is NOT a valid IDB key, empty string keyPath should error
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v =>
       // @ts-expect-error value type { id: string; name: string } is not a valid IDB key
       v.createIndex('byValue', { storeName: 'users', keyPath: '' })
@@ -199,7 +203,9 @@ void function testInvalidEmptyKeyPathAfterTransform() {
   // Transforming a valid IDB key type into an object should error
   // because the existing empty string keyPath index would become invalid
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'emails', schema: schema<string>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'emails', schema: schema<string>() })
+    )
     .version(2, v =>
       v.createIndex('byValue', { storeName: 'emails', keyPath: '' })
     )

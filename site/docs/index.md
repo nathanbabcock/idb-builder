@@ -27,6 +27,5 @@ features:
       information about the schema and database architecture as you do so.
   - title: Schema evolution
     icon: 🔄
-    details:
-      Define and evolve the shape of your data with native Typescript types and zero runtime dependencies.
+    details: Define and evolve the shape of your data with native Typescript types and zero runtime dependencies.
 ---

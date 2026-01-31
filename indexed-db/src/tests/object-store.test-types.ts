@@ -3,20 +3,26 @@ import { schema } from '../lib/schema'
 
 void function testDeleteObjectStoreOnlyAcceptsStoresThatExist() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     // @ts-expect-error 'nonexistent' was never created
     .version(2, v => v.deleteObjectStore('nonexistent'))
 }
 
 void function testDeleteObjectStoreAcceptsStoresThatWereCreated() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v => v.deleteObjectStore('users'))
 }
 
 void function testDeleteObjectStoreDoesNotAcceptAlreadyDeletedStores() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v => v.deleteObjectStore('users'))
     // @ts-expect-error 'users' was deleted in v2
     .version(3, v => v.deleteObjectStore('users'))
@@ -24,14 +30,20 @@ void function testDeleteObjectStoreDoesNotAcceptAlreadyDeletedStores() {
 
 void function testSchemaAccumulatesAcrossVersions() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
-    .version(2, v => v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
+    .version(2, v =>
+      v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
+    )
     .version(3, v => v.deleteObjectStore('users').deleteObjectStore('posts'))
 }
 
 void function testCreateObjectStoreDoesNotAcceptStoresThatAlreadyExist() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v =>
       // @ts-expect-error 'users' already exists
       v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
@@ -40,16 +52,24 @@ void function testCreateObjectStoreDoesNotAcceptStoresThatAlreadyExist() {
 
 void function testCreateObjectStoreAcceptsPreviouslyDeletedStores() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v => v.deleteObjectStore('users'))
-    .version(3, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(3, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
 }
 
 void function testFullLifecycleCreateDeleteCreateDelete() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v => v.deleteObjectStore('users'))
-    .version(3, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(3, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(4, v => v.deleteObjectStore('users'))
 }
 
@@ -64,7 +84,9 @@ void function testCreatingDuplicateStoresInSameVersionIsCaught() {
 
 void function testDeletingSameStoreTwiceInSameVersionIsCaught() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v =>
       v
         .deleteObjectStore('users')

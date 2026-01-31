@@ -2,7 +2,19 @@
   "name": "@typedex/indexed-db",
   "version": "0.1.0",
   "description": "Type-safe IndexedDB",
-  "type": "module",
+  "keywords": [
+    "browser",
+    "database",
+    "idb",
+    "indexeddb",
+    "storage",
+    "type-safe",
+    "typescript"
+  ],
+  "homepage": "https://github.com/nathanbabcock/typedex#readme",
+  "bugs": {
+    "url": "https://github.com/nathanbabcock/typedex/issues"
+  },
   "license": "MIT",
   "author": "Nathan Babcock",
   "repository": {
@@ -10,28 +22,16 @@
     "url": "https://github.com/nathanbabcock/typedex.git",
     "directory": "indexed-db"
   },
-  "homepage": "https://github.com/nathanbabcock/typedex#readme",
-  "bugs": {
-    "url": "https://github.com/nathanbabcock/typedex/issues"
-  },
-  "keywords": [
-    "indexeddb",
-    "typescript",
-    "type-safe",
-    "database",
-    "browser",
-    "storage",
-    "idb"
+  "files": [
+    "dist"
   ],
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts",
     "typecheck": "tsgo --build --noEmit",

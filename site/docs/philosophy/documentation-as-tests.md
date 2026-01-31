@@ -1,8 +1,8 @@
 # Documentation as tests
 
 Since so much of the library's functionality is experience at compile-time and
-through an IDE/code editing environment, the clearest way to communicate *what
-the library does* is to show its behavior in that context.
+through an IDE/code editing environment, the clearest way to communicate _what
+the library does_ is to show its behavior in that context.
 
 ## How it works
 

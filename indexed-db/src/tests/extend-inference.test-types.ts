@@ -30,7 +30,9 @@ void function testExtendWithNestedObjectReplacement() {
       })
     )
     // Deep merge adds imageBase64 to the nested settings object
-    .version(2, v => v.updateSchema<'triggers', { settings: { imageBase64?: string } }>())
+    .version(2, v =>
+      v.updateSchema<'triggers', { settings: { imageBase64?: string } }>()
+    )
 
   type Schema = InferSchema<typeof migrations>
   type Trigger = Schema['triggers']

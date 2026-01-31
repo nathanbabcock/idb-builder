@@ -9,7 +9,5 @@
   "tabWidth": 2,
   "useTabs": false,
   "trailingComma": "es5",
-  "ignorePatterns": [
-    "**/*.sample.ts"
-  ]
+  "ignorePatterns": ["**/*.sample.ts"]
 }

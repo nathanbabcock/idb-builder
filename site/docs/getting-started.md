@@ -26,7 +26,6 @@ deno add npm:@typedex/indexed-db
 
 :::
 
-
 ## Set up migrations
 
 Define your database schema using TypeScript types and the `schema()` helper. The `createMigrations()` builder captures your database structure with full type inference.

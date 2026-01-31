@@ -4,7 +4,9 @@ import type { InferSchema } from '../lib/migration-builder.types'
 
 void function testUpdateSchemaAddsOptionalProperties() {
   const migrations = createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     .version(2, v => v.updateSchema<'users', { email?: string }>())
 
   type Schema = InferSchema<typeof migrations>
@@ -28,7 +30,9 @@ void function testUpdateSchemaCanExtendNestedObjects() {
         schema: schema<{ id: string; settings: { theme: string } }>(),
       })
     )
-    .version(2, v => v.updateSchema<'users', { settings: { notifications?: boolean } }>())
+    .version(2, v =>
+      v.updateSchema<'users', { settings: { notifications?: boolean } }>()
+    )
 
   type Schema = InferSchema<typeof migrations>
   type User = Schema['users']
@@ -37,7 +41,10 @@ void function testUpdateSchemaCanExtendNestedObjects() {
   void ({ id: 'asdf', settings: { theme: 'dark' } } satisfies User)
 
   // Verify nested optional property can be provided
-  void ({ id: 'asdf', settings: { theme: 'dark', notifications: true } } satisfies User)
+  void ({
+    id: 'asdf',
+    settings: { theme: 'dark', notifications: true },
+  } satisfies User)
 
   // Verify nested optional property can be omitted
   void ({ id: 'asdf', settings: { theme: 'light' } } satisfies User)
@@ -48,7 +55,10 @@ void function testUpdateSchemaDeepMergesNestedObjects() {
     .version(1, v =>
       v.createObjectStore({
         name: 'users',
-        schema: schema<{ id: string; address: { street: string; city: string } }>(),
+        schema: schema<{
+          id: string
+          address: { street: string; city: string }
+        }>(),
       })
     )
     .version(2, v => v.updateSchema<'users', { address: { zip?: string } }>())
@@ -100,7 +110,9 @@ void function testUpdateSchemaDeletesNestedWithNever() {
         }>(),
       })
     )
-    .version(2, v => v.updateSchema<'users', { address: { legacyZone: never } }>())
+    .version(2, v =>
+      v.updateSchema<'users', { address: { legacyZone: never } }>()
+    )
 
   type Schema = InferSchema<typeof migrations>
   type User = Schema['users']
@@ -118,7 +130,9 @@ void function testUpdateSchemaDeletesNestedWithNever() {
 
 void function testUpdateSchemaRejectsAddingRequiredField() {
   createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+    )
     // @ts-expect-error adding required field is not backwards-compatible
     .version(2, v => v.updateSchema<'users', { email: string }>())
 }
@@ -200,8 +214,7 @@ void function testUpdateSchemaPreservesDiscriminatedUnions() {
       v.createObjectStore({
         name: 'pets',
         schema: schema<
-          | { type: 'dog'; breed: string }
-          | { type: 'cat'; indoor: boolean }
+          { type: 'dog'; breed: string } | { type: 'cat'; indoor: boolean }
         >(),
       })
     )
