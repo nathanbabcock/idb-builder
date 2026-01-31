@@ -33,7 +33,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts",
+    "build": "tsup src/index.ts --format esm --dts --dts-resolve",
     "typecheck": "tsgo --build --noEmit",
     "test": "vitest run"
   },

@@ -5,7 +5,7 @@
     "test": "pnpm run --parallel test",
     "typecheck": "pnpm run --parallel typecheck",
     "preview": "pnpm run --parallel preview",
-    "build": "pnpm run --parallel build",
+    "build": "pnpm --filter @typedex/indexed-db build && pnpm --filter @typedex/site build",
     "format": "oxfmt",
     "lint": "oxlint --type-aware",
     "verify": "pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm format --check"
