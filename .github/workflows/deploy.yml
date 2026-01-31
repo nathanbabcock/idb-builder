@@ -33,7 +33,7 @@ jobs:
         run: pnpm install
 
       - name: Build site
-        run: pnpm --filter site-vitepress build
+        run: pnpm --filter @typedex/site build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
