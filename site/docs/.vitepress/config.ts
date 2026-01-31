@@ -36,6 +36,7 @@ export default defineConfig({
           { text: 'Database versions', link: '/features/database-versions' },
           { text: 'Update schema', link: '/features/update-schema' },
           { text: 'Transform records', link: '/features/transform-records' },
+          { text: 'Nested keys', link: '/features/nested-keys' },
           { text: 'Composite keys', link: '/features/composite-keys' },
           { text: 'Auto increment', link: '/features/auto-increment' },
           {
