@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "paths": {
-      "@typedex/indexed-db": ["../indexed-db/dist/index.d.ts"]
-    }
-  }
-}

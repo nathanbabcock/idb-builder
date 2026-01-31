@@ -1,9 +1,5 @@
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -75,21 +71,7 @@ export default defineConfig({
   },
 
   markdown: {
-    codeTransformers: [
-      transformerTwoslash({
-        twoslashOptions: {
-          compilerOptions: {
-            target: 99, // ESNext
-            module: 99, // ESNext
-            paths: {
-              '@typedex/indexed-db': [
-                resolve(__dirname, '../../../indexed-db/dist/index.d.ts'),
-              ],
-            },
-          },
-        },
-      }),
-    ],
+    codeTransformers: [transformerTwoslash()],
     // Explicitly load these languages for types highlighting
     languages: ['ts'],
   },
