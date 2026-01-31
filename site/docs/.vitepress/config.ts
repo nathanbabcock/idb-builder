@@ -48,7 +48,14 @@ export default defineConfig({
       {
         text: 'Philosophy',
         collapsed: true,
-        items: [{ text: 'Error messages', link: '/philosophy/error-messages' }],
+        items: [
+          { text: 'Error messages', link: '/philosophy/error-messages' },
+          { text: 'LLM use', link: '/philosophy/llm-use' },
+          {
+            text: 'Documentation as tests',
+            link: '/philosophy/documentation-as-tests',
+          },
+        ],
       },
     ],
 

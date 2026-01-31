@@ -5,6 +5,12 @@ compound) key.
 
 <<< @/samples/composite-keys/composite-keys.sample.ts{ts twoslash}
 
+## Composite index key paths
+
+Indexes can also use composite key paths, allowing you to query by multiple fields at once.
+
+<<< @/samples/composite-keys/composite-index.sample.ts{ts twoslash}
+
 ## Errors
 
 ### Type mismatch
