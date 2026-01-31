@@ -22,5 +22,12 @@
     "typescript/no-meaningless-void-operator": "off",
     "vitest/require-to-throw-message": "off"
   },
-  "ignorePatterns": ["**/*.sample.ts"]
+  "overrides": [
+    {
+      "files": ["**/*.sample.ts"],
+      "rules": {
+        "eslint/no-unused-vars": "off"
+      }
+    }
+  ]
 }
