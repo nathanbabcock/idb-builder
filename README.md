@@ -1,6 +1,6 @@
 # Typedex
 
-Typesafe Indexed DB
+Type-safe IndexedDB
 
 ## Getting started
 

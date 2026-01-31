@@ -2,10 +2,6 @@
 
 ## Install Typedex
 
-::: info
-The library hasn't been published on NPM yet, so feel free to install it from Git.
-:::
-
 ::: code-group
 
 ```sh [npm]

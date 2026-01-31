@@ -25,6 +25,6 @@ await db.put('orders', {
   status: 'pending',
 })
 
-// ✅ Typesafety on queries for each array member
+// ✅ Type safety on queries for each array member
 await db.get('orders', ['customer-1', 0])
 //                     ^^^^^^^^^^^^^^^^^

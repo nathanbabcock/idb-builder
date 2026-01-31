@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: Typedex
-  text: Typesafe Indexed DB
+  text: Type-safe IndexedDB
   # tagline: My great project tagline
   actions:
     - theme: brand
@@ -15,7 +15,7 @@ hero:
     #   link: /api-examples
 
 features:
-  - title: Typesafety
+  - title: Type safety
     icon: 🛡️
     details:
       The idiosyncracies of the Indexed DB API are enforced through the type system, catching a

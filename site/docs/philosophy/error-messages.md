@@ -1,6 +1,6 @@
 # Error messages
 
-A useful pattern in typesafety libraries is to perform validation
+A useful pattern in type safety libraries is to perform validation
 with a generic helper type like `Validate<T>` and conditionally return an
 incompatible error value if the type `T` is invalid. This gives an entrypoint
 for the library to inject rich and contextual error messages, including both the exact

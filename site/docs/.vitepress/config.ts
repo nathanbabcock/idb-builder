@@ -4,7 +4,8 @@ import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Typedex',
-  description: 'Typesafe Indexed DB',
+  description: 'Type-safe IndexedDB',
+  base: '/typedex/',
   cleanUrls: true,
   lastUpdated: true,
 
