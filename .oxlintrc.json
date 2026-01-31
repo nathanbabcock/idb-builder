@@ -22,5 +22,5 @@
     "typescript/no-meaningless-void-operator": "off",
     "vitest/require-to-throw-message": "off"
   },
-  "ignorePatterns": ["**/supabase-types.gen.ts"]
+  "ignorePatterns": ["**/*.sample.ts"]
 }
