@@ -14,13 +14,13 @@
 
 <<< @/samples/multi-entry-indexes/multi-entry-non-array.sample.ts{ts twoslash}
 
-### \[wip] Array elements must be valid keys
+### Array elements must be valid keys
 
 `multiEntry` requires array elements to be valid IndexedDB keys (string, number, Date, ArrayBuffer, or arrays of these). Objects are not valid keys.
 
 <<< @/samples/multi-entry-indexes/multi-entry-object-array.sample.ts{ts twoslash}
 
-### \[wip] Incompatible with composite keypath
+### Incompatible with composite keypath
 
 `multiEntry` cannot be used with composite (array) keyPaths. This is an IndexedDB limitation.
 

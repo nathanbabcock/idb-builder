@@ -61,9 +61,11 @@ export type TypeName<T> = T extends string
         : T extends ArrayBuffer
           ? 'ArrayBuffer'
           : T extends IDBValidKey[]
-            ? 'Array'
-            : T extends undefined
-              ? 'undefined'
-              : T extends null
-                ? 'null'
-                : 'object'
+            ? 'Array<IDBValidKey>'
+            : T extends (infer E)[]
+              ? `Array<${TypeName<E>}>`
+              : T extends undefined
+                ? 'undefined'
+                : T extends null
+                  ? 'null'
+                  : 'object'

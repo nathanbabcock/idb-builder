@@ -96,6 +96,20 @@ export type ValidateKeyPath<T, Path> = Path extends undefined
       ? ValidateArrayPath<T, Path>
       : never
 
+// Validate that a path exists in the type (without IDBValidKey constraint)
+// Used for multiEntry indexes where the keyPath points to an array
+type ValidatePathExists<T, Path extends string> = Path extends ''
+  ? Path
+  : Path extends `${infer First}.${infer Rest}`
+    ? First extends keyof T
+      ? ValidatePathExists<T[First], Rest> extends never
+        ? never
+        : Path
+      : never
+    : Path extends keyof T
+      ? Path
+      : never
+
 // Validate string paths like "address.city"
 // Empty string '' means "use the value itself as the key" — valid only if T is a valid IDB key
 // For non-empty paths, the type at the path must also be a valid IDB key
@@ -190,14 +204,20 @@ export type ValidateMultiEntryIndex<
  * directly on the keyPath property rather than the entire call.
  */
 export type ValidatedKeyPath<Value, KeyPath, MultiEntry extends boolean> =
-  ValidateKeyPath<Value, KeyPath> extends never
-    ? MigrationError<`keyPath '${KeyPath extends string ? KeyPath : TypeName<KeyPath>}' is not a valid path in the store schema`>
-    : MultiEntry extends true
-      ? KeyPath extends string
-        ? ValidateMultiEntryIndex<Value, KeyPath, MultiEntry> extends true
+  MultiEntry extends true
+    ? // For multiEntry, use path existence check (not IDBValidKey check)
+      KeyPath extends string
+      ? ValidatePathExists<Value, KeyPath> extends never
+        ? MigrationError<`keyPath '${KeyPath}' is not a valid path in the store schema`>
+        : ValidateMultiEntryIndex<Value, KeyPath, MultiEntry> extends true
           ? KeyPath
-          : MigrationError<`The specified keypath '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}' and multi-entry requires an array.`>
-        : MigrationError<'multiEntry cannot be used with composite keyPath'>
+          : ResolveKeyPath<Value, KeyPath> extends (infer E)[]
+            ? MigrationError<`multiEntry index '${KeyPath}' has array elements of type '${TypeName<E>}', but IndexedDB requires elements to be valid keys (string, number, Date, ArrayBuffer, or arrays of these)`>
+            : MigrationError<`multiEntry requires keyPath to point to an array, but '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}'`>
+      : MigrationError<'multiEntry cannot be used with composite keyPath'>
+    : // For non-multiEntry, use full IDBValidKey validation
+      ValidateKeyPath<Value, KeyPath> extends never
+      ? MigrationError<`keyPath '${KeyPath extends string ? KeyPath : TypeName<KeyPath>}' is not a valid path in the store schema`>
       : KeyPath
 
 /**
