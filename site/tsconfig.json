@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@typedex/indexed-db": ["../indexed-db/dist/index.d.ts"]
+    }
+  }
+}
