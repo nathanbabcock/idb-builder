@@ -4,7 +4,7 @@ import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Typedex',
-  description: 'Extreme typesafety for Indexed DB',
+  description: 'Typesafe Indexed DB',
   cleanUrls: true,
   lastUpdated: true,
 
@@ -29,7 +29,10 @@ export default defineConfig({
         text: 'Features',
         collapsed: true,
         items: [
-          { text: 'Create object store', link: '/features/create-object-store' },
+          {
+            text: 'Create object store',
+            link: '/features/create-object-store',
+          },
           { text: 'Database versions', link: '/features/database-versions' },
           { text: 'Update schema', link: '/features/update-schema' },
           { text: 'Transform records', link: '/features/transform-records' },
