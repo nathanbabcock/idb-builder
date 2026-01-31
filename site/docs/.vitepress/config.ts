@@ -8,6 +8,9 @@ export default defineConfig({
   base: '/typedex/',
   cleanUrls: true,
   lastUpdated: true,
+  sitemap: {
+    hostname: 'https://nathanbabcock.github.io/typedex/',
+  },
 
   themeConfig: {
     outline: {
@@ -23,12 +26,12 @@ export default defineConfig({
     sidebar: [
       {
         text: 'Guides',
-        collapsed: false,
+        collapsed: true,
         items: [{ text: 'Getting started', link: '/getting-started' }],
       },
       {
         text: 'Features',
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: 'Create object store',
