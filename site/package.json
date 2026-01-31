@@ -7,7 +7,7 @@
   "author": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch ../indexed-db/src -e ts --exec \"vitepress dev docs\"",
+    "dev": "nodemon --watch ../library/src -e ts --exec \"vitepress dev docs\"",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs"
   },

@@ -1,5 +1,5 @@
 packages:
-  - indexed-db
+  - library
   - site
 
 onlyBuiltDependencies:

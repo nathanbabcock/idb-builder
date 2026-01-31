@@ -24,7 +24,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  indexed-db:
+  library:
     dependencies:
       idb:
         specifier: ^8.0.3
@@ -44,7 +44,7 @@ importers:
     dependencies:
       '@typedex/indexed-db':
         specifier: workspace:*
-        version: link:../indexed-db
+        version: link:../library
       zod:
         specifier: ^4.3.5
         version: 4.3.5
