@@ -227,15 +227,20 @@ export type ValidatedKeyPath<Value, KeyPath, MultiEntry extends boolean> =
  *
  * Checks:
  * 1. The keyPath must be valid within the schema
- * 2. Composite keys (arrays) cannot be used with autoIncrement
- * 3. When autoIncrement is true, the keyPath must point to a number type
+ * 2. The keyPath must point to a valid IDB key type (not an object)
+ * 3. Composite keys (arrays) cannot be used with autoIncrement
+ * 4. When autoIncrement is true, the keyPath must point to a number type
  */
 export type ValidatedPrimaryKey<
   Value,
   KeyPath,
   AutoIncrement extends boolean,
 > = ValidateKeyPath<Value, KeyPath> extends never
-  ? MigrationError<`Primary key '${Stringify<KeyPath>}' is not a valid path in the schema`>
+  ? KeyPath extends string
+    ? ValidatePathExists<Value, KeyPath> extends never
+      ? MigrationError<`Primary key '${KeyPath}' is not a valid path in the schema`>
+      : MigrationError<`Primary key '${KeyPath}' resolves to '${TypeName<ResolveSingleKeyPath<Value, KeyPath>>}', but must be a valid IndexedDB key (string, number, Date, ArrayBuffer, or array of these)`>
+    : MigrationError<`Primary key '${Stringify<KeyPath>}' is not a valid path in the schema`>
   : AutoIncrement extends true
     ? KeyPath extends readonly string[]
       ? MigrationError<'autoIncrement cannot be used with composite (array) primary keys'>
