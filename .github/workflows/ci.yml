@@ -22,7 +22,7 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
-      - name: Install dependencies
+      - name: Install
         run: pnpm install
 
       - name: Typecheck
@@ -37,5 +37,5 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Format check
+      - name: Format
         run: pnpm format --check
