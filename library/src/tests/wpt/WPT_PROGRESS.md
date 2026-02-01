@@ -2,7 +2,7 @@
 
 **WPT Commit:** [`9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f`](https://github.com/web-platform-tests/wpt/tree/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB)
 
-**Status:** 62 of 163 files ported
+**Status:** 61 of 163 files ported
 
 ## Legend
 
@@ -75,7 +75,7 @@
 |   ✅   | `keygenerator.any.js`                                         |                                                                    |
 |   ✅   | `keyorder.any.js`                                             |                                                                    |
 |   ✅   | `keypath.any.js`                                              |                                                                    |
-|   ✅   | `list_ordering.any.js`                                        |                                                                    |
+|   ➖   | `list_ordering.any.js`                                        | Tests DOMStringList ordering - not part of wrapper                 |
 |   ✅   | `objectstore_keyorder.any.js`                                 |                                                                    |
 |   ✅   | `reading-autoincrement-indexes.any.js`                        |                                                                    |
 |   ✅   | `structured-clone.any.js`                                     | 1 test skipped - fake-indexeddb bug with NaN                       |
@@ -225,9 +225,9 @@
 
 | Category   |   Count |
 | ---------- | ------: |
-| ✅ Ported  |      62 |
+| ✅ Ported  |      61 |
 | ⏳ TODO    |      36 |
-| ➖ Skipped |      65 |
+| ➖ Skipped |      66 |
 | **Total**  | **163** |
 
 ## Why Tests Are Skipped
