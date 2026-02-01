@@ -50,16 +50,19 @@ type ResolveIndexKeyType<
   : ExtractKeyPathType<V, KeyPath>
 
 // Extract the type at a given keypath (e.g., 'address.city' -> string)
+// Empty string means "use the value itself as the key"
 export type ExtractKeyPathType<
   T,
   Path extends string,
-> = Path extends `${infer Head}.${infer Tail}`
-  ? Head extends keyof T
-    ? ExtractKeyPathType<T[Head], Tail>
-    : never
-  : Path extends keyof T
-    ? T[Path]
-    : never
+> = Path extends ''
+  ? T
+  : Path extends `${infer Head}.${infer Tail}`
+    ? Head extends keyof T
+      ? ExtractKeyPathType<T[Head], Tail>
+      : never
+    : Path extends keyof T
+      ? T[Path]
+      : never
 
 // Extract schema type from MigrationBuilder
 export type ExtractSchema<M> =

@@ -1,4 +1,5 @@
 import { createMigrations } from '../lib/migration-builder'
+import { openDB } from '../lib/idb-adapter'
 import { schema } from '../lib/schema'
 
 void function testCreateIndexKeyPathIsTypeSafe() {
@@ -185,6 +186,27 @@ void function testValidEmptyKeyPath() {
     .version(2, v =>
       v.createIndex('byValue', { storeName: 'emails', keyPath: '' })
     )
+}
+
+void async function testEmptyKeyPathIndexQueryType() {
+  // When an index has empty string keyPath, queries should accept the store's value type
+  const migrations = createMigrations()
+    .version(1, v =>
+      v.createObjectStore({ name: 'emails', schema: schema<string>() })
+    )
+    .version(2, v =>
+      v.createIndex('byValue', { storeName: 'emails', keyPath: '' })
+    )
+
+  const db = await openDB('test', migrations)
+  const tx = db.transaction('emails', 'readonly')
+  const index = tx.objectStore('emails').index('byValue')
+
+  // Should accept string (the store's value type)
+  await index.openCursor('test@example.com')
+
+  // @ts-expect-error Should reject number (not the store's value type)
+  await index.openCursor(123)
 }
 
 void function testInvalidEmptyKeyPath() {
