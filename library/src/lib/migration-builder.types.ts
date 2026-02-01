@@ -186,8 +186,10 @@ export type FindInvalidIndexKeyPath<
 }[keyof Indexes]
 
 /**
- * Validates that a multiEntry index has valid element types.
- * When multiEntry is true, the keyPath must point to an array whose elements are valid IDB keys.
+ * Validates that a multiEntry index has valid key types.
+ * When multiEntry is true, the keyPath can point to either:
+ * - A single valid IDB key (creates one index entry)
+ * - An array of valid IDB keys (each element creates a separate index entry)
  * Returns true if valid, false if invalid.
  */
 export type ValidateMultiEntryIndex<
@@ -199,7 +201,9 @@ export type ValidateMultiEntryIndex<
     ? E extends IDBValidKey
       ? true
       : false // Array elements are not valid IDB keys
-    : false // multiEntry requires keyPath to point to an array
+    : ResolveKeyPath<Value, KeyPath> extends IDBValidKey
+      ? true // Single valid key is also allowed
+      : false // Not a valid key or array of valid keys
   : true // Not multiEntry, no validation needed
 
 /**
@@ -220,7 +224,7 @@ export type ValidatedKeyPath<
         ? KeyPath
         : ResolveKeyPath<Value, KeyPath> extends (infer E)[]
           ? MigrationError<`multiEntry index '${KeyPath}' has array elements of type '${TypeName<E>}', but IndexedDB requires elements to be valid keys (string, number, Date, ArrayBuffer, or arrays of these)`>
-          : MigrationError<`multiEntry requires keyPath to point to an array, but '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}'`>
+          : MigrationError<`multiEntry index '${KeyPath}' resolves to '${TypeName<ResolveKeyPath<Value, KeyPath>>}', but must be a valid IDB key or array of valid IDB keys`>
     : MigrationError<'multiEntry cannot be used with composite keyPath'>
   : // For non-multiEntry, use full IDBValidKey validation
     ValidateKeyPath<Value, KeyPath> extends never

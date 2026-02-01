@@ -73,7 +73,8 @@ void function testMultiEntryRejectsCompositeKeyPath() {
     )
 }
 
-void function testMultiEntryRejectsNonArrayKeyPath() {
+// Per spec, multiEntry accepts both single valid keys AND arrays of valid keys
+void function testMultiEntryAcceptsSingleValidKey() {
   createMigrations()
     .version(1, v =>
       v.createObjectStore({
@@ -85,8 +86,7 @@ void function testMultiEntryRejectsNonArrayKeyPath() {
     .version(2, v =>
       v.createIndex('byTitle', {
         storeName: 'posts',
-        // @ts-expect-error multiEntry requires keyPath to point to an array
-        keyPath: 'title',
+        keyPath: 'title', // Valid: single string key works with multiEntry
         multiEntry: true,
       })
     )

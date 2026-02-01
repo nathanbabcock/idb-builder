@@ -68,7 +68,7 @@ test('Adding keys with multiEntry index', async () => {
       })
       .createIndex('actors', {
         storeName: 'store',
-        keyPath: 'name', // !FIXME w3 says this is valid but it gives a compile error
+        keyPath: 'name',
         multiEntry: true,
       })
   )
