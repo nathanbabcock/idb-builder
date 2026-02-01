@@ -2,7 +2,7 @@
 
 **WPT Commit:** [`9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f`](https://github.com/web-platform-tests/wpt/tree/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB)
 
-**Status:** 64 of 163 files ported (491 tests passing, 17 skipped)
+**Status:** 62 of 163 files ported
 
 ## Legend
 
@@ -51,8 +51,8 @@
 |   ✅   | `idbindex_getKey.any.js`                                      |                                                                    |
 |   ✅   | `idbindex_openCursor.any.js`                                  |                                                                    |
 |   ✅   | `idbindex_openKeyCursor.any.js`                               |                                                                    |
-|   ✅   | `idbkeyrange-includes.any.js`                                 |                                                                    |
-|   ✅   | `idbkeyrange.any.js`                                          |                                                                    |
+|   ➖   | `idbkeyrange-includes.any.js`                                 | Tests IDBKeyRange - not part of wrapper                            |
+|   ➖   | `idbkeyrange.any.js`                                          | Tests IDBKeyRange - not part of wrapper                            |
 |   ✅   | `idbobjectstore_add.any.js`                                   | 1 test skipped - wrapper doesn't expose deleted stores             |
 |   ✅   | `idbobjectstore_clear.any.js`                                 | 1 test skipped - wrapper doesn't expose deleted stores             |
 |   ✅   | `idbobjectstore_count.any.js`                                 | 1 test skipped - wrapper doesn't expose deleted stores             |
@@ -225,9 +225,9 @@
 
 | Category   |   Count |
 | ---------- | ------: |
-| ✅ Ported  |      64 |
+| ✅ Ported  |      62 |
 | ⏳ TODO    |      36 |
-| ➖ Skipped |      63 |
+| ➖ Skipped |      65 |
 | **Total**  | **163** |
 
 ## Why Tests Are Skipped
