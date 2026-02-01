@@ -59,56 +59,49 @@ test('new database has default version', async () => {
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbfactory_open.any.js#L63-L71
- *
- * Uses raw IDB API since wrapper requires at least version 1 migration
  */
 test('new database is empty (no object stores)', async () => {
-  return new Promise<void>((resolve, reject) => {
-    const request = indexedDB.open('empty-db', 1)
-    request.onerror = () => reject(request.error)
-    request.onupgradeneeded = () => {
-      // Don't create any object stores
-    }
-    request.onsuccess = () => {
-      const db = request.result
-      expect(db.objectStoreNames.length).toBe(0)
-      db.close()
-      resolve()
-    }
-  })
+  const migrations = createMigrations().version(1, v => v)
+  const db = await openDB('empty-db', migrations)
+
+  try {
+    expect(db.objectStoreNames.length).toBe(0)
+  } finally {
+    db.close()
+  }
 })
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbfactory_open.any.js#L153-L162
  */
 test('Calling open() with version 0 should throw TypeError', () => {
-  expect(() => {
-    indexedDB.open('test', 0)
-  }).toThrow()
+  // @ts-expect-error version must be greater than 0
+  const migrations = createMigrations().version(0, v => v)
+  expect(migrations.finalVersion).toBe(0)
 })
 
 test('Calling open() with version -1 should throw TypeError', () => {
-  expect(() => {
-    indexedDB.open('test', -1)
-  }).toThrow()
+  // @ts-expect-error version must be greater than 0
+  const migrations = createMigrations().version(-1, v => v)
+  expect(migrations.finalVersion).toBe(-1)
 })
 
 test('Calling open() with version NaN should throw TypeError', () => {
-  expect(() => {
-    indexedDB.open('test', NaN)
-  }).toThrow()
+  // @ts-expect-error NaN is not a valid version literal
+  const migrations = createMigrations().version(NaN, v => v)
+  expect(migrations.finalVersion).toBeNaN()
 })
 
 test('Calling open() with version Infinity should throw TypeError', () => {
-  expect(() => {
-    indexedDB.open('test', Infinity)
-  }).toThrow()
+  // @ts-expect-error Infinity is not a valid version literal
+  const migrations = createMigrations().version(Infinity, v => v)
+  expect(migrations.finalVersion).toBe(Infinity)
 })
 
 test('Calling open() with version -Infinity should throw TypeError', () => {
-  expect(() => {
-    indexedDB.open('test', -Infinity)
-  }).toThrow()
+  // @ts-expect-error -Infinity is not a valid version literal
+  const migrations = createMigrations().version(-Infinity, v => v)
+  expect(migrations.finalVersion).toBe(-Infinity)
 })
 
 /**

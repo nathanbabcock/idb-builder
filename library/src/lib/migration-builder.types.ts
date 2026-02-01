@@ -513,7 +513,8 @@ export type InferSchema<T> =
 /**
  * Validates that a version number V is:
  * 1. A literal number (not the broad `number` type)
- * 2. Greater than the previous version PrevVersion
+ * 2. Greater than 0
+ * 3. Greater than the previous version PrevVersion
  *
  * Returns V if valid, or an error type that produces helpful messages.
  */
@@ -522,8 +523,10 @@ export type ValidateVersion<
   PrevVersion extends number | undefined,
 > = number extends V
   ? MigrationError<'a specific numeric literal (e.g. 1, 2, 3, …)'>
-  : PrevVersion extends undefined
-    ? V // First version - any literal number allowed
-    : IsGreaterThan<V, PrevVersion & number> extends true
-      ? V
-      : MigrationError<`specified version ${PrevVersion} is the same as previous version`>
+  : IsGreaterThan<V, 0> extends false
+    ? MigrationError<`version must be greater than 0, got ${V}`>
+    : PrevVersion extends undefined
+      ? V // First version - valid literal > 0
+      : IsGreaterThan<V, PrevVersion & number> extends true
+        ? V
+        : MigrationError<`specified version ${PrevVersion} is the same as previous version`>

@@ -1,24 +1,24 @@
 import { createMigrations } from '../lib/migration-builder'
 import { schema } from '../lib/schema'
 
-void function testFirstVersionCanBeAnyNumber() {
+void function testFirstVersionMustBePositive() {
   // First version can be 1
   createMigrations().version(1, v =>
     v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
   )
 
-  // First version can be 0
+  // First version can be a large number
+  createMigrations().version(1000, v =>
+    v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
+  )
+
+  // @ts-expect-error First version cannot be 0
   createMigrations().version(0, v =>
     v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
   )
 
-  // First version can be negative
+  // @ts-expect-error First version cannot be negative
   createMigrations().version(-5, v =>
-    v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
-  )
-
-  // First version can be a large number
-  createMigrations().version(1000, v =>
     v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
   )
 }
@@ -52,24 +52,6 @@ void function testSuccessiveVersionsMustBeGreater() {
         name: 'comments',
         schema: schema<{ id: string }>(),
       })
-    )
-
-  // Valid: starting from negative and going up
-  createMigrations()
-    .version(-10, v =>
-      v.createObjectStore({ name: 'users', schema: schema<{ id: string }>() })
-    )
-    .version(-5, v =>
-      v.createObjectStore({ name: 'posts', schema: schema<{ id: string }>() })
-    )
-    .version(0, v =>
-      v.createObjectStore({
-        name: 'comments',
-        schema: schema<{ id: string }>(),
-      })
-    )
-    .version(1, v =>
-      v.createObjectStore({ name: 'tags', schema: schema<{ id: string }>() })
     )
 }
 

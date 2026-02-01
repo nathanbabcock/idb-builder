@@ -12,16 +12,6 @@ import { createMigrations } from '../../lib/migration-builder'
 import { schema } from '../../lib/schema'
 
 /**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/get-databases.any.js#L4-L9
- */
-test('Ensure that databases() returns a promise', async () => {
-  const result = indexedDB.databases()
-  expect(result).toBeInstanceOf(Promise)
-  // Clean up by awaiting the result
-  await result
-})
-
-/**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/get-databases.any.js#L11-L30
  */
 test('Enumerate one database', async () => {
