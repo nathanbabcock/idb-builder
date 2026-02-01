@@ -256,7 +256,9 @@ test('Iteration with key range on index', async () => {
   const index = store.index('index')
 
   const results: string[] = []
-  let cursor = await index.openCursor(IDBKeyRange.bound('indexKey_3', 'indexKey_6'))
+  let cursor = await index.openCursor(
+    IDBKeyRange.bound('indexKey_3', 'indexKey_6')
+  )
   while (cursor) {
     results.push(cursor.value.iKey)
     cursor = await cursor.continue()
@@ -264,7 +266,12 @@ test('Iteration with key range on index', async () => {
 
   await tx.done
 
-  expect(results).toEqual(['indexKey_3', 'indexKey_4', 'indexKey_5', 'indexKey_6'])
+  expect(results).toEqual([
+    'indexKey_3',
+    'indexKey_4',
+    'indexKey_5',
+    'indexKey_6',
+  ])
 
   db.close()
 })

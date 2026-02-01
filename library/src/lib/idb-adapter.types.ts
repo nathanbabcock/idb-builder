@@ -51,10 +51,7 @@ type ResolveIndexKeyType<
 
 // Extract the type at a given keypath (e.g., 'address.city' -> string)
 // Empty string means "use the value itself as the key"
-export type ExtractKeyPathType<
-  T,
-  Path extends string,
-> = Path extends ''
+export type ExtractKeyPathType<T, Path extends string> = Path extends ''
   ? T
   : Path extends `${infer Head}.${infer Tail}`
     ? Head extends keyof T

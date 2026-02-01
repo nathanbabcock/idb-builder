@@ -50,12 +50,11 @@ test('Clear removes all records from an index', async () => {
     v
       .createObjectStore({
         name: 'store',
-        schema:
-          schema<
-            | { indexedProperty: string | number | number[] }
-            | { indexedProperty: string; something_different: string }
-            | number
-          >(),
+        schema: schema<
+          | { indexedProperty: string | number | number[] }
+          | { indexedProperty: string; something_different: string }
+          | number
+        >(),
         autoIncrement: true,
       })
       .createIndex('index', {

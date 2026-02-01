@@ -72,7 +72,11 @@ test('Values - Object', async () => {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'store',
-      schema: schema<{ name: string; age: number; nested: { value: string } }>(),
+      schema: schema<{
+        name: string
+        age: number
+        nested: { value: string }
+      }>(),
     })
   )
 

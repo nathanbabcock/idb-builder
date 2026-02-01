@@ -195,7 +195,10 @@ test('Cursor iteration with update and continue', async () => {
 
     while (cursor) {
       // Double each value
-      await cursor.update({ id: cursor.key as number, value: cursor.value.value * 2 })
+      await cursor.update({
+        id: cursor.key as number,
+        value: cursor.value.value * 2,
+      })
       cursor = await cursor.continue()
     }
 

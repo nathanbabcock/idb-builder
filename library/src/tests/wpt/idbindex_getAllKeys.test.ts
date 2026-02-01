@@ -238,7 +238,9 @@ test('Get upper excluded', async () => {
   const store = tx.objectStore('store')
   const index = store.index('test_idx')
 
-  const result = await index.getAllKeys(IDBKeyRange.bound('G', 'K', false, true))
+  const result = await index.getAllKeys(
+    IDBKeyRange.bound('G', 'K', false, true)
+  )
   expect(result).toEqual(['g', 'h', 'i', 'j'])
 
   await tx.done
@@ -271,7 +273,9 @@ test('Get lower excluded', async () => {
   const store = tx.objectStore('store')
   const index = store.index('test_idx')
 
-  const result = await index.getAllKeys(IDBKeyRange.bound('G', 'K', true, false))
+  const result = await index.getAllKeys(
+    IDBKeyRange.bound('G', 'K', true, false)
+  )
   expect(result).toEqual(['h', 'i', 'j', 'k'])
 
   await tx.done

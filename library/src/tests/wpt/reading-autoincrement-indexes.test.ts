@@ -33,7 +33,10 @@ test('IDBObjectStore.getAll() for an autoincrement store', async () => {
   try {
     // Add 32 records
     for (let i = 1; i <= 32; i++) {
-      await db.add('store', { name: nameForId(i) } as { id: number; name: string })
+      await db.add('store', { name: nameForId(i) } as {
+        id: number
+        name: string
+      })
     }
 
     const results = await db.getAll('store')
@@ -66,7 +69,10 @@ test('IDBObjectStore.getAllKeys() for an autoincrement store', async () => {
   try {
     // Add 32 records
     for (let i = 1; i <= 32; i++) {
-      await db.add('store', { name: nameForId(i) } as { id: number; name: string })
+      await db.add('store', { name: nameForId(i) } as {
+        id: number
+        name: string
+      })
     }
 
     const keys = await db.getAllKeys('store')
@@ -98,7 +104,10 @@ test('IDBObjectStore.get() for an autoincrement store', async () => {
   try {
     // Add 32 records
     for (let i = 1; i <= 32; i++) {
-      await db.add('store', { name: nameForId(i) } as { id: number; name: string })
+      await db.add('store', { name: nameForId(i) } as {
+        id: number
+        name: string
+      })
     }
 
     // Get each record individually
@@ -131,7 +140,10 @@ test('Cursor iteration on autoincrement store', async () => {
   try {
     // Add 10 records
     for (let i = 1; i <= 10; i++) {
-      await db.add('store', { name: nameForId(i) } as { id: number; name: string })
+      await db.add('store', { name: nameForId(i) } as {
+        id: number
+        name: string
+      })
     }
 
     const tx = db.transaction('store', 'readonly')
@@ -174,7 +186,10 @@ test('Key cursor on autoincrement store', async () => {
   try {
     // Add 10 records
     for (let i = 1; i <= 10; i++) {
-      await db.add('store', { name: nameForId(i) } as { id: number; name: string })
+      await db.add('store', { name: nameForId(i) } as {
+        id: number
+        name: string
+      })
     }
 
     const tx = db.transaction('store', 'readonly')
@@ -215,7 +230,10 @@ test('IDBObjectStore.getAll() with count limit', async () => {
 
   try {
     for (let i = 1; i <= 20; i++) {
-      await db.add('store', { name: nameForId(i) } as { id: number; name: string })
+      await db.add('store', { name: nameForId(i) } as {
+        id: number
+        name: string
+      })
     }
 
     const results = await db.getAll('store', undefined, 5)

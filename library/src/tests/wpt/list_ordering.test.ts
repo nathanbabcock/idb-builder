@@ -23,7 +23,7 @@ async function listOrderTest(
 
     request.onerror = () => reject(request.error)
 
-    request.onupgradeneeded = (e) => {
+    request.onupgradeneeded = e => {
       const db = (e.target as IDBOpenDBRequest).result
       let objStore: IDBObjectStore | null = null
 
@@ -52,7 +52,7 @@ async function listOrderTest(
       }
     }
 
-    request.onsuccess = (e) => {
+    request.onsuccess = e => {
       const db = (e.target as IDBOpenDBRequest).result
 
       // Verify objectStoreNames after upgrade

@@ -124,8 +124,10 @@ test('put() where an index has unique:true specified', async () => {
 
   // Try to put record with same indexed value (different primary key due to autoIncrement)
   // Should fail with ConstraintError
-  // @ts-expect-error - autoIncrement allows omitting key
-  await expect(db.put('store', { property: record.property })).rejects.toMatchObject({
+  await expect(
+    // @ts-expect-error - autoIncrement allows omitting key
+    db.put('store', { property: record.property })
+  ).rejects.toMatchObject({
     name: 'ConstraintError',
   })
 
@@ -311,7 +313,7 @@ test("Attempt to put() a record that does not meet the constraints of an object 
  * not about out-of-line keys.
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbobjectstore_put.any.js#L286-L304
  */
-test("Attempt to call put() without a key parameter when the object store uses out-of-line keys", async () => {
+test('Attempt to call put() without a key parameter when the object store uses out-of-line keys', async () => {
   const record = { property: 'data' }
 
   const migrations = createMigrations().version(1, v =>
@@ -386,7 +388,7 @@ test("Attempt to put() a record where the record's in-line key is not defined", 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbobjectstore_put.any.js#L345-L363
  */
-test("Attempt to put() a record where the out of line key provided does not meet the constraints of a valid key", async () => {
+test('Attempt to put() a record where the out of line key provided does not meet the constraints of a valid key', async () => {
   const record = { property: 'data' }
 
   const migrations = createMigrations().version(1, v =>

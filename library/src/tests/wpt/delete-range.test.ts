@@ -12,10 +12,34 @@ import { createMigrations } from '../../lib/migration-builder'
 import { schema } from '../../lib/schema'
 
 const entries = [
-  { lower: 3, upper: 8, lowerOpen: false, upperOpen: false, expected: [1, 2, 9, 10] },
-  { lower: 3, upper: 8, lowerOpen: true, upperOpen: false, expected: [1, 2, 3, 9, 10] },
-  { lower: 3, upper: 8, lowerOpen: false, upperOpen: true, expected: [1, 2, 8, 9, 10] },
-  { lower: 3, upper: 8, lowerOpen: true, upperOpen: true, expected: [1, 2, 3, 8, 9, 10] },
+  {
+    lower: 3,
+    upper: 8,
+    lowerOpen: false,
+    upperOpen: false,
+    expected: [1, 2, 9, 10],
+  },
+  {
+    lower: 3,
+    upper: 8,
+    lowerOpen: true,
+    upperOpen: false,
+    expected: [1, 2, 3, 9, 10],
+  },
+  {
+    lower: 3,
+    upper: 8,
+    lowerOpen: false,
+    upperOpen: true,
+    expected: [1, 2, 8, 9, 10],
+  },
+  {
+    lower: 3,
+    upper: 8,
+    lowerOpen: true,
+    upperOpen: true,
+    expected: [1, 2, 3, 8, 9, 10],
+  },
 ]
 
 /**
@@ -43,7 +67,12 @@ for (const entry of entries) {
     const store = tx.objectStore('store')
 
     await store.delete(
-      IDBKeyRange.bound(entry.lower, entry.upper, entry.lowerOpen, entry.upperOpen)
+      IDBKeyRange.bound(
+        entry.lower,
+        entry.upper,
+        entry.lowerOpen,
+        entry.upperOpen
+      )
     )
 
     await tx.done

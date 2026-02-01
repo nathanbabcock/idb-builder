@@ -65,8 +65,12 @@ test('Enumerate multiple databases', async () => {
     v.createObjectStore({ name: 'store', schema: schema<string>() })
   )
   const migrations2v2 = createMigrations()
-    .version(1, v => v.createObjectStore({ name: 'store', schema: schema<string>() }))
-    .version(2, v => v.createObjectStore({ name: 'store2', schema: schema<string>() }))
+    .version(1, v =>
+      v.createObjectStore({ name: 'store', schema: schema<string>() })
+    )
+    .version(2, v =>
+      v.createObjectStore({ name: 'store2', schema: schema<string>() })
+    )
   const migrations3 = createMigrations().version(1, v =>
     v.createObjectStore({ name: 'store', schema: schema<string>() })
   )

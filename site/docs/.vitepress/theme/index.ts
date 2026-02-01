@@ -9,6 +9,9 @@ export default {
   extends: Theme,
   enhanceApp({ app }: EnhanceAppContext) {
     app.use(TwoslashFloatingVue)
-    app.component('CopyOrDownloadAsMarkdownButtons', CopyOrDownloadAsMarkdownButtons)
+    app.component(
+      'CopyOrDownloadAsMarkdownButtons',
+      CopyOrDownloadAsMarkdownButtons
+    )
   },
 }

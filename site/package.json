@@ -1,11 +1,11 @@
 {
   "name": "@typedex/site",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
   "keywords": [],
   "license": "ISC",
   "author": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch ../library/src -e ts --exec \"vitepress dev docs\"",
