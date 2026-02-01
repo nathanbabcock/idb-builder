@@ -2,7 +2,7 @@
 
 **WPT Commit:** [`9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f`](https://github.com/web-platform-tests/wpt/tree/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB)
 
-**Status:** 61 of 163 files ported
+**Status:** 89 of 163 files ported
 
 ## Legend
 
@@ -81,41 +81,41 @@
 |   ✅   | `structured-clone.any.js`                                     | 1 test skipped - fake-indexeddb bug with NaN                       |
 |   ✅   | `value.any.js`                                                |                                                                    |
 |   ✅   | `value_recursive.any.js`                                      |                                                                    |
-|   ⏳   | `idbcursor-advance-invalid.any.js`                            | Tests invalid advance arguments                                    |
-|   ⏳   | `idbcursor-direction-index-keyrange.any.js`                   | Cursor direction with keyrange on index                            |
-|   ⏳   | `idbcursor-direction-index.any.js`                            | Cursor direction on index                                          |
-|   ⏳   | `idbcursor-direction-objectstore-keyrange.any.js`             | Cursor direction with keyrange                                     |
-|   ⏳   | `idbcursor-direction-objectstore.any.js`                      | Cursor direction on objectstore                                    |
-|   ⏳   | `idbcursor-iterating-update.any.js`                           | Update while iterating                                             |
-|   ⏳   | `idbcursor_continue_delete_objectstore.any.js`                | Continue after delete                                              |
-|   ⏳   | `idbcursor_continue_invalid.any.js`                           | Invalid continue handling                                          |
-|   ⏳   | `idbfactory_deleteDatabase.any.js`                            | Database deletion                                                  |
-|   ⏳   | `idbindex-getAll-enforcerange.any.js`                         | getAll range enforcement                                           |
-|   ⏳   | `idbindex-getAllKeys-enforcerange.any.js`                     | getAllKeys range enforcement                                       |
-|   ⏳   | `idbindex_getAll-options.any.js`                              | getAll with options                                                |
-|   ⏳   | `idbindex_getAllKeys-options.any.js`                          | getAllKeys with options                                            |
-|   ⏳   | `idbindex_indexNames.any.js`                                  | indexNames property                                                |
-|   ⏳   | `idbindex_keyPath.any.js`                                     | keyPath property                                                   |
-|   ⏳   | `idbindex_reverse_cursor.any.js`                              | Reverse cursor tests                                               |
-|   ⏳   | `idbkeyrange_incorrect.any.js`                                | Incorrect keyrange handling                                        |
-|   ⏳   | `idbobjectstore-getAll-enforcerange.any.js`                   | getAll range enforcement                                           |
-|   ⏳   | `idbobjectstore-getAllKeys-enforcerange.any.js`               | getAllKeys range enforcement                                       |
-|   ⏳   | `idbobjectstore_getAll-options.any.js`                        | getAll with options                                                |
-|   ⏳   | `idbobjectstore_getAllKeys-options.any.js`                    | getAllKeys with options                                            |
-|   ⏳   | `idbobjectstore_index.any.js`                                 | Index access tests                                                 |
-|   ⏳   | `idbobjectstore_keyPath.any.js`                               | keyPath property                                                   |
-|   ⏳   | `idbobjectstore_openCursor_invalid.any.js`                    | Invalid openCursor handling                                        |
-|   ⏳   | `idbtransaction.any.js`                                       | Transaction properties                                             |
-|   ⏳   | `key-conversion-exceptions.any.js`                            | Key conversion exceptions                                          |
-|   ⏳   | `keypath-exceptions.any.js`                                   | Keypath exceptions                                                 |
-|   ⏳   | `keypath-special-identifiers.any.js`                          | Special keypath identifiers                                        |
-|   ⏳   | `keypath_invalid.any.js`                                      | Invalid keypath handling                                           |
-|   ⏳   | `name-scopes.any.js`                                          | Name scoping tests                                                 |
-|   ⏳   | `reading-autoincrement-indexes-cursors.any.js`                | Autoincrement with cursors                                         |
-|   ⏳   | `reading-autoincrement-store-cursors.any.js`                  | Autoincrement store cursors                                        |
-|   ⏳   | `reading-autoincrement-store.any.js`                          | Autoincrement stores                                               |
-|   ⏳   | `string-list-ordering.any.js`                                 | String list ordering                                               |
-|   ⏳   | `transaction-relaxed-durability.any.js`                       | Durability option                                                  |
+|   ✅   | `idbcursor-advance-invalid.any.js`                            | Tests invalid advance arguments                                    |
+|   ✅   | `idbcursor-direction-index-keyrange.any.js`                   | Cursor direction with keyrange on index                            |
+|   ✅   | `idbcursor-direction-index.any.js`                            | Cursor direction on index                                          |
+|   ✅   | `idbcursor-direction-objectstore-keyrange.any.js`             | Cursor direction with keyrange                                     |
+|   ✅   | `idbcursor-direction-objectstore.any.js`                      | Cursor direction on objectstore                                    |
+|   ✅   | `idbcursor-iterating-update.any.js`                           | Update while iterating                                             |
+|   ✅   | `idbcursor_continue_delete_objectstore.any.js`                | Continue after delete                                              |
+|   ✅   | `idbcursor_continue_invalid.any.js`                           | Invalid continue handling                                          |
+|   ✅   | `idbfactory_deleteDatabase.any.js`                            | Database deletion                                                  |
+|   ✅   | `idbindex-getAll-enforcerange.any.js`                         | getAll range enforcement                                           |
+|   ✅   | `idbindex-getAllKeys-enforcerange.any.js`                     | getAllKeys range enforcement                                       |
+|   ✅   | `idbindex_getAll-options.any.js`                              | getAll with options                                                |
+|   ✅   | `idbindex_getAllKeys-options.any.js`                          | getAllKeys with options                                            |
+|   ✅   | `idbindex_indexNames.any.js`                                  | indexNames property                                                |
+|   ✅   | `idbindex_keyPath.any.js`                                     | keyPath property                                                   |
+|   ✅   | `idbindex_reverse_cursor.any.js`                              | Reverse cursor tests                                               |
+|   ✅   | `idbkeyrange_incorrect.any.js`                                | Incorrect keyrange handling                                        |
+|   ✅   | `idbobjectstore-getAll-enforcerange.any.js`                   | getAll range enforcement                                           |
+|   ✅   | `idbobjectstore-getAllKeys-enforcerange.any.js`               | getAllKeys range enforcement                                       |
+|   ✅   | `idbobjectstore_getAll-options.any.js`                        | getAll with options                                                |
+|   ✅   | `idbobjectstore_getAllKeys-options.any.js`                    | getAllKeys with options                                            |
+|   ✅   | `idbobjectstore_index.any.js`                                 | Index access tests                                                 |
+|   ✅   | `idbobjectstore_keyPath.any.js`                               | keyPath property                                                   |
+|   ✅   | `idbobjectstore_openCursor_invalid.any.js`                    | Invalid openCursor handling                                        |
+|   ➖   | `idbtransaction.any.js`                                       | Tests raw IDB request properties - not wrapper                     |
+|   ➖   | `key-conversion-exceptions.any.js`                            | Tests raw IDB key conversion - not wrapper                         |
+|   ➖   | `keypath-exceptions.any.js`                                   | Tests raw IDB keypath exceptions - not wrapper                     |
+|   ➖   | `keypath-special-identifiers.any.js`                          | Tests raw IDB special identifiers - not wrapper                    |
+|   ➖   | `keypath_invalid.any.js`                                      | Tests raw IDB invalid keypaths - not wrapper                       |
+|   ✅   | `name-scopes.any.js`                                          | Name scoping tests                                                 |
+|   ✅   | `reading-autoincrement-indexes-cursors.any.js`                | Autoincrement with cursors                                         |
+|   ✅   | `reading-autoincrement-store-cursors.any.js`                  | Autoincrement store cursors                                        |
+|   ✅   | `reading-autoincrement-store.any.js`                          | Autoincrement stores                                               |
+|   ➖   | `string-list-ordering.any.js`                                 | Tests raw IDB string list ordering - not wrapper                   |
+|   ➖   | `transaction-relaxed-durability.any.js`                       | Tests raw IDB durability option - not wrapper                      |
 |   ➖   | `abort-in-initial-upgradeneeded.any.js`                       | Raw IDB API - upgrade abort handling                               |
 |   ➖   | `bindings-inject-keys-bypass.any.js`                          | Internal binding tests                                             |
 |   ➖   | `bindings-inject-values-bypass.any.js`                        | Internal binding tests                                             |
@@ -225,9 +225,9 @@
 
 | Category   |   Count |
 | ---------- | ------: |
-| ✅ Ported  |      61 |
-| ⏳ TODO    |      36 |
-| ➖ Skipped |      66 |
+| ✅ Ported  |      89 |
+| ⏳ TODO    |       0 |
+| ➖ Skipped |      74 |
 | **Total**  | **163** |
 
 ## Why Tests Are Skipped
