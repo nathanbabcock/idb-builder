@@ -25,7 +25,8 @@
     "jest/no-conditional-expect": "off",
     "typescript/require-array-sort-compare": "off",
     "typescript/no-floating-promises": "off",
-    "jest/no-disabled-tests": "off"
+    "jest/no-disabled-tests": "off",
+    "jest/valid-title": "off"
   },
   "overrides": [
     {

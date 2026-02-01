@@ -6,393 +6,126 @@
  */
 
 import './wpt-setup'
-import { expect, test } from 'vitest'
-import { openDB } from '../../lib/idb-adapter'
-import { createMigrations } from '../../lib/migration-builder'
-import { schema } from '../../lib/schema'
-
-const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
-// const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L11-L12
- */
-test('Single item get', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll('C')
-  expect(result.length).toBe(1)
-  expect(result[0].ch).toBe('c')
-  expect(result[0].upper).toBe('C')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L14-L15
- */
-test('Empty object store', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll()
-  expect(result).toEqual([])
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L17-L18
- */
-test('Get all', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll()
-  expect(result.length).toBe(26)
-  // Results should be ordered by index key (uppercase letters A-Z)
-  expect(result[0].upper).toBe('A')
-  expect(result[25].upper).toBe('Z')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L28-L29
- */
-test('maxCount=10', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll(undefined, 10)
-  expect(result.length).toBe(10)
-  expect(result[0].upper).toBe('A')
-  expect(result[9].upper).toBe('J')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L31-L33
- */
-test('Get bound range', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll(IDBKeyRange.bound('G', 'M'))
-  expect(result.length).toBe(7) // G, H, I, J, K, L, M
-  expect(result[0].upper).toBe('G')
-  expect(result[6].upper).toBe('M')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L35-L38
- */
-test('Get bound range with maxCount', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll(IDBKeyRange.bound('G', 'M'), 3)
-  expect(result.length).toBe(3)
-  expect(result[0].upper).toBe('G')
-  expect(result[2].upper).toBe('I')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L40-L45
- */
-test('Get upper excluded', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  // bound('G', 'K', false, true) => G, H, I, J (K excluded)
-  const result = await index.getAll(IDBKeyRange.bound('G', 'K', false, true))
-  expect(result.length).toBe(4)
-  expect(result[0].upper).toBe('G')
-  expect(result[3].upper).toBe('J')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L47-L52
- */
-test('Get lower excluded', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  // bound('G', 'K', true, false) => H, I, J, K (G excluded)
-  const result = await index.getAll(IDBKeyRange.bound('G', 'K', true, false))
-  expect(result.length).toBe(4)
-  expect(result[0].upper).toBe('H')
-  expect(result[3].upper).toBe('K')
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L59-L61
- */
-test('Non existent key', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  const result = await index.getAll("Doesn't exist")
-  expect(result).toEqual([])
-
-  await tx.done
-  db.close()
-})
-
-/**
- * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L63-L64
- */
-test('maxCount=0', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const tx = db.transaction('store', 'readonly')
-  const store = tx.objectStore('store')
-  const index = store.index('test_idx')
-
-  // count of 0 should return all values
-  const result = await index.getAll(undefined, 0)
-  expect(result.length).toBe(26)
-
-  await tx.done
-  db.close()
-})
-
-/**
- * Convenience method test - getAllFromIndex on db directly
- */
-test('getAllFromIndex() convenience method', async () => {
-  const migrations = createMigrations().version(1, v =>
-    v
-      .createObjectStore({
-        name: 'store',
-        schema: schema<{ ch: string; upper: string }>(),
-      })
-      .createIndex('test_idx', {
-        storeName: 'store',
-        keyPath: 'upper',
-      })
-  )
-
-  const db = await openDB('test-db', migrations)
-
-  // Add records with out-of-line keys
-  for (const letter of alphabet) {
-    await db.add('store', { ch: letter, upper: letter.toUpperCase() }, letter)
-  }
-
-  const result = await db.getAllFromIndex('store', 'test_idx')
-  expect(result.length).toBe(26)
-  expect(result[0].upper).toBe('A')
-
-  db.close()
-})
+import { index_get_all_values_test } from './resources/support-get-all'
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { query: 'C' },
+  'Single item get'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'empty',
+  /*options=*/ undefined,
+  'Empty object store'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ undefined,
+  'Get all'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'generated',
+  /*options=*/ undefined,
+  'Get all with generated keys'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'large-values',
+  /*options=*/ undefined,
+  'Get all with large values'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { count: 10 },
+  'maxCount=10'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { query: IDBKeyRange.bound('G', 'M') },
+  'Get bound range'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { query: IDBKeyRange.bound('G', 'M'), count: 3 },
+  'Get bound range with maxCount'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ {
+    query: IDBKeyRange.bound(
+      'G',
+      'K',
+      /*lowerOpen=*/ false,
+      /*upperOpen=*/ true
+    ),
+  },
+  'Get upper excluded'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ {
+    query: IDBKeyRange.bound(
+      'G',
+      'K',
+      /*lowerOpen=*/ true,
+      /*upperOpen=*/ false
+    ),
+  },
+  'Get lower excluded'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'generated',
+  /*options=*/ { query: IDBKeyRange.bound(4, 15), count: 3 },
+  'Get bound range (generated) with maxCount'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { query: "Doesn't exist" },
+  'Non existent key'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { count: 0 },
+  'maxCount=0'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { count: 4294967295 },
+  'Max value count'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { query: IDBKeyRange.upperBound('0') },
+  'Query with empty range where first key < upperBound'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line',
+  /*options=*/ { query: IDBKeyRange.lowerBound('ZZ') },
+  'Query with empty range where lowerBound < last key'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line-not-unique',
+  /*options=*/ { query: 'first' },
+  'Retrieve multiEntry key'
+)
+
+index_get_all_values_test(
+  /*storeName=*/ 'out-of-line-multi',
+  /*options=*/ { query: 'vowel' },
+  'Retrieve one key multiple values'
+)
