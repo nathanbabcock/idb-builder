@@ -68,7 +68,7 @@ test('Adding keys with multiEntry index', async () => {
       })
       .createIndex('actors', {
         storeName: 'store',
-        keyPath: 'name',
+        keyPath: 'name', // !FIXME w3 says this is valid but it gives a compile error
         multiEntry: true,
       })
   )
@@ -227,7 +227,10 @@ test('multiEntry index cursor iteration', async () => {
   const entries: Array<{ key: string; primaryKey: number }> = []
   let cursor = await index.openCursor()
   while (cursor) {
-    entries.push({ key: cursor.key as string, primaryKey: cursor.primaryKey as number })
+    entries.push({
+      key: cursor.key as string,
+      primaryKey: cursor.primaryKey as number,
+    })
     cursor = await cursor.continue()
   }
 

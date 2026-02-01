@@ -2,7 +2,7 @@
 
 **WPT Commit:** [`9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f`](https://github.com/web-platform-tests/wpt/tree/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB)
 
-**Status:** 65 of 163 files ported (502 tests passing, 17 skipped)
+**Status:** 64 of 163 files ported (491 tests passing, 17 skipped)
 
 ## Legend
 
@@ -41,7 +41,7 @@
 | ✅ | `idbdatabase_createObjectStore.any.js` | 2 tests skipped - wrapper only allows store creation in migrations |
 | ✅ | `idbdatabase_deleteObjectStore.any.js` | |
 | ✅ | `idbdatabase_transaction.any.js` | |
-| ✅ | `idbfactory_cmp.any.js` | |
+| ➖ | `idbfactory_cmp.any.js` | Tests IDBFactory.cmp() - not part of wrapper |
 | ✅ | `idbfactory_open.any.js` | |
 | ✅ | `idbindex-multientry.any.js` | |
 | ✅ | `idbindex_count.any.js` | |
@@ -225,9 +225,9 @@
 
 | Category | Count |
 |----------|------:|
-| ✅ Ported | 65 |
+| ✅ Ported | 64 |
 | ⏳ TODO | 36 |
-| ➖ Skipped | 62 |
+| ➖ Skipped | 63 |
 | **Total** | **163** |
 
 ## Why Tests Are Skipped

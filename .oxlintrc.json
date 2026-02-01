@@ -20,7 +20,8 @@
     "eslint/no-unused-expressions": "warn",
     "typescript/unbound-method": "off",
     "typescript/no-meaningless-void-operator": "off",
-    "vitest/require-to-throw-message": "off"
+    "vitest/require-to-throw-message": "off",
+    "jest/expect-expect": "off"
   },
   "overrides": [
     {

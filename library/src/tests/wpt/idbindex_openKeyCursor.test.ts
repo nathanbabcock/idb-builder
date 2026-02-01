@@ -38,7 +38,7 @@ test('If the transaction has been aborted, throw TransactionInactiveError', asyn
   tx.abort()
 
   expect(() => {
-    index.openKeyCursor()
+    void index.openKeyCursor()
   }).toThrow(expect.objectContaining({ name: 'TransactionInactiveError' }))
 
   await tx.done.catch(() => {})

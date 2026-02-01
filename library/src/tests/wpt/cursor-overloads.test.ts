@@ -12,6 +12,19 @@ import { createMigrations } from '../../lib/migration-builder'
 import { schema } from '../../lib/schema'
 
 /**
+ * Helper to verify cursor direction, mimicking WPT's checkCursorDirection
+ * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/cursor-overloads.any.js#L81-L87
+ */
+async function checkCursorDirection(
+  cursorPromise: Promise<{ direction: IDBCursorDirection } | null>,
+  direction: IDBCursorDirection
+) {
+  const cursor = await cursorPromise
+  expect(cursor).not.toBeNull()
+  expect(cursor!.direction).toBe(direction)
+}
+
+/**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/cursor-overloads.any.js#L7-L87
  */
 test('Validate the overloads of IDBObjectStore.openCursor(), IDBIndex.openCursor() and IDBIndex.openKeyCursor()', async () => {
@@ -38,142 +51,91 @@ test('Validate the overloads of IDBObjectStore.openCursor(), IDBIndex.openCursor
     const index = store.index('index')
 
     // Test store.openCursor() overloads
-    let cursor = await store.openCursor()
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('next')
-
-    cursor = await store.openCursor(0)
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('next')
-
-    cursor = await store.openCursor(0, 'next')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('next')
-
-    cursor = await store.openCursor(0, 'nextunique')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('nextunique')
-
-    cursor = await store.openCursor(0, 'prev')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('prev')
-
-    cursor = await store.openCursor(0, 'prevunique')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('prevunique')
+    await checkCursorDirection(store.openCursor(), 'next')
+    await checkCursorDirection(store.openCursor(0), 'next')
+    await checkCursorDirection(store.openCursor(0, 'next'), 'next')
+    await checkCursorDirection(store.openCursor(0, 'nextunique'), 'nextunique')
+    await checkCursorDirection(store.openCursor(0, 'prev'), 'prev')
+    await checkCursorDirection(store.openCursor(0, 'prevunique'), 'prevunique')
 
     // Test with IDBKeyRange
-    cursor = await store.openCursor(IDBKeyRange.only(0))
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('next')
-
-    cursor = await store.openCursor(IDBKeyRange.only(0), 'next')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('next')
-
-    cursor = await store.openCursor(IDBKeyRange.only(0), 'nextunique')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('nextunique')
-
-    cursor = await store.openCursor(IDBKeyRange.only(0), 'prev')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('prev')
-
-    cursor = await store.openCursor(IDBKeyRange.only(0), 'prevunique')
-    expect(cursor).not.toBeNull()
-    expect(cursor!.direction).toBe('prevunique')
+    await checkCursorDirection(store.openCursor(IDBKeyRange.only(0)), 'next')
+    await checkCursorDirection(
+      store.openCursor(IDBKeyRange.only(0), 'next'),
+      'next'
+    )
+    await checkCursorDirection(
+      store.openCursor(IDBKeyRange.only(0), 'nextunique'),
+      'nextunique'
+    )
+    await checkCursorDirection(
+      store.openCursor(IDBKeyRange.only(0), 'prev'),
+      'prev'
+    )
+    await checkCursorDirection(
+      store.openCursor(IDBKeyRange.only(0), 'prevunique'),
+      'prevunique'
+    )
 
     // Test index.openCursor() overloads
-    let indexCursor = await index.openCursor()
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('next')
-
-    indexCursor = await index.openCursor(0)
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('next')
-
-    indexCursor = await index.openCursor(0, 'next')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('next')
-
-    indexCursor = await index.openCursor(0, 'nextunique')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('nextunique')
-
-    indexCursor = await index.openCursor(0, 'prev')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('prev')
-
-    indexCursor = await index.openCursor(0, 'prevunique')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('prevunique')
+    await checkCursorDirection(index.openCursor(), 'next')
+    await checkCursorDirection(index.openCursor(0), 'next')
+    await checkCursorDirection(index.openCursor(0, 'next'), 'next')
+    await checkCursorDirection(index.openCursor(0, 'nextunique'), 'nextunique')
+    await checkCursorDirection(index.openCursor(0, 'prev'), 'prev')
+    await checkCursorDirection(index.openCursor(0, 'prevunique'), 'prevunique')
 
     // Test with IDBKeyRange on index
-    indexCursor = await index.openCursor(IDBKeyRange.only(0))
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('next')
-
-    indexCursor = await index.openCursor(IDBKeyRange.only(0), 'next')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('next')
-
-    indexCursor = await index.openCursor(IDBKeyRange.only(0), 'nextunique')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('nextunique')
-
-    indexCursor = await index.openCursor(IDBKeyRange.only(0), 'prev')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('prev')
-
-    indexCursor = await index.openCursor(IDBKeyRange.only(0), 'prevunique')
-    expect(indexCursor).not.toBeNull()
-    expect(indexCursor!.direction).toBe('prevunique')
+    await checkCursorDirection(index.openCursor(IDBKeyRange.only(0)), 'next')
+    await checkCursorDirection(
+      index.openCursor(IDBKeyRange.only(0), 'next'),
+      'next'
+    )
+    await checkCursorDirection(
+      index.openCursor(IDBKeyRange.only(0), 'nextunique'),
+      'nextunique'
+    )
+    await checkCursorDirection(
+      index.openCursor(IDBKeyRange.only(0), 'prev'),
+      'prev'
+    )
+    await checkCursorDirection(
+      index.openCursor(IDBKeyRange.only(0), 'prevunique'),
+      'prevunique'
+    )
 
     // Test index.openKeyCursor() overloads
-    let keyCursor = await index.openKeyCursor()
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('next')
-
-    keyCursor = await index.openKeyCursor(0)
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('next')
-
-    keyCursor = await index.openKeyCursor(0, 'next')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('next')
-
-    keyCursor = await index.openKeyCursor(0, 'nextunique')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('nextunique')
-
-    keyCursor = await index.openKeyCursor(0, 'prev')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('prev')
-
-    keyCursor = await index.openKeyCursor(0, 'prevunique')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('prevunique')
+    await checkCursorDirection(index.openKeyCursor(), 'next')
+    await checkCursorDirection(index.openKeyCursor(0), 'next')
+    await checkCursorDirection(index.openKeyCursor(0, 'next'), 'next')
+    await checkCursorDirection(
+      index.openKeyCursor(0, 'nextunique'),
+      'nextunique'
+    )
+    await checkCursorDirection(index.openKeyCursor(0, 'prev'), 'prev')
+    await checkCursorDirection(
+      index.openKeyCursor(0, 'prevunique'),
+      'prevunique'
+    )
 
     // Test with IDBKeyRange on index keyCursor
-    keyCursor = await index.openKeyCursor(IDBKeyRange.only(0))
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('next')
-
-    keyCursor = await index.openKeyCursor(IDBKeyRange.only(0), 'next')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('next')
-
-    keyCursor = await index.openKeyCursor(IDBKeyRange.only(0), 'nextunique')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('nextunique')
-
-    keyCursor = await index.openKeyCursor(IDBKeyRange.only(0), 'prev')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('prev')
-
-    keyCursor = await index.openKeyCursor(IDBKeyRange.only(0), 'prevunique')
-    expect(keyCursor).not.toBeNull()
-    expect(keyCursor!.direction).toBe('prevunique')
+    await checkCursorDirection(index.openKeyCursor(IDBKeyRange.only(0)), 'next')
+    await checkCursorDirection(
+      index.openKeyCursor(IDBKeyRange.only(0), 'next'),
+      'next'
+    )
+    await checkCursorDirection(
+      index.openKeyCursor(IDBKeyRange.only(0), 'nextunique'),
+      'nextunique'
+    )
+    await checkCursorDirection(
+      index.openKeyCursor(IDBKeyRange.only(0), 'prev'),
+      'prev'
+    )
+    await checkCursorDirection(
+      index.openKeyCursor(IDBKeyRange.only(0), 'prevunique'),
+      'prevunique'
+    )
 
     await tx.done
   } finally {
