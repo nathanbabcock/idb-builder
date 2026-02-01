@@ -2,7 +2,7 @@
 
 **WPT Commit:** [`9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f`](https://github.com/web-platform-tests/wpt/tree/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB)
 
-**Status:** 89 of 163 files ported
+**Status:** 95 of 163 files ported
 
 ## Legend
 
@@ -157,9 +157,9 @@
 |   ➖   | `idbfactory-open-request-success.any.js`                      | Open request internals                                             |
 |   ➖   | `idbindex-objectStore-SameObject.any.js`                      | SameObject identity                                                |
 |   ➖   | `idbindex-query-exception-order.any.js`                       | Exception ordering                                                 |
-|   ➖   | `idbindex-rename-abort.any.js`                                | Rename not in wrapper API                                          |
-|   ➖   | `idbindex-rename-errors.any.js`                               | Rename not in wrapper API                                          |
-|   ➖   | `idbindex-rename.any.js`                                      | Rename not in wrapper API                                          |
+|   ✅   | `idbindex-rename-abort.any.js`                                | Index rename abort behavior                                        |
+|   ✅   | `idbindex-rename-errors.any.js`                               | Index rename error handling                                        |
+|   ✅   | `idbindex-rename.any.js`                                      | Basic index renaming                                               |
 |   ➖   | `idbindex-request-source.any.js`                              | Request source internals                                           |
 |   ➖   | `idbindex_getAllRecords.any.js`                               | getAllRecords API not in wrapper                                   |
 |   ➖   | `idbindex_tombstones.any.js`                                  | Tombstone handling internals                                       |
@@ -169,9 +169,9 @@
 |   ➖   | `idbobjectstore-deleteIndex-exception-order.any.js`           | Exception ordering                                                 |
 |   ➖   | `idbobjectstore-index-finished.any.js`                        | Finished transaction internals                                     |
 |   ➖   | `idbobjectstore-query-exception-order.any.js`                 | Exception ordering                                                 |
-|   ➖   | `idbobjectstore-rename-abort.any.js`                          | Rename not in wrapper API                                          |
-|   ➖   | `idbobjectstore-rename-errors.any.js`                         | Rename not in wrapper API                                          |
-|   ➖   | `idbobjectstore-rename-store.any.js`                          | Rename not in wrapper API                                          |
+|   ✅   | `idbobjectstore-rename-abort.any.js`                          | Store rename abort behavior                                        |
+|   ✅   | `idbobjectstore-rename-errors.any.js`                         | Store rename error handling                                        |
+|   ✅   | `idbobjectstore-rename-store.any.js`                          | Basic store renaming                                               |
 |   ➖   | `idbobjectstore-request-source.any.js`                        | Request source internals                                           |
 |   ➖   | `idbobjectstore-transaction-SameObject.any.js`                | SameObject identity                                                |
 |   ➖   | `idbobjectstore_getAllRecords.any.js`                         | getAllRecords API not in wrapper                                   |
@@ -225,9 +225,9 @@
 
 | Category   |   Count |
 | ---------- | ------: |
-| ✅ Ported  |      89 |
+| ✅ Ported  |      95 |
 | ⏳ TODO    |       0 |
-| ➖ Skipped |      74 |
+| ➖ Skipped |      68 |
 | **Total**  | **163** |
 
 ## Why Tests Are Skipped

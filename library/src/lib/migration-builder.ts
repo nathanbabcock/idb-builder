@@ -4,6 +4,8 @@ import type {
   ExtractStoreInfo,
   FindInvalidIndexKeyPath,
   IndexInfo,
+  RenameIndexKey,
+  RenameStoreKey,
   ResolveKeyPath,
   Schema,
   SchemaToIDBSchema,
@@ -199,6 +201,60 @@ class VersionBuilder<S extends Schema> {
       action: 'delete-index',
       storeName: options.storeName,
       indexName,
+    })
+  }
+
+  /**
+   * Rename an object store.
+   * @param options Configuration with old and new store names
+   */
+  renameObjectStore<
+    OldName extends keyof S & string,
+    const NewName extends string,
+  >(options: {
+    oldName: OldName
+    newName: NewName & Exclude<NewName, keyof S>
+  }): VersionBuilder<RenameStoreKey<S, OldName, NewName>> {
+    return this.chain<RenameStoreKey<S, OldName, NewName>>({
+      action: 'rename-object-store',
+      oldName: options.oldName,
+      newName: options.newName,
+    })
+  }
+
+  /**
+   * Rename an index on an object store.
+   * @param options Configuration with store name, old index name, and new index name
+   */
+  renameIndex<
+    StoreName extends keyof S & string,
+    OldIndexName extends keyof S[StoreName]['indexes'] & string,
+    const NewIndexName extends string,
+    Info extends ExtractStoreInfo<S, StoreName> = ExtractStoreInfo<
+      S,
+      StoreName
+    >,
+  >(options: {
+    storeName: StoreName
+    oldIndexName: OldIndexName
+    newIndexName: NewIndexName & Exclude<NewIndexName, keyof Info['indexes']>
+  }): VersionBuilder<
+    UpdateStore<
+      S,
+      StoreName,
+      UpdateStoreInfo<
+        Info,
+        {
+          indexes: RenameIndexKey<Info['indexes'], OldIndexName, NewIndexName>
+        }
+      >
+    >
+  > {
+    return this.chain<any>({
+      action: 'rename-index',
+      storeName: options.storeName,
+      oldIndexName: options.oldIndexName,
+      newIndexName: options.newIndexName,
     })
   }
 

@@ -57,6 +57,24 @@ export type UpdateStore<
       : never
 }
 
+// Helper: Rename a store key in the schema while preserving its StoreInfo
+export type RenameStoreKey<
+  S extends Schema,
+  OldName extends keyof S,
+  NewName extends string,
+> = {
+  [K in keyof S as K extends OldName ? NewName : K]: S[K]
+}
+
+// Helper: Rename an index key in a store's indexes while preserving its IndexInfo
+export type RenameIndexKey<
+  Indexes extends Record<string, IndexInfo<any, any, any>>,
+  OldName extends keyof Indexes,
+  NewName extends string,
+> = {
+  [K in keyof Indexes as K extends OldName ? NewName : K]: Indexes[K]
+}
+
 // Helper: Build a new StoreInfo preserving extracted properties
 export type UpdateStoreInfo<
   Info extends {

@@ -15,6 +15,8 @@ export type MigrationAction =
       boolean
     >
   | DeleteIndexAction<string, string>
+  | RenameObjectStoreAction<string, string>
+  | RenameIndexAction<string, string, string>
 
 export type CreateObjectStoreAction<
   Name extends string,
@@ -66,4 +68,24 @@ export type DeleteIndexAction<
   action: 'delete-index'
   storeName: StoreName
   indexName: IndexName
+}
+
+export type RenameObjectStoreAction<
+  OldName extends string,
+  NewName extends string,
+> = {
+  action: 'rename-object-store'
+  oldName: OldName
+  newName: NewName
+}
+
+export type RenameIndexAction<
+  StoreName extends string,
+  OldIndexName extends string,
+  NewIndexName extends string,
+> = {
+  action: 'rename-index'
+  storeName: StoreName
+  oldIndexName: OldIndexName
+  newIndexName: NewIndexName
 }

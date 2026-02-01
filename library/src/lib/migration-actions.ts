@@ -59,6 +59,21 @@ export async function applyAction(
       break
     }
 
+    case 'rename-object-store': {
+      const { oldName, newName } = action
+      const store = tx.objectStore(oldName)
+      store.name = newName
+      break
+    }
+
+    case 'rename-index': {
+      const { storeName, oldIndexName, newIndexName } = action
+      const store = tx.objectStore(storeName)
+      const index = store.index(oldIndexName)
+      index.name = newIndexName
+      break
+    }
+
     default:
       throw new Error(
         `unhandled migration action type: ${type satisfies never as string}`
