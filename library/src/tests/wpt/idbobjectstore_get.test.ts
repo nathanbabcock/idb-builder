@@ -150,7 +150,7 @@ test('When a transaction is aborted, throw TransactionInactiveError', async () =
 
   // Accessing the store after abort must throw TransactionInactiveError
   expect(() => {
-    store.get(1)
+    void store.get(1)
   }).toThrow(expect.objectContaining({ name: 'TransactionInactiveError' }))
 
   // Catch the abort rejection
@@ -179,7 +179,7 @@ test('When an invalid key is used, throw DataError', async () => {
   // Attempt to use an invalid key (null)
   expect(() => {
     // @ts-expect-error - null is not a valid key
-    store.get(null)
+    void store.get(null)
   }).toThrow(expect.objectContaining({ name: 'DataError' }))
 
   db.close()

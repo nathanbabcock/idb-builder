@@ -80,12 +80,12 @@ const one_min_future = new Date(now.getTime() + 1000 * 60)
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L58
  */
-keysortTest('String < Array', [[0], 'yo', '', []], ['', 'yo', [], [0]])
+void keysortTest('String < Array', [[0], 'yo', '', []], ['', 'yo', [], [0]])
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L60-L62
  */
-keysortTest(
+void keysortTest(
   'float < String',
   [Infinity, 'yo', 0, '', 100],
   [0, 100, Infinity, '', 'yo']
@@ -94,12 +94,16 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L64-L66
  */
-keysortTest('float < Date', [now, 0, 9999999999999, -0.22], [-0.22, 0, 9999999999999, now])
+void keysortTest(
+  'float < Date',
+  [now, 0, 9999999999999, -0.22],
+  [-0.22, 0, 9999999999999, now]
+)
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L68-L70
  */
-keysortTest(
+void keysortTest(
   'float < Date < String < Array',
   [[], '', now, [0], '-1', 0, 9999999999999],
   [0, 9999999999999, now, '', '-1', [], [0]]
@@ -108,7 +112,7 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L72-L74
  */
-keysortTest(
+void keysortTest(
   'Date(1 sec ago) < Date(now) < Date(1 minute in future)',
   [now, one_sec_ago, one_min_future],
   [one_sec_ago, now, one_min_future]
@@ -117,7 +121,7 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L76-L78
  */
-keysortTest(
+void keysortTest(
   '-1.1 < 1 < 1.01337 < 1.013373 < 2',
   [1.013373, 2, 1.01337, -1.1, 1],
   [-1.1, 1, 1.01337, 1.013373, 2]
@@ -126,7 +130,7 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L80-L82
  */
-keysortTest(
+void keysortTest(
   '-Infinity < -0.01 < 0 < Infinity',
   [0, -0.01, -Infinity, Infinity],
   [-Infinity, -0.01, 0, Infinity]
@@ -135,12 +139,20 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L84-L86
  */
-keysortTest('"" < "a" < "ab" < "b" < "ba"', ['a', 'ba', '', 'b', 'ab'], ['', 'a', 'ab', 'b', 'ba'])
+void keysortTest(
+  '"" < "a" < "ab" < "b" < "ba"',
+  ['a', 'ba', '', 'b', 'ab'],
+  ['', 'a', 'ab', 'b', 'ba']
+)
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L88-L90
  */
-keysortTest('Arrays', [[[0]], [0], [], [0, 0], [0, [0]]], [[], [0], [0, 0], [0, [0]], [[0]]])
+void keysortTest(
+  'Arrays',
+  [[[0]], [0], [], [0, 0], [0, [0]]],
+  [[], [0], [0, 0], [0, [0]], [[0]]]
+)
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L92-L103
@@ -153,7 +165,7 @@ for (let i = 0; i < 10000; i++) {
 }
 bigger_array.push(0)
 
-keysortTest(
+void keysortTest(
   'Array.length: 10,000 < Array.length: 10,001',
   [bigger_array, [0, 2, 3], [0], [9], big_array],
   [[0], big_array, bigger_array, [0, 2, 3], [9]]
@@ -162,7 +174,7 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L105-L122
  */
-keysortTest(
+void keysortTest(
   'Infinity inside arrays',
   [
     [Infinity, 1],
@@ -185,7 +197,7 @@ keysortTest(
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/keyorder.any.js#L124-L169
  */
-keysortTest(
+void keysortTest(
   'Test different stuff at once',
   [
     now,

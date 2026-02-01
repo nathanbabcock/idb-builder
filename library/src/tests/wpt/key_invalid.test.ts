@@ -15,7 +15,7 @@ import { schema } from '../../lib/schema'
  * Helper to test invalid keys
  * Note: Invalid keys throw synchronously in IndexedDB as DataError
  */
-async function invalidKeyTest(desc: string, key: unknown) {
+async function invalidKeyTest(_desc: string, key: unknown) {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'store',
@@ -28,9 +28,9 @@ async function invalidKeyTest(desc: string, key: unknown) {
   try {
     const txn = db.transaction('store', 'readwrite')
     // Invalid keys throw synchronously as DataError
-    expect(() => {
-      txn.objectStore('store').add('value', key as IDBValidKey)
-    }).toThrow()
+    expect(
+      () => void txn.objectStore('store').add('value', key as IDBValidKey)
+    ).toThrow()
     // Clean up the transaction
     txn.abort()
     await txn.done.catch(() => {})

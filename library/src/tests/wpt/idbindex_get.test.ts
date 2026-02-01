@@ -90,7 +90,7 @@ test('get() attempts to retrieve a record that does not exist', async () => {
     v
       .createObjectStore({
         name: 'store',
-        schema: schema<{ key: number; indexedProperty: string }>(),
+        schema: schema<{ key: number; indexedProperty: string | number }>(),
         primaryKey: 'key',
       })
       .createIndex('index', {
@@ -170,9 +170,10 @@ test('get() throws DataError when using invalid key', async () => {
   const store = tx.objectStore('store')
   const index = store.index('index')
 
-  expect(() => {
-    index.get(NaN)
-  }).toThrow(expect.objectContaining({ name: 'DataError' }))
+  // @ts-expect-error invalid key is caught at compile time
+  expect(() => void index.get(NaN)).toThrow(
+    expect.objectContaining({ name: 'DataError' })
+  )
 
   db.close()
 })
@@ -204,7 +205,7 @@ test('get() throws TransactionInactiveError on aborted transaction', async () =>
   tx.abort()
 
   expect(() => {
-    index.get('data')
+    void index.get('data')
   }).toThrow(expect.objectContaining({ name: 'TransactionInactiveError' }))
 
   await tx.done.catch(() => {})

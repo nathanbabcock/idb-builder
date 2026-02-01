@@ -117,7 +117,6 @@ test('If storeNames is an empty list, throw InvalidAccessError', async () => {
 
   try {
     expect(() => {
-      // @ts-expect-error - testing empty array
       db.transaction([])
     }).toThrow()
   } finally {

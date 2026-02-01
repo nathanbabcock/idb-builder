@@ -13,7 +13,13 @@ import { schema } from '../../lib/schema'
 
 type CloneableValue = unknown
 
-async function cloneTest(value: CloneableValue, verifyFunc: (orig: CloneableValue, clone: CloneableValue) => void | Promise<void>) {
+async function cloneTest(
+  value: CloneableValue,
+  verifyFunc: (
+    orig: CloneableValue,
+    clone: CloneableValue
+  ) => void | Promise<void>
+) {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'store',
@@ -74,7 +80,7 @@ test('Clone primitive: number 0', async () => {
 })
 
 test('Clone primitive: number -0', async () => {
-  await cloneTest(-0, (orig, clone) => {
+  await cloneTest(-0, (_, clone) => {
     expect(Object.is(clone, -0)).toBe(true)
   })
 })
@@ -84,19 +90,19 @@ test('Clone primitive: number -0', async () => {
  * This test passes in real browsers with real IndexedDB.
  */
 test.skip('Clone primitive: number NaN', async () => {
-  await cloneTest(NaN, (orig, clone) => {
+  await cloneTest(NaN, (_, clone) => {
     expect(Number.isNaN(clone)).toBe(true)
   })
 })
 
 test('Clone primitive: number Infinity', async () => {
-  await cloneTest(Infinity, (orig, clone) => {
+  await cloneTest(Infinity, (_, clone) => {
     expect(clone).toBe(Infinity)
   })
 })
 
 test('Clone primitive: number -Infinity', async () => {
-  await cloneTest(-Infinity, (orig, clone) => {
+  await cloneTest(-Infinity, (_, clone) => {
     expect(clone).toBe(-Infinity)
   })
 })
@@ -171,7 +177,9 @@ test('Clone Uint8Array', async () => {
   await cloneTest(arr, (orig, clone) => {
     expect(clone).not.toBe(orig)
     expect(clone).toBeInstanceOf(Uint8Array)
-    expect(Array.from(clone as Uint8Array)).toEqual(Array.from(orig as Uint8Array))
+    expect(Array.from(clone as Uint8Array)).toEqual(
+      Array.from(orig as Uint8Array)
+    )
   })
 })
 
@@ -180,7 +188,9 @@ test('Clone Int32Array', async () => {
   await cloneTest(arr, (orig, clone) => {
     expect(clone).not.toBe(orig)
     expect(clone).toBeInstanceOf(Int32Array)
-    expect(Array.from(clone as Int32Array)).toEqual(Array.from(orig as Int32Array))
+    expect(Array.from(clone as Int32Array)).toEqual(
+      Array.from(orig as Int32Array)
+    )
   })
 })
 
@@ -206,12 +216,19 @@ test('Clone Float64Array', async () => {
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/structured-clone.any.js#L199-L208
  */
 test('Clone Map', async () => {
-  const map = new Map([[1, 2], [3, 4]])
+  const map = new Map([
+    [1, 2],
+    [3, 4],
+  ])
   await cloneTest(map, (orig, clone) => {
     expect(clone).not.toBe(orig)
     expect(clone).toBeInstanceOf(Map)
-    expect([...(clone as Map<number, number>).keys()]).toEqual([...(orig as Map<number, number>).keys()])
-    expect([...(clone as Map<number, number>).values()]).toEqual([...(orig as Map<number, number>).values()])
+    expect([...(clone as Map<number, number>).keys()]).toEqual([
+      ...(orig as Map<number, number>).keys(),
+    ])
+    expect([...(clone as Map<number, number>).values()]).toEqual([
+      ...(orig as Map<number, number>).values(),
+    ])
   })
 })
 
@@ -223,7 +240,9 @@ test('Clone Set', async () => {
   await cloneTest(set, (orig, clone) => {
     expect(clone).not.toBe(orig)
     expect(clone).toBeInstanceOf(Set)
-    expect([...(clone as Set<number>).values()]).toEqual([...(orig as Set<number>).values()])
+    expect([...(clone as Set<number>).values()]).toEqual([
+      ...(orig as Set<number>).values(),
+    ])
   })
 })
 
@@ -257,8 +276,12 @@ test('Clone Object', async () => {
     expect(clone).not.toBe(orig)
     expect(typeof clone).toBe('object')
     expect(Object.keys(clone as object)).toEqual(Object.keys(orig as object))
-    expect((clone as Record<string, boolean>).foo).toBe((orig as Record<string, boolean>).foo)
-    expect((clone as Record<string, boolean>).bar).toBe((orig as Record<string, boolean>).bar)
+    expect((clone as Record<string, boolean>).foo).toBe(
+      (orig as Record<string, boolean>).foo
+    )
+    expect((clone as Record<string, boolean>).bar).toBe(
+      (orig as Record<string, boolean>).bar
+    )
   })
 })
 

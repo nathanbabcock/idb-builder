@@ -153,9 +153,10 @@ test('count() throws DataError when using invalid key', async () => {
   const store = tx.objectStore('store')
   const index = store.index('index')
 
-  expect(() => {
-    index.count(NaN)
-  }).toThrow(expect.objectContaining({ name: 'DataError' }))
+  // @ts-expect-error invalid key is caught at compile time
+  expect(() => void index.count(NaN)).toThrow(
+    expect.objectContaining({ name: 'DataError' })
+  )
 
   db.close()
 })

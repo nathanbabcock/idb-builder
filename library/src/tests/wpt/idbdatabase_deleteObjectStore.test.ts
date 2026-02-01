@@ -44,8 +44,6 @@ test("Deleted object store's name should be removed from database's list", async
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbdatabase_deleteObjectStore.any.js#L50-L58
- *
- * Note: Wrapper prevents this at compile time. Using @ts-expect-error to test runtime.
  */
 test('Attempting to remove an object store that does not exist should throw a NotFoundError', async () => {
   const migrations = createMigrations().version(1, v =>

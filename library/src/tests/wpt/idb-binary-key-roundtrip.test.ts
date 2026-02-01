@@ -43,7 +43,9 @@ test('ArrayBuffer', () => {
 
   expect(key instanceof ArrayBuffer).toBe(true)
   expect((key as ArrayBuffer).byteLength).toBe(4)
-  expect(dataView.getUint32(0)).toBe(new DataView(key as ArrayBuffer).getUint32(0))
+  expect(dataView.getUint32(0)).toBe(
+    new DataView(key as ArrayBuffer).getUint32(0)
+  )
 })
 
 /**
@@ -58,7 +60,9 @@ test('DataView', () => {
 
   expect(key instanceof ArrayBuffer).toBe(true)
   expect((key as ArrayBuffer).byteLength).toBe(4)
-  expect(dataView.getUint32(0)).toBe(new DataView(key as ArrayBuffer).getUint32(0))
+  expect(dataView.getUint32(0)).toBe(
+    new DataView(key as ArrayBuffer).getUint32(0)
+  )
 })
 
 /**
@@ -197,8 +201,6 @@ test('Binary keys can be supplied using DataView', async () => {
     await db.add('store', 'value', key)
     const result = await db.get('store', key)
     expect(result).toBe('value')
-
-    await db.close()
   } finally {
     db.close()
   }
@@ -232,7 +234,10 @@ test('Uint8Array with explicit offset', async () => {
     expect(cursor).not.toBeNull()
     const retrievedKey = cursor!.key
     expect(retrievedKey instanceof ArrayBuffer).toBe(true)
-    assertBufferEquals(retrievedKey as ArrayBuffer, new Uint8Array([0x11, 0xff, 0xee, 0xdd, 0xcc]).buffer)
+    assertBufferEquals(
+      retrievedKey as ArrayBuffer,
+      new Uint8Array([0x11, 0xff, 0xee, 0xdd, 0xcc]).buffer
+    )
 
     await tx.done
   } finally {
@@ -268,7 +273,10 @@ test('Uint8Array with explicit offset and length', async () => {
     expect(cursor).not.toBeNull()
     const retrievedKey = cursor!.key
     expect(retrievedKey instanceof ArrayBuffer).toBe(true)
-    assertBufferEquals(retrievedKey as ArrayBuffer, new Uint8Array([0x11, 0xff, 0xee, 0xdd]).buffer)
+    assertBufferEquals(
+      retrievedKey as ArrayBuffer,
+      new Uint8Array([0x11, 0xff, 0xee, 0xdd]).buffer
+    )
 
     await tx.done
   } finally {

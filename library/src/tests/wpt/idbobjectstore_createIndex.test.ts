@@ -106,7 +106,6 @@ test('Empty keyPath', async () => {
 
   // Verify index lookup works with empty keyPath (whole value as key)
   const tx2 = db.transaction('store', 'readonly')
-  // @ts-expect-error - empty keyPath means whole value is the key
   const result = await tx2.objectStore('store').index('index').get('object_4')
   expect(result).toBe('object_4')
   await tx2.done
@@ -298,7 +297,10 @@ test('Index can be valid keys', async () => {
     v
       .createObjectStore({
         name: 'store',
-        schema: schema<{ key: string; i: Date | (string | number)[] | number }>(),
+        schema: schema<{
+          key: string
+          i: Date | (string | number)[] | number
+        }>(),
         primaryKey: 'key',
       })
       .createIndex('index', {
@@ -321,11 +323,11 @@ test('Index can be valid keys', async () => {
 
   const resultNow = await idx.get(now)
   expect(resultNow?.key).toBe('now')
-  expect((resultNow?.i as Date).getTime()).toBe(now.getTime())
+  expect((resultNow!.i as Date).getTime()).toBe(now.getTime())
 
   const resultMar18 = await idx.get(mar18)
   expect(resultMar18?.key).toBe('mar18')
-  expect((resultMar18?.i as Date).getTime()).toBe(mar18.getTime())
+  expect((resultMar18!.i as Date).getTime()).toBe(mar18.getTime())
 
   const resultArray = await idx.get(ar)
   expect(resultArray?.key).toBe('array')

@@ -90,7 +90,7 @@ test("getKey() attempt to retrieve the primary key of a record that doesn't exis
     v
       .createObjectStore({
         name: 'store',
-        schema: schema<{ key: number; indexedProperty: string }>(),
+        schema: schema<{ key: number; indexedProperty: string | number }>(),
         primaryKey: 'key',
       })
       .createIndex('index', {
@@ -169,9 +169,10 @@ test('getKey() throws DataError when using invalid key', async () => {
   const store = tx.objectStore('store')
   const index = store.index('index')
 
-  expect(() => {
-    index.getKey(NaN)
-  }).toThrow(expect.objectContaining({ name: 'DataError' }))
+  // @ts-expect-error invalid key is caught at compile time
+  expect(() => void index.getKey(NaN)).toThrow(
+    expect.objectContaining({ name: 'DataError' })
+  )
 
   db.close()
 })
@@ -203,7 +204,7 @@ test('getKey() throws TransactionInactiveError on aborted transaction', async ()
   tx.abort()
 
   expect(() => {
-    index.getKey('data')
+    void index.getKey('data')
   }).toThrow(expect.objectContaining({ name: 'TransactionInactiveError' }))
 
   await tx.done.catch(() => {})

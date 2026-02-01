@@ -14,7 +14,7 @@ import { schema } from '../../lib/schema'
 /**
  * Helper to test cursor.key with different key types
  */
-async function cursorKeyTest(key: IDBValidKey, description: string) {
+async function cursorKeyTest(key: IDBValidKey, _description: string) {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'test',

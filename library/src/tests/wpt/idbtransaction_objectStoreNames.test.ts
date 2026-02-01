@@ -15,12 +15,11 @@ import { schema } from '../../lib/schema'
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbtransaction_objectStoreNames.any.js#L104-L112
  */
 test('IDBTransaction.objectStoreNames - transaction scope with one store', async () => {
-  const migrations = createMigrations()
-    .version(1, v =>
-      v
-        .createObjectStore({ name: 's1', schema: schema<string>() })
-        .createObjectStore({ name: 's2', schema: schema<string>() })
-    )
+  const migrations = createMigrations().version(1, v =>
+    v
+      .createObjectStore({ name: 's1', schema: schema<string>() })
+      .createObjectStore({ name: 's2', schema: schema<string>() })
+  )
 
   const db = await openDB('test-db', migrations)
 
@@ -37,12 +36,11 @@ test('IDBTransaction.objectStoreNames - transaction scope with one store', async
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbtransaction_objectStoreNames.any.js#L104-L112
  */
 test('IDBTransaction.objectStoreNames - transaction scope with two stores', async () => {
-  const migrations = createMigrations()
-    .version(1, v =>
-      v
-        .createObjectStore({ name: 's1', schema: schema<string>() })
-        .createObjectStore({ name: 's2', schema: schema<string>() })
-    )
+  const migrations = createMigrations().version(1, v =>
+    v
+      .createObjectStore({ name: 's1', schema: schema<string>() })
+      .createObjectStore({ name: 's2', schema: schema<string>() })
+  )
 
   const db = await openDB('test-db', migrations)
 
@@ -59,18 +57,17 @@ test('IDBTransaction.objectStoreNames - transaction scope with two stores', asyn
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbtransaction_objectStoreNames.any.js#L114-L124
  */
 test('IDBTransaction.objectStoreNames - value after commit', async () => {
-  const migrations = createMigrations()
-    .version(1, v =>
-      v
-        .createObjectStore({ name: 's1', schema: schema<number>() })
-        .createObjectStore({ name: 's2', schema: schema<number>() })
-    )
+  const migrations = createMigrations().version(1, v =>
+    v
+      .createObjectStore({ name: 's1', schema: schema<number>() })
+      .createObjectStore({ name: 's2', schema: schema<number>() })
+  )
 
   const db = await openDB('test-db', migrations)
 
   try {
     const tx = db.transaction(['s1', 's2'], 'readwrite')
-    tx.objectStore('s1').put(0, 0)
+    void tx.objectStore('s1').put(0, 0)
     await tx.done
 
     // After commit, objectStoreNames should still return the scope
@@ -84,13 +81,12 @@ test('IDBTransaction.objectStoreNames - value after commit', async () => {
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbtransaction_objectStoreNames.any.js#L139-L144
  */
 test('IDBTransaction.objectStoreNames - sorting', async () => {
-  const migrations = createMigrations()
-    .version(1, v =>
-      v
-        .createObjectStore({ name: 's1', schema: schema<string>() })
-        .createObjectStore({ name: 's2', schema: schema<string>() })
-        .createObjectStore({ name: 's3', schema: schema<string>() })
-    )
+  const migrations = createMigrations().version(1, v =>
+    v
+      .createObjectStore({ name: 's1', schema: schema<string>() })
+      .createObjectStore({ name: 's2', schema: schema<string>() })
+      .createObjectStore({ name: 's3', schema: schema<string>() })
+  )
 
   const db = await openDB('test-db', migrations)
 
@@ -108,12 +104,11 @@ test('IDBTransaction.objectStoreNames - sorting', async () => {
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbtransaction_objectStoreNames.any.js#L146-L151
  */
 test('IDBTransaction.objectStoreNames - no duplicates', async () => {
-  const migrations = createMigrations()
-    .version(1, v =>
-      v
-        .createObjectStore({ name: 's1', schema: schema<string>() })
-        .createObjectStore({ name: 's2', schema: schema<string>() })
-    )
+  const migrations = createMigrations().version(1, v =>
+    v
+      .createObjectStore({ name: 's1', schema: schema<string>() })
+      .createObjectStore({ name: 's2', schema: schema<string>() })
+  )
 
   const db = await openDB('test-db', migrations)
 
@@ -131,11 +126,9 @@ test('IDBTransaction.objectStoreNames - no duplicates', async () => {
  * Test objectStoreNames with single store
  */
 test('IDBTransaction.objectStoreNames - single store string', async () => {
-  const migrations = createMigrations()
-    .version(1, v =>
-      v
-        .createObjectStore({ name: 'store', schema: schema<string>() })
-    )
+  const migrations = createMigrations().version(1, v =>
+    v.createObjectStore({ name: 'store', schema: schema<string>() })
+  )
 
   const db = await openDB('test-db', migrations)
 

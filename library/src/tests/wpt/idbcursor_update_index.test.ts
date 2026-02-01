@@ -47,7 +47,10 @@ test('Modify a record in the object store via index cursor', async () => {
   const cursor = await index1.openCursor()
   expect(cursor).not.toBeNull()
 
-  const updatedValue = { ...cursor!.value, iKey: cursor!.value.iKey + '_updated' }
+  const updatedValue = {
+    ...cursor!.value,
+    iKey: cursor!.value.iKey + '_updated',
+  }
   await cursor!.update(updatedValue)
 
   await tx1.done
@@ -100,6 +103,7 @@ test('Attempt to modify a record in a read-only transaction via index', async ()
   expect(cursor).not.toBeNull()
 
   expect(() => {
+    // @ts-expect-error Testing runtime error when calling delete on readonly cursor
     cursor!.update(cursor!.value)
   }).toThrow(expect.objectContaining({ name: 'ReadOnlyError' }))
 

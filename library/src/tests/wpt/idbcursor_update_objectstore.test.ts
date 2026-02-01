@@ -85,6 +85,7 @@ test('Attempt to modify a record in a read-only transaction', async () => {
   expect(cursor).not.toBeNull()
 
   expect(() => {
+    // @ts-expect-error Testing runtime error when calling delete on readonly cursor
     cursor!.update(cursor!.value)
   }).toThrow(expect.objectContaining({ name: 'ReadOnlyError' }))
 

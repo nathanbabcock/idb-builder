@@ -14,7 +14,7 @@ import { schema } from '../../lib/schema'
 /**
  * Helper function to test recursive values
  */
-async function recursiveValueTest(desc: string, value: unknown) {
+async function recursiveValueTest(_desc: string, value: unknown) {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'store',

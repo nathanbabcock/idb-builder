@@ -91,6 +91,7 @@ test('Attempt to remove a record in a read-only transaction', async () => {
   expect(cursor).not.toBeNull()
 
   expect(() => {
+    // @ts-expect-error Testing runtime error when calling delete on readonly cursor
     cursor!.delete()
   }).toThrow(expect.objectContaining({ name: 'ReadOnlyError' }))
 
@@ -176,7 +177,12 @@ test('Delete current record and continue iteration', async () => {
   // But only 4 remain
   const remaining = await db.getAll('test')
   expect(remaining.length).toBe(4)
-  expect(remaining.map(r => r.pKey)).toEqual(['key_1', 'key_2', 'key_3', 'key_4'])
+  expect(remaining.map(r => r.pKey)).toEqual([
+    'key_1',
+    'key_2',
+    'key_3',
+    'key_4',
+  ])
 
   db.close()
 })

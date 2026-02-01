@@ -35,13 +35,13 @@ test('IDBObjectStore.getKey() - invalid parameters', async () => {
   // null is not a valid key
   expect(() => {
     // @ts-expect-error - null is not a valid key
-    store.getKey(null)
+    void store.getKey(null)
   }).toThrow(expect.objectContaining({ name: 'DataError' }))
 
   // object is not a valid key
   expect(() => {
     // @ts-expect-error - object is not a valid key
-    store.getKey({})
+    void store.getKey({})
   }).toThrow(expect.objectContaining({ name: 'DataError' }))
 
   db.close()

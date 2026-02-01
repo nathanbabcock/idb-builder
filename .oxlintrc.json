@@ -21,7 +21,11 @@
     "typescript/unbound-method": "off",
     "typescript/no-meaningless-void-operator": "off",
     "vitest/require-to-throw-message": "off",
-    "jest/expect-expect": "off"
+    "jest/expect-expect": "off",
+    "jest/no-conditional-expect": "off",
+    "typescript/require-array-sort-compare": "off",
+    "typescript/no-floating-promises": "off",
+    "jest/no-disabled-tests": "off"
   },
   "overrides": [
     {

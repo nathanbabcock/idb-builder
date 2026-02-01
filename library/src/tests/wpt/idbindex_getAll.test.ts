@@ -12,7 +12,7 @@ import { createMigrations } from '../../lib/migration-builder'
 import { schema } from '../../lib/schema'
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+// const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
 /**
  * @see https://github.com/web-platform-tests/wpt/blob/9fb0c34afd20d2cd5ea73cd50e2400a0c5b3159f/IndexedDB/idbindex_getAll.any.js#L11-L12

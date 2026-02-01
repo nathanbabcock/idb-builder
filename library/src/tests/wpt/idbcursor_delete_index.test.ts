@@ -107,6 +107,7 @@ test('Attempt to remove a record in a read-only transaction via index', async ()
   expect(cursor).not.toBeNull()
 
   expect(() => {
+    // @ts-expect-error Testing runtime error when calling delete on readonly cursor
     cursor!.delete()
   }).toThrow(expect.objectContaining({ name: 'ReadOnlyError' }))
 
@@ -197,7 +198,12 @@ test('Delete via index cursor in reverse direction', async () => {
   // Verify the deletion
   const remaining = await db.getAll('test')
   expect(remaining.length).toBe(4)
-  expect(remaining.map(r => r.iKey)).toEqual(['ikey_0', 'ikey_1', 'ikey_2', 'ikey_3'])
+  expect(remaining.map(r => r.iKey)).toEqual([
+    'ikey_0',
+    'ikey_1',
+    'ikey_2',
+    'ikey_3',
+  ])
 
   db.close()
 })

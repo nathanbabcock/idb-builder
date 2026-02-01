@@ -132,6 +132,7 @@ test('IDBCursor.continue() - skip far forward', async () => {
     expect(cursor!.value).toBe('cupcake')
 
     // Skip far forward with an array key (arrays are always bigger than strings)
+    // @ts-expect-error schema expects string keys
     cursor = await cursor!.continue([])
     expect(cursor).toBeNull()
 

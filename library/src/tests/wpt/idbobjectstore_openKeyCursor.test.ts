@@ -194,18 +194,18 @@ test('IDBObjectStore.openKeyCursor() - invalid inputs', async () => {
 
   // NaN is not a valid key
   expect(() => {
-    store.openKeyCursor(NaN)
+    void store.openKeyCursor(NaN)
   }).toThrow(expect.objectContaining({ name: 'DataError' }))
 
   // Date(NaN) is not a valid key
   expect(() => {
-    store.openKeyCursor(new Date(NaN))
+    void store.openKeyCursor(new Date(NaN))
   }).toThrow(expect.objectContaining({ name: 'DataError' }))
 
   // Object is not a valid key
   expect(() => {
     // @ts-expect-error - object is not a valid key
-    store.openKeyCursor({})
+    void store.openKeyCursor({})
   }).toThrow(expect.objectContaining({ name: 'DataError' }))
 
   db.close()

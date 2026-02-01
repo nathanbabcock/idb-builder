@@ -11,15 +11,10 @@ import { openDB } from '../../lib/idb-adapter'
 import { createMigrations } from '../../lib/migration-builder'
 import { schema } from '../../lib/schema'
 
-interface KeypathRecord {
-  x: string
-  keypath: IDBValidKey
-}
-
 /**
  * Helper to test valid keys
  */
-async function validKeyTest(desc: string, key: IDBValidKey) {
+async function validKeyTest(_desc: string, key: IDBValidKey) {
   const migrations = createMigrations().version(1, v =>
     v.createObjectStore({
       name: 'store',
