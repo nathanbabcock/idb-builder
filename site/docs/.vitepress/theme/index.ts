@@ -4,6 +4,7 @@ import Theme from 'vitepress/theme'
 import CopyOrDownloadAsMarkdownButtons from 'vitepress-plugin-llms/vitepress-components/CopyOrDownloadAsMarkdownButtons.vue'
 
 import '@shikijs/vitepress-twoslash/style.css'
+import './custom.css'
 
 export default {
   extends: Theme,

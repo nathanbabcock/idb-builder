@@ -1,0 +1,75 @@
+/* Hero styles - Image to the left, tighter spacing */
+
+/* 1. Layout Container */
+.VPHero .container {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important; /* Align content to start of the container */
+  align-items: center !important;
+  /* Restore the constraint so it centers on the page */
+  max-width: 1152px !important;
+  margin: 0 auto !important;
+  gap: 32px !important;
+}
+
+/* 2. Text Section */
+.VPHero .main {
+  order: 1 !important;
+  width: auto !important;
+  max-width: none !important;
+  flex-grow: 1;
+  text-align: left !important;
+}
+
+/* 3. Image Section Wrapper */
+.VPHero .image {
+  order: -1 !important;
+  flex-grow: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+}
+
+/* 4. Image Container & Inner Image logic */
+.VPHero .image-container {
+  display: block;
+  position: relative !important;
+  width: 300px !important;
+  height: 300px !important;
+  transform: none !important;
+}
+
+.VPHero .image-bg {
+  display: none !important;
+}
+
+:deep(.VPHero .image-src) {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Mobile responsiveness - Restore Stacked Layout */
+@media (max-width: 960px) {
+  .VPHero .container {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 24px !important;
+  }
+
+  .VPHero .image {
+    order: -1 !important;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+  }
+
+  .VPHero .main {
+    text-align: center !important;
+    width: 100% !important;
+  }
+}

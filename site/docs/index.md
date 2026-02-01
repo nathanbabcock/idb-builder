@@ -6,6 +6,11 @@ hero:
   name: Typedex
   text: Type-safe IndexedDB
   # tagline: My great project tagline
+  image:
+    src: /assets/typedex-logo.png
+    alt: Typedex logo
+    width: 300
+    height: 300
   actions:
     - theme: brand
       text: Getting started

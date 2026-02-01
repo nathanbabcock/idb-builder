@@ -13,7 +13,15 @@ export default defineConfig({
     hostname: 'https://nathanbabcock.github.io/typedex/',
   },
 
+  head: [
+    ['link', { rel: 'icon', type: 'image/x-icon', href: '/typedex/assets/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/typedex/assets/favicon-32x32.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/typedex/assets/favicon-16x16.png' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/typedex/assets/apple-touch-icon.png' }],
+  ],
+
   themeConfig: {
+    logo: '/assets/typedex-logo.png',
     search: {
       provider: 'local',
     },
