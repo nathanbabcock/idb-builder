@@ -1,4 +1,4 @@
-import { createMigrations, schema } from '@typedex/indexed-db'
+import { createMigrations, schema } from 'idb-migrate'
 
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore({

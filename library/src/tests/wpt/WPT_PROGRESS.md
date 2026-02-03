@@ -242,16 +242,3 @@
 | **Timing/scheduling**   | Test implementation-specific timing behavior             |
 | **Event bubbling**      | Test DOM event propagation internals                     |
 | **Upgrade lifecycle**   | Require raw IDB API for upgrade transaction control      |
-
-## Running Tests
-
-```bash
-# Run all tests
-pnpm --filter @typedex/indexed-db test
-
-# Run only WPT tests
-pnpm --filter @typedex/indexed-db test -- --run src/tests/wpt/
-
-# Run specific test file
-pnpm --filter @typedex/indexed-db test -- --run src/tests/wpt/idbdatabase_createObjectStore.test.ts
-```

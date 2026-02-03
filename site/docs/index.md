@@ -3,12 +3,12 @@
 layout: home
 
 hero:
-  name: Typedex
-  text: Type-safe IndexedDB
+  # name: idb-migrate
+  text: Type-safe IndexedDB migrations
   # tagline: My great project tagline
   image:
-    src: /assets/typedex-logo.png
-    alt: Typedex logo
+    src: /assets/logo.png
+    alt: idb-migrate logo
     width: 300
     height: 300
   actions:
@@ -20,17 +20,15 @@ hero:
     #   link: /api-examples
 
 features:
-  - title: Type safety
-    icon: 🛡️
-    details:
-      The idiosyncracies of the Indexed DB API are enforced through the type system, catching a
-      wide range of potential errors at compile-time before they happen.
   - title: Declarative migrations
     icon: 📋
     details:
       Use a fluent builder interface to set up your database, capturing granular
       information about the schema and database architecture as you do so.
-  - title: Schema evolution
-    icon: 🔄
-    details: Define and evolve the shape of your data with native Typescript types and zero runtime dependencies.
+  - title: Compile-time guarantees
+    icon: 🛡️
+    details: Catch potential runtime errors at compile-time before they happen.
+  - title: Single source of truth
+    icon: ☝️
+    details: Since your database schema is inferred from the migrations themselves, they will never be out of sync.
 ---

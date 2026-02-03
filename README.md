@@ -1,13 +1,13 @@
-# Typedex
+# idb-migrate
 
-Type-safe IndexedDB
+Type-safe IndexedDB migrations
 
 ## Getting started
 
 ### Install
 
 ```sh
-npm install @typedex/indexed-db
+npm install idb-migrate
 ```
 
 ### Set up migrations
@@ -15,7 +15,7 @@ npm install @typedex/indexed-db
 Define your database schema using TypeScript types and the `schema()` helper. The `createMigrations()` builder captures your database structure with full type inference.
 
 ```ts
-import { createMigrations, schema } from '@typedex/indexed-db'
+import { createMigrations, schema } from 'idb-migrate'
 
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore({

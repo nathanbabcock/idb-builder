@@ -35,7 +35,19 @@
   position: relative !important;
   width: 300px !important;
   height: 300px !important;
-  transform: none !important;
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -12px;
+  }
 }
 
 .VPHero .image-bg {

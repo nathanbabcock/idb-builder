@@ -1,6 +1,6 @@
 // @errors: 2322
 
-import { createMigrations, schema } from '@typedex/indexed-db'
+import { createMigrations, schema } from 'idb-migrate'
 
 // ---cut---
 createMigrations().version(1, v =>

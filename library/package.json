@@ -1,7 +1,7 @@
 {
-  "name": "@typedex/indexed-db",
+  "name": "idb-migrate",
   "version": "0.1.0",
-  "description": "Type-safe IndexedDB",
+  "description": "Type-safe IndexedDB migrations",
   "keywords": [
     "browser",
     "database",
@@ -11,15 +11,15 @@
     "type-safe",
     "typescript"
   ],
-  "homepage": "https://github.com/nathanbabcock/typedex#readme",
+  "homepage": "https://github.com/nathanbabcock/idb-migrate#readme",
   "bugs": {
-    "url": "https://github.com/nathanbabcock/typedex/issues"
+    "url": "https://github.com/nathanbabcock/idb-migrate/issues"
   },
   "license": "MIT",
   "author": "Nathan Babcock",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nathanbabcock/typedex.git",
+    "url": "https://github.com/nathanbabcock/idb-migrate.git",
     "directory": "library"
   },
   "files": [

@@ -1,27 +1,27 @@
 # Getting started
 
-## Install Typedex
+## Install
 
 ::: code-group
 
 ```sh [npm]
-npm install @typedex/indexed-db
+npm install idb-migrate
 ```
 
 ```sh [yarn]
-yarn add @typedex/indexed-db
+yarn add idb-migrate
 ```
 
 ```sh [pnpm]
-pnpm add @typedex/indexed-db
+pnpm add idb-migrate
 ```
 
 ```sh [bun]
-bun add @typedex/indexed-db
+bun add idb-migrate
 ```
 
 ```sh [deno]
-deno add npm:@typedex/indexed-db
+deno add npm:idb-migrate
 ```
 
 :::

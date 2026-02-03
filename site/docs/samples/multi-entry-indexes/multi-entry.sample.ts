@@ -1,4 +1,4 @@
-import { createMigrations, openDB, schema } from '@typedex/indexed-db'
+import { createMigrations, openDB, schema } from 'idb-migrate'
 
 // Create an index pointing to an array field in the schema
 const migrations = createMigrations().version(1, v =>

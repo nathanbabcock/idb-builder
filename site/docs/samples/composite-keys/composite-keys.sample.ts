@@ -1,5 +1,5 @@
 // @errors: 2322 2345
-import { createMigrations, openDB, schema } from '@typedex/indexed-db'
+import { createMigrations, openDB, schema } from 'idb-migrate'
 
 // Create an object store with a composite primary key
 const migrations = createMigrations().version(1, v =>

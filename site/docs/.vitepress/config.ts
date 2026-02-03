@@ -4,13 +4,13 @@ import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'Typedex',
-  description: 'Type-safe IndexedDB',
-  base: '/typedex/',
+  title: 'idb-migrate',
+  description: 'Type-safe IndexedDB migrations',
+  base: '/idb-migrate/',
   cleanUrls: true,
   lastUpdated: true,
   sitemap: {
-    hostname: 'https://nathanbabcock.github.io/typedex/',
+    hostname: 'https://nathanbabcock.github.io/idb-migrate/',
   },
 
   head: [
@@ -19,7 +19,7 @@ export default defineConfig({
       {
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/typedex/assets/favicon.ico',
+        href: '/idb-migrate/assets/favicon.ico',
       },
     ],
     [
@@ -28,7 +28,7 @@ export default defineConfig({
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
-        href: '/typedex/assets/favicon-32x32.png',
+        href: '/idb-migrate/assets/favicon-32x32.png',
       },
     ],
     [
@@ -37,7 +37,7 @@ export default defineConfig({
         rel: 'icon',
         type: 'image/png',
         sizes: '16x16',
-        href: '/typedex/assets/favicon-16x16.png',
+        href: '/idb-migrate/assets/favicon-16x16.png',
       },
     ],
     [
@@ -45,13 +45,13 @@ export default defineConfig({
       {
         rel: 'apple-touch-icon',
         sizes: '180x180',
-        href: '/typedex/assets/apple-touch-icon.png',
+        href: '/idb-migrate/assets/apple-touch-icon.png',
       },
     ],
   ],
 
   themeConfig: {
-    logo: '/assets/typedex-logo.png',
+    logo: '/assets/logo.png',
     search: {
       provider: 'local',
     },
@@ -107,11 +107,11 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/nathanbabcock/typedex' },
+      { icon: 'github', link: 'https://github.com/nathanbabcock/idb-migrate' },
     ],
 
     editLink: {
-      pattern: 'https://github.com/nathanbabcock/typedex/edit/main/:path',
+      pattern: 'https://github.com/nathanbabcock/idb-migrate/edit/main/:path',
       text: 'Edit this page on GitHub',
     },
   },

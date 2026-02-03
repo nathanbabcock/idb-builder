@@ -1,11 +1,11 @@
 {
-  "name": "@typedex/monorepo",
+  "name": "@idb-migrate/monorepo",
   "scripts": {
     "dev": "pnpm run --parallel dev",
     "test": "pnpm run --parallel test",
     "typecheck": "pnpm run --parallel typecheck",
     "preview": "pnpm run --parallel preview",
-    "build": "pnpm --filter @typedex/indexed-db build && pnpm --filter @typedex/site build",
+    "build": "pnpm --filter idb-migrate build && pnpm --filter @idb-migrate/site build",
     "format": "oxfmt",
     "lint": "oxlint --type-aware",
     "verify": "pnpm typecheck && pnpm test && pnpm lint && pnpm build"

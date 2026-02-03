@@ -1,6 +1,6 @@
 // @errors: 2345
 
-import { createMigrations, openDB, schema } from '@typedex/indexed-db'
+import { createMigrations, openDB, schema } from 'idb-migrate'
 
 // ---cut---
 const migrations = createMigrations().version(1, v =>

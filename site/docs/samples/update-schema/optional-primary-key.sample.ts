@@ -1,6 +1,6 @@
 // @errors: 2740
 
-import { createMigrations, schema } from '@typedex/indexed-db'
+import { createMigrations, schema } from 'idb-migrate'
 
 // ---cut---
 createMigrations()

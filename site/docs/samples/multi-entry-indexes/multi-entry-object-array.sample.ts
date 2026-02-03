@@ -1,4 +1,4 @@
-import { createMigrations, schema } from '@typedex/indexed-db'
+import { createMigrations, schema } from 'idb-migrate'
 
 // ---cut---
 // @errors: 2322

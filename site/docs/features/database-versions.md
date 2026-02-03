@@ -3,7 +3,7 @@
 In Indexed DB, database version must be positive integers (1, 2, 3, …). More
 importantly, they must be monotonically increasing.
 
-This typically isn't too difficult to remember, but for good measure Typedex
+This typically isn't too difficult to remember, but for good measure idb-migrate
 enforces this through the type system when you define your migrations. It will
 catch errors like copy-pasting a previous migration and forgetting to increment
 the version number.

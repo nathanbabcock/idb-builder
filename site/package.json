@@ -1,5 +1,5 @@
 {
-  "name": "@typedex/site",
+  "name": "@idb-migrate/site",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -13,7 +13,7 @@
     "preview": "vitepress preview docs"
   },
   "dependencies": {
-    "@typedex/indexed-db": "workspace:*",
+    "idb-migrate": "workspace:*",
     "zod": "^4.3.5"
   },
   "devDependencies": {

@@ -42,7 +42,7 @@ importers:
 
   site:
     dependencies:
-      '@typedex/indexed-db':
+      'idb-migrate':
         specifier: workspace:*
         version: link:../library
       zod:

@@ -1,5 +1,5 @@
 // @errors: 2322 2345
-import { createMigrations, openDB, schema } from '@typedex/indexed-db'
+import { createMigrations, openDB, schema } from 'idb-migrate'
 
 // Nested keys also work with indexes
 const migrations = createMigrations()
