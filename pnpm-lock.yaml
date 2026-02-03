@@ -42,7 +42,7 @@ importers:
 
   site:
     dependencies:
-      'idb-migrate':
+      'idb-builder':
         specifier: workspace:*
         version: link:../library
       zod:

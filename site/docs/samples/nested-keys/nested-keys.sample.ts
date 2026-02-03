@@ -1,5 +1,5 @@
 // @errors: 2322 2345
-import { createMigrations, openDB, schema } from 'idb-migrate'
+import { createMigrations, openDB, schema } from 'idb-builder'
 
 // Create an object store with a nested primary key
 const migrations = createMigrations().version(1, v =>

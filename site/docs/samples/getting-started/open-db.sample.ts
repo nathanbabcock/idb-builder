@@ -1,4 +1,4 @@
-import { createMigrations, openDB, schema } from 'idb-migrate'
+import { createMigrations, openDB, schema } from 'idb-builder'
 
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore({

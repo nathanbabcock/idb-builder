@@ -5,23 +5,23 @@
 ::: code-group
 
 ```sh [npm]
-npm install idb-migrate
+npm install idb-builder
 ```
 
 ```sh [yarn]
-yarn add idb-migrate
+yarn add idb-builder
 ```
 
 ```sh [pnpm]
-pnpm add idb-migrate
+pnpm add idb-builder
 ```
 
 ```sh [bun]
-bun add idb-migrate
+bun add idb-builder
 ```
 
 ```sh [deno]
-deno add npm:idb-migrate
+deno add npm:idb-builder
 ```
 
 :::

@@ -1,4 +1,4 @@
-# idb-migrate
+# idb-builder
 
 Type-safe IndexedDB migrations
 
@@ -7,7 +7,7 @@ Type-safe IndexedDB migrations
 ### Install
 
 ```sh
-npm install idb-migrate
+npm install idb-builder
 ```
 
 ### Set up migrations
@@ -15,7 +15,7 @@ npm install idb-migrate
 Define your database schema using TypeScript types and the `schema()` helper. The `createMigrations()` builder captures your database structure with full type inference.
 
 ```ts
-import { createMigrations, schema } from 'idb-migrate'
+import { createMigrations, schema } from 'idb-builder'
 
 const migrations = createMigrations().version(1, v =>
   v.createObjectStore({

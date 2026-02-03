@@ -3,12 +3,12 @@
 layout: home
 
 hero:
-  # name: idb-migrate
+  # name: idb-builder
   text: Type-safe IndexedDB migrations
   # tagline: My great project tagline
   image:
     src: /assets/logo.png
-    alt: idb-migrate logo
+    alt: idb-builder logo
     width: 300
     height: 300
   actions:

@@ -1,5 +1,5 @@
 {
-  "name": "@idb-migrate/site",
+  "name": "@idb-builder/site",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -13,7 +13,7 @@
     "preview": "vitepress preview docs"
   },
   "dependencies": {
-    "idb-migrate": "workspace:*",
+    "idb-builder": "workspace:*",
     "zod": "^4.3.5"
   },
   "devDependencies": {

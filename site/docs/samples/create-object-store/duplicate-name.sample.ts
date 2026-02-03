@@ -1,6 +1,6 @@
 // @errors: 2322
 
-import { createMigrations, schema } from 'idb-migrate'
+import { createMigrations, schema } from 'idb-builder'
 
 // ---cut---
 createMigrations().version(1, v =>

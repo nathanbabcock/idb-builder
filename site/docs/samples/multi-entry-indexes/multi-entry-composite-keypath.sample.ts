@@ -1,4 +1,4 @@
-import { createMigrations, schema } from 'idb-migrate'
+import { createMigrations, schema } from 'idb-builder'
 
 // @errors: 2741
 // ---cut---

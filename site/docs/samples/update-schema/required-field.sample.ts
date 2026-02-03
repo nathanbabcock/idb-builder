@@ -1,6 +1,6 @@
 // @errors: 2740
 
-import { createMigrations, schema } from 'idb-migrate'
+import { createMigrations, schema } from 'idb-builder'
 
 // ---cut---
 createMigrations()

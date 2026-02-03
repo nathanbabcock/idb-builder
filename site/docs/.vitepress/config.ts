@@ -4,13 +4,13 @@ import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'idb-migrate',
+  title: 'idb-builder',
   description: 'Type-safe IndexedDB migrations',
-  base: '/idb-migrate/',
+  base: '/idb-builder/',
   cleanUrls: true,
   lastUpdated: true,
   sitemap: {
-    hostname: 'https://nathanbabcock.github.io/idb-migrate/',
+    hostname: 'https://nathanbabcock.github.io/idb-builder/',
   },
 
   head: [
@@ -19,7 +19,7 @@ export default defineConfig({
       {
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/idb-migrate/assets/favicon.ico',
+        href: '/idb-builder/assets/favicon.ico',
       },
     ],
     [
@@ -28,7 +28,7 @@ export default defineConfig({
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
-        href: '/idb-migrate/assets/favicon-32x32.png',
+        href: '/idb-builder/assets/favicon-32x32.png',
       },
     ],
     [
@@ -37,7 +37,7 @@ export default defineConfig({
         rel: 'icon',
         type: 'image/png',
         sizes: '16x16',
-        href: '/idb-migrate/assets/favicon-16x16.png',
+        href: '/idb-builder/assets/favicon-16x16.png',
       },
     ],
     [
@@ -45,7 +45,7 @@ export default defineConfig({
       {
         rel: 'apple-touch-icon',
         sizes: '180x180',
-        href: '/idb-migrate/assets/apple-touch-icon.png',
+        href: '/idb-builder/assets/apple-touch-icon.png',
       },
     ],
   ],
@@ -107,11 +107,11 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/nathanbabcock/idb-migrate' },
+      { icon: 'github', link: 'https://github.com/nathanbabcock/idb-builder' },
     ],
 
     editLink: {
-      pattern: 'https://github.com/nathanbabcock/idb-migrate/edit/main/:path',
+      pattern: 'https://github.com/nathanbabcock/idb-builder/edit/main/:path',
       text: 'Edit this page on GitHub',
     },
   },

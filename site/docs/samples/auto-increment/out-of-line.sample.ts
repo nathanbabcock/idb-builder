@@ -1,6 +1,6 @@
 // @errors: 2345
 
-import { createMigrations, openDB, schema } from 'idb-migrate'
+import { createMigrations, openDB, schema } from 'idb-builder'
 
 // ---cut---
 const migrations = createMigrations().version(1, v =>

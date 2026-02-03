@@ -1,5 +1,5 @@
 {
-  "name": "idb-migrate",
+  "name": "idb-builder",
   "version": "0.1.0",
   "description": "Type-safe IndexedDB migrations",
   "keywords": [
@@ -11,15 +11,15 @@
     "type-safe",
     "typescript"
   ],
-  "homepage": "https://github.com/nathanbabcock/idb-migrate#readme",
+  "homepage": "https://github.com/nathanbabcock/idb-builder#readme",
   "bugs": {
-    "url": "https://github.com/nathanbabcock/idb-migrate/issues"
+    "url": "https://github.com/nathanbabcock/idb-builder/issues"
   },
   "license": "MIT",
   "author": "Nathan Babcock",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nathanbabcock/idb-migrate.git",
+    "url": "https://github.com/nathanbabcock/idb-builder.git",
     "directory": "library"
   },
   "files": [
